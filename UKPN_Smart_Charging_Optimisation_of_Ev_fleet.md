@@ -1,3 +1,8 @@
+---
+layout: default
+title: "EV Fleet Smart-Charging Optimization & Market Participation Model"
+permalink:  /smart_charging_optimisation
+---
 # Project Overview
 
 ##### Competitive Market Intelligence: UKPN Flexibility Market Analysis
