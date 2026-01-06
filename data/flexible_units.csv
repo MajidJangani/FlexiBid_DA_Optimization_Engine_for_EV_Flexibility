@@ -1,0 +1,18 @@
+fu_id,ukpn_constraint_zone,zone_region,zone_priority,num_vehicles,total_capacity_kw,total_energy_kwh,avg_flexibility_hours,avg_flexibility_score,cp_constraint_violations
+FU-West_Letchworth_Shefford_Biggl,West Letchworth Shefford Biggleswade,Eastern,High,13,99.8,108.27,12.92,67.0,13
+FU-Trowse_Grid_33,Trowse Grid 33,Eastern,High,10,73.9,104.31,12.88,75.8,10
+FU-Bramford_Diss_Thetford,Bramford Diss Thetford,Eastern,Medium,6,44.4,59.81,12.39,74.7,6
+FU-Cockfosters,Cockfosters,London,High,5,37.0,32.1,13.33,68.6,5
+FU-Central_Harpenden,Central Harpenden,Eastern,Medium,5,37.0,52.19,12.84,66.9,5
+FU-Brandon,Brandon,Eastern,Medium,3,22.2,17.67,13.12,72.7,3
+FU-March_Primary,March Primary,Eastern,Low,3,22.2,50.56,12.33,85.2,2
+FU-Capel_Switching_Station,Capel Switching Station,South East,Medium,3,22.2,35.61,11.92,83.7,3
+FU-Worthing_Grid_A,Worthing Grid A,South East,High,3,22.2,37.71,12.81,85.5,3
+FU-Sundon_Little_Barford,Sundon Little Barford,Eastern,Medium,3,22.2,29.92,12.27,83.7,3
+FU-Haverhill,Haverhill,Eastern,Low,3,22.2,22.38,11.79,75.2,3
+FU-Chartham,Chartham,South East,Low,3,18.5,45.34,10.87,81.7,2
+FU-Hendon_Way,Hendon Way,London,Low,1,11.0,12.76,13.77,88.5,1
+FU-Thorpe_Grid_33,Thorpe Grid 33,Eastern,Low,1,7.4,11.77,11.93,85.3,1
+FU-Wrotham,Wrotham,South East,Low,1,7.4,10.33,12.59,85.2,1
+FU-Uplands_Park,Uplands Park,London,High,1,7.4,16.4,11.53,85.2,1
+FU-Brockenhurst_Mill_Hill_Total,Brockenhurst Mill Hill Total,London,Low,1,7.4,5.78,12.72,64.6,1

@@ -1,0 +1,6 @@
+Metric,Revenue/Vehicle,Total Revenue,vs WS1,Notes
+Module 05 (Deterministic),£149,£8067,-13.1%,Optimistic - assumes no variance
+Scenario Analysis (Expected Value),£138,£7446,-35.9%,Risk-adjusted - probability-weighted
+Downside (5th Percentile),£32,£1750,-84.9%,Conservative - bad scenario
+Upside (95th Percentile),£291,£15731,+35.5%,Optimistic - good scenario
+WS1 Trial (Benchmark),£215,£11610,0.0%,"British Gas trial (60 events, crisis year)"

@@ -1,0 +1,15 @@
+{
+  "baseline_revenue": 149.39,
+  "expected_value": 137.89634989932,
+  "ev_vs_baseline_pct": -7.693721199999992,
+  "var_5_percentile": 32.4071727,
+  "var_10_percentile": 53.123084,
+  "median": 134.451,
+  "upside_90_percentile": 262.17945,
+  "upside_95_percentile": 291.3105,
+  "worst_case": 7.1145194819999995,
+  "best_case": 346.0623084749999,
+  "std_dev": 72.56295581485803,
+  "coefficient_of_variation": 0.5262137530677007,
+  "range_multiplier": 48.64169805853375
+}

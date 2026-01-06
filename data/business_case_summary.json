@@ -1,0 +1,54 @@
+{
+  "business_case": {
+    "fleet_size": 54,
+    "num_fus": 10,
+    "total_capacity_kw": 210.24,
+    "avg_price_gbp_mwh": 436.24,
+    "total_annual_revenue": 8067.11,
+    "revenue_per_vehicle_annual": 149.39,
+    "vs_ws1_benchmark_pct": -13.1,
+    "vs_axle_price_pct": 0,
+    "total_accuracy_penalties": 0,
+    "total_aggregator_fees": 2201.16,
+    "avg_delivery_confidence": 0.99,
+    "avg_monthly_saf": 0.919
+  },
+  "portfolio_metrics": {
+    "optimization_performance": {
+      "peak_reduction_pct": 51.09,
+      "load_factor_improvement": 0.135,
+      "capacity_utilization": 52.61
+    },
+    "market_competitiveness": {
+      "price_competitiveness_score": 85,
+      "price_vs_axle_pct": 0,
+      "zone_coverage_pct": 50.0,
+      "reliability_advantage": 9.0
+    },
+    "business_value": {
+      "tco_impact_pct": 6.5,
+      "payback_period_months": 36.8,
+      "roi_first_year": 32.6
+    }
+  },
+  "ws1_validation": {
+    "ws1_findings": {
+      "revenue_per_vehicle_annual": 172,
+      "peak_reduction_potential": 50,
+      "reliability_achieved": 95,
+      "opt_out_rate": 10,
+      "secondary_peak_ratio": 30,
+      "load_factor_improvement": 0.15
+    },
+    "our_metrics": {
+      "revenue_per_vehicle_annual": 155.64152572416,
+      "peak_reduction_potential": 51.088,
+      "reliability_achieved": 99.0,
+      "opt_out_rate": 7.14285714285714,
+      "secondary_peak_ratio": 25,
+      "load_factor_improvement": 0.13520000000000004
+    },
+    "validation_score": 88.2
+  },
+  "timestamp": "2026-01-06T17:33:23.549957"
+}

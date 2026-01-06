@@ -1,0 +1,12 @@
+{
+  "avg_price": 436.23999999999995,
+  "vs_axle_pct": 6.3999999999999835,
+  "num_fus": 10,
+  "strategy_distribution": {
+    "MARKET_COMPETITIVE": 10
+  },
+  "price_range": {
+    "min": 436.24,
+    "max": 436.24
+  }
+}

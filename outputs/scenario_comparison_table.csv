@@ -1,0 +1,11 @@
+Scenario,Probability,Revenue,vs Baseline,Grid,Device,Competition,Forecasting
+normal_winter_baseline_uptime_normal_competition_good_accuracy,7.20%,£134,-10.0%,normal_winter,baseline_uptime,normal_competition,good_accuracy
+normal_winter_baseline_uptime_normal_competition_excellent_accuracy,7.20%,£149,+0.0%,normal_winter,baseline_uptime,normal_competition,excellent_accuracy
+normal_winter_high_uptime_normal_competition_good_accuracy,4.32%,£139,-7.0%,normal_winter,high_uptime,normal_competition,good_accuracy
+normal_winter_high_uptime_normal_competition_excellent_accuracy,4.32%,£154,+3.3%,normal_winter,high_uptime,normal_competition,excellent_accuracy
+normal_winter_baseline_uptime_normal_competition_poor_accuracy,2.70%,£105,-30.0%,normal_winter,baseline_uptime,normal_competition,poor_accuracy
+normal_winter_baseline_uptime_high_competition_excellent_accuracy,2.40%,£127,-15.0%,normal_winter,baseline_uptime,high_competition,excellent_accuracy
+normal_winter_baseline_uptime_low_competition_excellent_accuracy,2.40%,£172,+15.0%,normal_winter,baseline_uptime,low_competition,excellent_accuracy
+normal_winter_baseline_uptime_low_competition_good_accuracy,2.40%,£155,+3.5%,normal_winter,baseline_uptime,low_competition,good_accuracy
+harsh_winter_crisis_baseline_uptime_normal_competition_good_accuracy,2.40%,£262,+75.5%,harsh_winter_crisis,baseline_uptime,normal_competition,good_accuracy
+harsh_winter_crisis_baseline_uptime_normal_competition_excellent_accuracy,2.40%,£291,+95.0%,harsh_winter_crisis,baseline_uptime,normal_competition,excellent_accuracy

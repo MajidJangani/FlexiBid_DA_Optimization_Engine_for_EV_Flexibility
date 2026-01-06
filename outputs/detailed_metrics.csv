@@ -1,0 +1,10 @@
+Metric,Value,Notes
+Module 05 Revenue/Vehicle,£149,Deterministic model
+Expected Value (Risk-Adjusted),£138,Probability-weighted mean
+Worst Case (5th %ile),£32,Downside risk (VaR)
+Best Case (95th %ile),£291,Upside potential
+Standard Deviation,£73,Revenue volatility
+Coefficient of Variation,0.53,Risk measure (σ/μ)
+Average Price,£436/MWh,Average bid price
+Fleet Size,54 vehicles,Participating vehicles
+Total Capacity,210.2 kW,Total turn-down capacity

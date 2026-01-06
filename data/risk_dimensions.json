@@ -1,0 +1,159 @@
+{
+  "weather_scenarios": {
+    "mild_winter_low_demand": {
+      "events_per_year": 20,
+      "price_environment": 0.9,
+      "revenue_multiplier": 0.45,
+      "probability": 0.15,
+      "description": "Mild winter, high renewables, low heating demand",
+      "driver": "Weather-driven (uncontrollable)",
+      "historical_precedent": "Summer 2023 - mild conditions",
+      "controllability": "NONE - Weather dependent",
+      "note": "Represents 2\u00d7 baseline deviation (40 \u2192 20 events)"
+    },
+    "normal_winter": {
+      "events_per_year": 40,
+      "price_environment": 1.0,
+      "revenue_multiplier": 1.0,
+      "probability": 0.6,
+      "description": "Normal winter conditions",
+      "driver": "Baseline assumption",
+      "historical_precedent": "Winter 2023/24",
+      "controllability": "NONE - Weather dependent"
+    },
+    "harsh_winter_crisis": {
+      "events_per_year": 60,
+      "events_range": "50-70 (plausible estimate)",
+      "price_environment": 1.3,
+      "revenue_multiplier": 1.95,
+      "probability": 0.2,
+      "description": "Cold snap, low wind generation, gas supply issues",
+      "driver": "Weather + supply constraints (uncontrollable)",
+      "historical_precedent": "Winter 2021/22 - Energy crisis",
+      "controllability": "NONE - Weather dependent",
+      "note": "Probability increased to 0.20"
+    },
+    "mild_summer": {
+      "events_per_year": 10,
+      "price_environment": 0.85,
+      "revenue_multiplier": 0.21,
+      "probability": 0.05,
+      "description": "Summer months, minimal heating demand",
+      "driver": "Seasonal variation",
+      "historical_precedent": "Typical summer baseline",
+      "controllability": "NONE - Seasonal pattern"
+    }
+  },
+  "device_scenarios": {
+    "high_uptime": {
+      "participation_rate": 0.93,
+      "revenue_multiplier": 1.033,
+      "probability": 0.3,
+      "description": "Excellent connectivity, stable OEM platform",
+      "driver": "Hypervolt/GivEnergy API uptime 99%+",
+      "controllability": "MEDIUM - OEM partnership SLAs",
+      "mitigation": "99% uptime SLA with device manufacturers"
+    },
+    "baseline_uptime": {
+      "participation_rate": 0.9,
+      "revenue_multiplier": 1.0,
+      "probability": 0.5,
+      "description": "Normal device operations",
+      "driver": "Typical API/connectivity performance",
+      "controllability": "MEDIUM - Standard operations",
+      "mitigation": "Monitoring and alerting systems"
+    },
+    "degraded_uptime": {
+      "participation_rate": 0.8,
+      "revenue_multiplier": 0.889,
+      "probability": 0.15,
+      "description": "API issues, firmware bugs",
+      "driver": "OEM platform instability",
+      "controllability": "MEDIUM - Escalate with OEM",
+      "mitigation": "Redundant device integrations, fallback systems"
+    },
+    "critical_failure": {
+      "participation_rate": 0.6,
+      "revenue_multiplier": 0.667,
+      "probability": 0.05,
+      "description": "Major OEM platform outage",
+      "driver": "Hypervolt/GivEnergy system down",
+      "controllability": "MEDIUM - Partner diversification",
+      "mitigation": "Multi-OEM integration strategy"
+    }
+  },
+  "competition_scenarios": {
+    "low_competition": {
+      "aggregators_active": 2,
+      "price_premium": 1.15,
+      "revenue_multiplier": 1.15,
+      "probability": 0.2,
+      "description": "Few aggregators, limited capacity, premium pricing",
+      "driver": "Market undersupply",
+      "controllability": "NONE - Market dynamics",
+      "mitigation": "Lock in long-term contracts during favorable periods"
+    },
+    "normal_competition": {
+      "aggregators_active": 4,
+      "price_premium": 1.0,
+      "revenue_multiplier": 1.0,
+      "probability": 0.6,
+      "description": "Balanced market, fair pricing",
+      "driver": "Competitive equilibrium",
+      "controllability": "NONE - Market dynamics",
+      "mitigation": "Maintain competitive edge through reliability"
+    },
+    "high_competition": {
+      "aggregators_active": 8,
+      "price_premium": 0.85,
+      "revenue_multiplier": 0.85,
+      "probability": 0.2,
+      "description": "Market saturation, price wars, margin compression",
+      "driver": "New entrants, oversupply",
+      "controllability": "NONE - Market dynamics",
+      "mitigation": "Differentiate through service quality"
+    }
+  },
+  "forecasting_scenarios": {
+    "excellent_accuracy": {
+      "saf_multiplier": 1.0,
+      "accuracy_pct": 95,
+      "revenue_multiplier": 1.0,
+      "probability": 0.4,
+      "description": "95%+ accuracy, no SAF penalty",
+      "driver": "Advanced ML forecasting, mature operations",
+      "controllability": "HIGH - Invest in forecasting systems",
+      "mitigation": "ML-based demand prediction, conservative buffers"
+    },
+    "good_accuracy": {
+      "saf_multiplier": 0.9,
+      "accuracy_pct": 90,
+      "revenue_multiplier": 0.9,
+      "probability": 0.4,
+      "description": "90% accuracy, 10% SAF penalty",
+      "driver": "Standard forecasting methods",
+      "controllability": "HIGH - Controllable through investment",
+      "mitigation": "Baseline forecasting improvements"
+    },
+    "poor_accuracy": {
+      "saf_multiplier": 0.7,
+      "accuracy_pct": 85,
+      "revenue_multiplier": 0.7,
+      "probability": 0.15,
+      "description": "85% accuracy, 30% SAF penalty",
+      "driver": "Baseline errors, new market entry",
+      "controllability": "HIGH - Learning curve issue",
+      "mitigation": "Experience + system refinement"
+    },
+    "critical_miss": {
+      "saf_multiplier": 0.4,
+      "accuracy_pct": 75,
+      "revenue_multiplier": 0.4,
+      "probability": 0.05,
+      "description": "<80% accuracy, severe SAF penalty",
+      "driver": "Major forecasting failure",
+      "controllability": "HIGH - Preventable with proper systems",
+      "mitigation": "Redundant forecasting models, real-time monitoring"
+    }
+  }
+}
