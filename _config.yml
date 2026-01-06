@@ -1,1 +1,13 @@
-
+title: MAJID JANGANI
+description: EV Fleet Smart-Charging Optimization & Market Participation Model
+show_downloads: true
+theme: jekyll-theme-slate
+markdown: kramdown
+kramdown:
+  math_engine: mathjax
+  syntax_highlighter: rouge
+  input: GFM
+plugins:
+  - jekyll-remote-theme
+permalink: /:title/
+baseurl: "/FlexiBid_DA_Optimization_Engine_for_EV_Flexibility"
