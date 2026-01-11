@@ -1,8 +1,3 @@
----
-layout: default
-title: "EV Fleet Smart-Charging Optimization & Market Participation Model"
-permalink:  /smart_charging_optimisation
----
 # Project Overview
 
 ##### Competitive Market Intelligence: UKPN Flexibility Market Analysis
@@ -642,7 +637,7 @@ $$
 R_{\text{event}} = C^{\max}_{\text{turndown}} \times \tau_{\text{event}} \times \frac{P_{\text{bid}}}{1000} \times SAF \times (1 - \phi)
 $$
 
-Where \(C^{\max}_{\text{turndown}}\) = max sustained reduction (kW), \(\tau_{\text{event}} = 1.5\) h typical, \(P_{\text{bid}}\) = bid price (£/MWh), \(SAF \in [0,1]\) = forecast accuracy factor, \(\phi = 0.2\) = aggregator fee.  
+Where $C^{\max}_{\text{turndown}}$ = max sustained reduction (kW), $\tau_{\text{event}} = 1.5$ h typical, $P_{\text{bid}}$ = bid price (£/MWh), $SAF \in [0,1]$ = forecast accuracy factor, $\phi = 0.2$ = aggregator fee.  
 
 **Annual revenue:**
 $$
@@ -719,259 +714,182 @@ $$
 This is ~15% below WS1 outcomes (gross £172), reflecting lower bid prices but better forecast accuracy. The trade-off favours **reliable, repeatable revenue** over high one-off prices, which aligns with a near-zero marginal cost, high-frequency flexibility market.
 
 
-## <a id="model-validation"></a> Model Validation and Benchmarking
+## <a id="model-validation"></a> Model Validation and Benchmarking NO2
+# Model Validation 
 
-### WS1 Trial Validation: Grounding the Model in Reality
+To validate the model, we compare its outputs against a real-world reference point. We use the WS1 trials to test whether the model reproduces the same orders of magnitude and operational trade-offs, without tuning inputs to match observed outcomes.
 
-Any flexibility model can look impressive on paper. Credibility comes from one test only: does it reproduce real-world outcomes?
+WS1 involved 65 return-to-home commercial EVs (54 active after the 10 kW participation threshold) responding to more than 60 UKPN congestion events. The fleet was weekday-dominant, with reported outcomes covering per-vehicle revenue, delivery reliability, peak reduction, opt-out behaviour, post-event rebound, and changes in load factor.
 
-The British Gas WS1 trials (UKPN, winter 2017/18) provide the strongest benchmark available for domestic EV flexibility in the UK, combining real DNO events, documented revenues, and observed driver behaviour.
+The model is configured to mirror WS1 fleet characteristics and operating conditions, with one intentional difference: pricing. WS1 bids reflected crisis-year emergency conditions (£549/MWh), while the model assumes competitive, repeatable pricing based on over 18 months of UKPN market data (£436/MWh on average).
 
-Our objective here is simple: validate that the model produces the same orders of magnitude, trade-offs, and constraints seen in WS1— without tuning to match the result.
+The objective is straightforward: to confirm that the model produces the same orders of magnitude, constraints, and trade-offs observed in WS1, without calibration to the result.
 
-#### Benchmark Context (WS1)
+[pic1](pic)!
 
-The WS1 trials operated during the 2017/18 winter (“Beast from the East”), a crisis year with over 60 flexibility events. The fleet consisted of 65 return-to-home commercial EVs participating in real UKPN events.
+Revenue is expected to scale with both clearing price and delivery accuracy:
 
-Published outcomes show:
-- £172 per vehicle net revenue (from £215 gross after a 20% aggregator fee)
-- 50% peak reduction during events
-- ~95% delivery reliability on weekdays
-- ~10% final opt-out rate
-- <30% post-event rebound
-- +0.15 load-factor improvement
+- **Price effect:** £436/MWh versus £549/MWh implies revenue at ~79% of WS1, all else equal.  
+- **Delivery accuracy effect:** A 91% schedule accuracy factor versus ~80% in WS1 increases recovered revenue by ~14%.  
+- **Combined effect:** Applying both factors multiplicatively implies revenue at ~90% of WS1 levels.
 
-These figures define the standard any credible model must meet.
+The model produces ~87% of WS1 revenue in practice. The remaining ~4 percentage point difference falls within expected model variance and reflects:
 
-#### Like-for-Like Test Conditions
+- higher operational safety margins (15.5% vs ~10% in WS1),  
+- exclusion of vehicles below the minimum bid threshold, and  
+- optimisation choices that prioritise feasibility over revenue maximisation.
 
-To ensure an apples-to-apples comparison, we configure the model identically:
-- Fleet size: 65 vehicles
-- Event frequency: 60 events/year
-- Fleet type: commercial R2H, weekday dominant
-- Season: UKPN winter constraints
+[pic2](pic!)
 
-The only intentional difference is pricing.  
-WS1 bid at crisis-level prices (£549/MWh). Our model bids £436/MWh, reflecting sustainable, competitive market behaviour rather than emergency pricing.
+### Model Design Decisions Behind Key Metrics
+**1. Peak reduction (51.1%):** Determined by the **minimum charging constraint** (1.4 kW floor due to charge point behavior below 6 A) and vehicle energy requirements. This reflects physical limitations of equipment.  
 
-#### Revenue Validation
+**2. Opt-out rate (7.1%):** Based on a **behavioral persona distribution** (80% reliable, 10% irregular, 5% late, 5% early bird) derived from general UK commercial fleet patterns documented in transport surveys.  
 
-Under WS1 conditions, the model produces £149 per vehicle net revenue, compared with WS1’s £172.
+**3. SAF accuracy (91%):** Result of **conservative baseline forecasting** with a 15.5% buffer (10% operational + 5% behavioral) and MILP optimization prioritizing feasibility over revenue.
 
-This –13.4% gap is fully explained, not accidental:
+**Overall Validation Score:** **88.2/100** (from automated scoring algorithm)
 
-Lower bid price:  
-$$
-\frac{436}{549} = 0.794 \quad (-20.6\%)
-$$
+**Assessment:** Model achieves **87% of WS1 revenue** under different pricing strategy (competitive vs crisis). Technical and behavioral metrics align within ±5% (well within year-to-year operational variance for weather, driver behavior, and market conditions).
 
-Higher forecast accuracy (SAF recovery):  
-$$
-\frac{0.91}{0.80} \approx 1.14 \quad (+13.8\%)
-$$
+**Confidence Level:** **85% (High)** 
+- Suitable for strategic decision-making and business case development
+- Appropriate for investor presentations and market entry analysis
+- Not suitable for contract performance guarantees without 6-12 month operational validation period
 
-Net effect:  
-$$
--20.6\% + 13.8\% = -13.4\%
-$$
+## Risk-Based Scenario Analysis
 
-**Interpretation**: The model deliberately sacrifices margin for win-rate and penalty resilience. It achieves 87% of WS1 revenue while bidding 21% lower prices, confirming conservative, scalable assumptions.
+### Overview and Methodology
 
-#### Technical & Behavioral Alignment
+Under baseline assumptions (60 constraint events per year, 90% fleet participation, competitive pricing, and 91% forecast accuracy), deterministic modelling produces £149 per vehicle per year. While useful as a reference, this estimate is fragile because it assumes risks act independently and average out over time.
 
-Across all non-price dimensions, the model independently reproduces WS1 outcomes:
-- Peak reduction: exactly 50%, driven by a minimum charging constraint that reflects driver anxiety
-- Reliability: 97% modeled vs 95% observed, consistent with weekday commercial fleets
-- Opt-out rate: 7% modeled vs 10% observed, reflecting mature UX rather than first-generation trials
-- Secondary peak: ~25% rebound, safely below WS1’s <30% threshold
-- Load factor: +0.16 improvement, matching WS1’s +0.15 within rounding error
+In practice, risks compound. Weather-driven reductions in grid constraints lower revenue and strand capacity; device outages reduce deliverable volume and increase Schedule Accuracy Factor (SAF) penalties; and market saturation compresses clearing prices. To capture these interactions, we replace point estimates with a scenario-based approach.
 
-**None of these results are hard-coded targets**; they emerge from behavioral and grid constraints.
+We model 192 joint scenarios by combining discrete outcomes across four risk dimensions, with probabilities informed by historical precedent and operational assumptions:
 
-#### Validation Scorecard
+- Grid conditions (event frequency driven by weather and heating demand; uncontrollable)
+- Fleet participation (device uptime and opt-out behaviour; partially controllable)
+- Market competition (pricing pressure from aggregator supply–demand dynamics; uncontrollable)
+- Forecasting accuracy (SAF penalty exposure driven by ML investment and operational maturity; controllable)
 
-| Metric            | WS1     | Model   | Status                  |
-|-------------------|---------|---------|-------------------------|
-| Net revenue       | £172   | £149   | Explained gap           |
-| Peak reduction    | 50%    | 50%    | Perfect match           |
-| Reliability       | 95%    | 97%    | Slightly optimistic     |
-| Opt-out rate      | 10%    | 7%     | Realistic improvement   |
-| Secondary peak    | <30%   | 25%    | Stricter                |
-| Load factor       | +0.15  | +0.16  | Equivalent              |
+Scenario probabilities are calculated multiplicatively, and revenues are derived by applying the corresponding multipliers to the £149 baseline to produce probability-weighted outcomes rather than a single deterministic estimate.
 
-**Overall validation: 94 / 100**
-
-## <a id="risk-scenario"></a> Risk-Based Scenario Analysis
-
-### Overview
-
-Deterministic models suggest ~£149/vehicle/year under baseline assumptions. While simple, this ignores the compounding effects of real-world risks: weather volatility, driver behaviour, and market competition. Budgeting off deterministic outputs systematically understates downside risk.
-
-We therefore model **combined scenarios** to reflect realistic outcomes, evaluating 36 joint scenarios across three risk dimensions. Each scenario is assigned a probability based on historical data, and expected revenue is calculated.
-
----
-
-### Why Deterministic Models Break Down
-
-Traditional “what-if” or sensitivity analysis varies one parameter at a time (event frequency, price, opt-outs), assuming risks are independent. Real-world risks are **interdependent**:
-
-- Mild winter → oversupply → price compression  
-- Driver opt-outs → reduced capacity → SAF penalties  
-- Increased competition → lower prices, higher delivery expectations  
-
-This section models **joint effects**, not isolated shocks.
-
----
 
 ### Risk Dimensions
 
-#### 1. Weather Volatility (Uncontrollable, Dominant)
+#### 1. Grid Conditions (Event Frequency – Uncontrollable)
 
-Winter severity drives UK network stress and flexibility events. UK data shows **3–4× variance** in constraint hours between mild and severe winters. Four weather regimes are modelled:
+Winter severity drives UK distribution stress, with historical UKPN data showing multi-fold variation in constraint events. The 40-event “normal” winter is scaled from WS1’s 60-event crisis year, with mild and harsh cases representing ±50% variance. Mitigation focuses on geographic diversification, product blending, and liquidity buffers.
 
-| Winter Type | Probability | Event Count | Revenue Example (£/vehicle) |
-|------------|------------|-------------|----------------------------|
-| Mild       | 15%        | <30         | ~50                        |
-| Normal     | 60%        | ~40         | 150                        |
-| Harsh      | 20%        | ~60         | 250                        |
-| Extreme    | 5%         | >80         | ~300                       |
+| Scenario | Events / Year | Probability | Revenue Multiplier | Historical Reference |
+|--------|----------------|-------------|-------------------|---------------------|
+| Mild Winter | 20 | 15% | 0.45× | Summer 2023 (mild, high renewables) |
+| Normal Winter | 40 | 60% | 1.00× | Winter 2023/24 baseline |
+| Harsh Winter | 60 | 20% | 1.95× | Winter 2017/18 (“Beast from the East”) |
+| Summer Low | 10 | 5% | 0.21× | Typical summer conditions |
 
-**Mitigation:** Geographic diversification, blending products, cash reserves.
+#### 2. Fleet Participation (Partially Controllable)
 
----
+Fleet participation directly affects deliverable capacity and forecast accuracy. Baseline participation is 90% (WS1 observed ~10% opt-out), with deviations reflecting service quality, UX clarity, and driver trust. Participation swings account for ~15–20% of revenue volatility.
 
-#### 2. Driver Trust & Operational Quality (Controllable, High ROI)
+| Scenario | Participation | Probability | Revenue Multiplier | Interpretation |
+|--------|----------------|-------------|-------------------|---------------|
+| High Engagement | 93% | 30% | 1.033× | Mature operations, strong trust |
+| Baseline | 90% | 50% | 1.00× | Normal operations |
+| Elevated Opt-Outs | 80% | 15% | 0.889× | SLA or UX issues |
+| Participation Collapse | 60% | 5% | 0.667× | Major service failure |
 
-EV flexibility depends on **driver confidence**. Opt-outs reduce capacity and degrade baseline accuracy, triggering SAF penalties. Three scenarios are considered:
+Mitigation levers include OEM SLAs, real-time earnings transparency, and phased pilot rollouts.
 
-| Scenario        | Probability | Opt-Out Rate | SAF  | Revenue Impact | Key Assumption                  |
-|-----------------|------------|--------------|------|----------------|--------------------------------|
-| Trust Erosion   | 20%        | 15%          | 0.85 | -45%           | Poor UX, missed SLAs           |
-| Baseline Trust  | 60%        | 7%           | 0.92 | Baseline       | Decent service                 |
-| High Trust      | 20%        | 3%           | 0.96 | +26%           | Excellent UX, guarantees       |
+#### 3. Market Competition (Pricing Pressure – Uncontrollable)
 
-**Insight:** Investments in UX, support, and reliability guarantees (~£28/vehicle/year) recover ~£52/vehicle/year—ROI ~186%.
+Flexibility markets are competitive, with prices set by supply–demand dynamics across multiple aggregators. The £436/MWh baseline reflects an optimized competitive bid, with ±15% scenarios calibrated to historical clearing price variance.
 
----
+| Scenario | Effective Price | Probability | Revenue Multiplier | Market State |
+|--------|------------------|-------------|-------------------|--------------|
+| Low Competition | £502/MWh | 20% | 1.15× | Supply shortage |
+| Competitive Market | £436/MWh | 60% | 1.00× | Current equilibrium |
+| Price War | £370/MWh | 20% | 0.85× | Market saturation |
 
-#### 3. Market Competition (Moderate Impact, Low Control)
+Mitigation focuses on delivery reliability, constrained-zone targeting, and long-term DNO relationships.
 
-Markets are competitive; Axle Energy controls ~50% of UKPN volume. Three scenarios:
+#### 4. Forecasting Accuracy (SAF Penalty Risk – Controllable)
 
-| Scenario           | Probability | Price Change | Win Rate | Revenue Impact | Market Dynamics                  |
-|-------------------|------------|--------------|---------|----------------|--------------------------------|
-| Price War          | 20%        | -30%         | 70%     | -51%           | Axle defends share              |
-| Competitive Market | 65%        | Stable       | 60%     | Baseline       | Current state                   |
-| Premium Positioning| 15%        | +20%         | 95%     | +14%           | Reliability premium accepted    |
+Forecast errors trigger SAF penalties, with accuracy below 95% incurring proportional payment reductions. Our model predicts ~91% accuracy (WS1 trials ~80%), with 95% representing the penalty-free threshold.
 
-**Mitigation:** Differentiate via delivery reliability, selective zones, and long-term DNO relationships.
+| Scenario | Accuracy | SAF Multiplier | Probability | Revenue Multiplier |
+|--------|----------|----------------|-------------|-------------------|
+| Excellent | ≥95% | 1.00 | 40% | 1.00× |
+| Good | 90% | 0.90 | 40% | 0.90× |
+| Poor | 85% | 0.70 | 15% | 0.70× |
+| Critical Miss | <80% | 0.40 | 5% | 0.40× |
 
----
+### Visual Analysis: Four-Panel Risk Dashboard
 
-### Combining Risks: 36-Scenario Matrix
+![Risk Scenario Analysis](outputs/risk_scenario_analysis.png)
 
-**Methodology:**
+#### Revenue Distribution Analysis (Top Panels)
+Probability-weighted revenue across 192 scenarios produces an expected value of £138 per vehicle, with a median of £134, indicating a right-skewed distribution. Most outcomes cluster between £120–150 under normal winter conditions, while a small number of harsh-winter scenarios lift the long-run average above the median.
 
-1. **Generate all combinations:** 4 weather × 3 trust × 3 competition = 36 scenarios  
-2. **Calculate joint probabilities:**  
-   Example: Harsh Winter ∩ High Trust ∩ Premium = 0.20 × 0.20 × 0.15 = 0.006 (0.6%)  
-3. **Calculate scenario revenue:**  
+Downside risk is material but bounded: the 5th-percentile Value-at-Risk is £32 per vehicle, which defines a conservative stress-testing floor rather than a planning baseline. The deterministic estimate (£149) sits around the 65th percentile, overstating expected outcomes by ignoring downside variance.
 
-Example scenario: Harsh Winter (60 events) + High Trust (3% opt-out, 96% SAF) + Competitive Market (stable price)
-
-Adjusted Capacity:  
-$$
-49.7 \times 0.97 = 48.2\text{ kW}
-$$
-
-Total Fleet Revenue:  
-$$
-48.2 \times 2.0 \times \frac{436}{1000} \times 0.80 \times 60 \times 0.96 = £3,230
-$$
-
-Per vehicle (13 vehicles):  
-$$
-£3,230 / 13 = £248/\text{vehicle/year}
-$$
-
-4. **Expected revenue:**  
-$$
-\mathbb{E}[R] = \sum_{i=1}^{36} P_i \times R_i
-$$
-
-**Key Metrics:**
-
-| Metric                 | Value         | Interpretation                                      |
-|------------------------|---------------|---------------------------------------------------|
-| Expected Value         | £113/vehicle  | Probability-weighted average across all scenarios |
-| Deterministic Baseline | £149/vehicle  | Baseline estimate (40 events, baseline trust)     |
-| Gap                    | -24%          | Realistic expectation vs deterministic           |
-| 5th Percentile (VaR)   | £32/vehicle   | 95% chance of earning more                         |
-| 95th Percentile        | £224/vehicle  | Upside potential                                   |
-| Standard Deviation     | £64/vehicle   | High variance; point estimates unreliable         |
-
----
-
-### Top 10 Scenarios (by Likelihood)
-
-| Rank | Scenario                              | Probability | Revenue/Vehicle | Cumulative Prob |
-|------|---------------------------------------|------------|----------------|----------------|
-| 1    | Normal + Baseline Trust + Competitive | 39.0%      | £149           | 39%            |
-| 2    | Normal + Baseline Trust + Price War   | 13.0%      | £73            | 52%            |
-| 3    | Mild + Baseline Trust + Competitive   | 9.8%       | £75            | 62%            |
-| 4    | Harsh + Baseline Trust + Competitive  | 7.8%       | £224           | 70%            |
-| 5    | Normal + Trust Erosion + Competitive  | 7.8%       | £82            | 78%            |
-| 6    | Normal + High Trust + Competitive     | 5.2%       | £188           | 83%            |
-| 7    | Harsh + Baseline Trust + Price War    | 2.6%       | £110           | 86%            |
-| 8    | Normal + Baseline Trust + Premium     | 2.3%       | £170           | 88%            |
-| 9    | Mild + Baseline Trust + Price War     | 3.2%       | £37            | 91%            |
-| 10   | Extreme + Baseline Trust + Competitive| 1.9%       | £298           | 93%            |
-
-**Insight:** Top 10 scenarios cover 93% probability—focus planning on these.
-
----
-
-### Practical Business Implications
-
-1. **Budget conservatively:** Use expected value (£113/vehicle) rather than deterministic baseline (£149).  
-2. **Hold reserves:** Single mild winter may push revenues below operating costs.  
-   - Recommended Reserve:  
-   $$
-   \text{Reserve} = 6 \times £32 \times 50 = £9,600
-   $$  
-   6 months covers November–March season.  
-3. **Invest in controllable levers:** Driver trust offers the highest ROI.  
-4. **Focus on likely scenarios:** Avoid over-engineering for extreme tail events.
-
----
-
-### Operational Priorities (ROI-Ranked)
-
-#### [CRITICAL] Invest in Driver Trust (ROI: 186%)
-- Risk: 20% → £82/vehicle loss  
-- Solution: UX, support, guarantees  
-- Cost: £28/vehicle/year  
-- Benefit: £52/vehicle/year  
-
-**Action Plan:**  
-- Q1: Launch app with real-time status  
-- Q2: 99% vehicle readiness SLA  
-- Q3: Real-time earnings notifications  
-- Q4: Monthly transparency reports
-
-#### [HIGH] Diversify Across DNO Zones
-- Problem: Weather exposure  
-- Solution: 3–5 zones (UKPN, SSEN, WPD)  
-- Effect: Reduces single-zone dependency ~40%
-
-#### [MEDIUM] Build 99%+ Delivery Reputation
-- Goal: Unlock Premium Positioning scenario (+14% revenue)  
-- Requirement: Proven 12-month event delivery track record  
-
-**Differentiation Strategy:** Transparency reports, premium bids, target risk-averse DNOs.
+Sensitivity analysis confirms that grid conditions dominate absolute variance, but are uncontrollable. Forecasting accuracy ranks second and is fully controllable, making it the most attractive lever for risk reduction. Fleet participation and market pricing contribute secondary uncertainty and can be partially mitigated through operational execution and differentiation.
 
 
+The cumulative distribution function (top-right) translates these probabilities into decision-relevant thresholds. The steep slope between £100-200 indicates high probability concentration in this range—most real-world outcomes will cluster here. The CDF flattens in the tails (below £50 and above £250), showing that extreme scenarios are possible but rare. At the 50% probability mark (blue horizontal line), the median revenue of £134 intersects the curve, confirming this as the "break-even" prediction where upside and downside scenarios are equally likely. For investor presentations, this median represents a more defensible forecast than the deterministic £149, as it explicitly accounts for probable weather variance and operational uncertainty without over-indexing on tail risks.
 
+[pic panel 2]()
+
+#### Sensitivity and Risk Prioritization (Bottom Panels)
+
+The tornado diagram ranks uncertainty drivers by revenue impact, identifying grid conditions as the dominant factor with a £239 spread (£7 worst-case to £246 best-case)—over 30× larger than any other variable. This confirms weather-driven event frequency as the primary determinant of annual profitability and the least amenable to operational control. Forecasting accuracy ranks second (£102 range) but is fully controllable, offering the steepest opportunity for risk reduction. Device performance (£46) and market competition (£44) contribute similar secondary uncertainty, with uptime partially controllable via OEM SLAs and pricing pressure largely external.
+
+The risk matrix translates these sensitivities into operational priorities. Normal winter scenarios (≈60% probability) cluster near baseline impact and require no special mitigation. Harsh winters (≈20% probability, +95% impact) justify operational readiness and contractual flexibility, but not permanent overprovisioning. Critical device failures (5% probability, −33% impact) fall into the low-probability, high-impact quadrant, appropriate for contingency planning via multi-OEM redundancy. Competition scenarios show asymmetric risk: price wars and premium pricing have comparable magnitude but opposite impact, implying that investment in delivery reliability can systematically shift outcomes from commodity competition to differentiated pricing. Overall, while weather dominates absolute variance, controllable levers—forecast accuracy and uptime—offer the highest ROI for risk-adjusted value creation.
+
+### Top 10 Scenarios by Probability
+
+
+The ten most likely scenario combinations account for ~62% of total probability mass, representing the outcomes operators should design around.
+
+| Rank | Scenario Combination | Probability | Revenue | vs Baseline |
+|------|---------------------|-------------|---------|-------------|
+| 1 | Normal Winter + Baseline Uptime + Competitive Market + Good Accuracy | 7.20% | £134 | -10% |
+| 2 | Normal Winter + Baseline Uptime + Competitive Market + Excellent Accuracy | 4.80% | £149 | 0% |
+| 3 | Normal Winter + High Uptime + Competitive Market + Good Accuracy | 4.32% | £139 | -7% |
+| 4 | Harsh Winter + Baseline Uptime + Competitive Market + Good Accuracy | 2.40% | £261 | +75% |
+| 5 | Normal Winter + High Uptime + Competitive Market + Excellent Accuracy | 2.88% | £154 | +3% |
+| 6 | Mild Winter + Baseline Uptime + Competitive Market + Good Accuracy | 2.70% | £60 | -60% |
+| 7 | Normal Winter + Baseline Uptime + Low Competition + Good Accuracy | 2.40% | £154 | +3% |
+| 8 | Normal Winter + Baseline Uptime + Competitive Market + Poor Accuracy | 2.70% | £104 | -30% |
+| 9 | Normal Winter + Degraded Uptime + Competitive Market + Good Accuracy | 2.16% | £119 | -20% |
+| 10 | Harsh Winter + Baseline Uptime + Competitive Market + Excellent Accuracy | 1.60% | £290 | +95% |
+
+The most probable single outcome—normal winter, baseline participation, competitive pricing, and good forecasting—yields £134 per vehicle, defining a realistic “business-as-usual” case. Improving forecasting accuracy alone closes most of the gap to the deterministic baseline, while harsh-winter scenarios deliver substantial upside but occur infrequently, explaining the right-skewed distribution.
+
+### Scenario Calibration and Risk Summary
+
+Scenario inputs combine historical precedent (WS1 2017/18), trial observations, and engineering judgment. Event frequency, fleet participation, and forecasting accuracy represent plausible operational ranges rather than statistically fitted distributions. Multi-year fleet-level data would be required to empirically validate distributions and learning curves.
+
+Deterministic revenue (£149/vehicle) reflects favorable, crisis-year conditions and is suitable as an upside benchmark. Risk-adjusted expected revenue (£138/vehicle) accounts for 192 scenarios, incorporating mild winters, operational degradation, and competitive pressure. Outcomes are right-skewed: the median (£134/vehicle) is the conservative anchor for Year 1 budgeting, while £138 represents multi-year expectations.
+
+Key Implications for Planning:
+- Deterministic models overstate revenue by 7–10%; use risk-adjusted figures for decision-making.
+- Revenue variance is dominated by uncontrollable factors (weather, competition); controllable levers (forecasting, uptime, driver engagement) determine capture efficiency.
+
+
+### Transition: Applying the Risk Framework to International Markets
+
+This analysis establishes two critical findings that generalize beyond the UK market.
+
+First, deterministic revenue estimates systematically overstate outcomes by ~7–10%. While favorable conditions can produce £150+/vehicle, probability-weighted results cluster around a lower median, with weather variance, competition, and operational degradation creating meaningful downside risk. As a result, median outcomes—not upside scenarios—should anchor Year 1 budgeting, while expected values are more appropriate for multi-year planning.
+
+Second, revenue variance decomposes cleanly into uncontrollable and controllable drivers. Weather-driven event frequency and market competition account for the majority of absolute variance and must be treated as screening variables for market entry. By contrast, forecasting accuracy and fleet participation are execution-dependent levers that determine how much value can be captured once a market is entered.
+
+This distinction defines how the model should be used internationally:
+- Market entry decisions should focus on uncontrollable factors (event frequency, regulatory stability, competitive concentration).
+- Market performance and scaling depend on controllable factors (forecasting accuracy, uptime, driver engagement).
+
+The same scenario-based framework is therefore applied in the following section to European flexibility markets, recalibrated for local settlement rules, event frequency distributions, technical constraints, and behavioral maturity. The objective is not to forecast upside, but to determine which markets clear a minimum risk-adjusted revenue threshold and justify further validation.
 
 # 🌍 International Market Expansion Framework
 
@@ -1196,333 +1114,6 @@ Days 13-14: Decision: Go/No-Go based on data gaps
 
 **Verdict:** ❌ **Defer** - Focus on demand-side markets (NL, SE, NO) where V2G not required
 
----
-
-## Part IV: Module-Level Adaptation Matrix
-
-### What Changes Per Market (Technical Checklist)
-
-**Module 00 (Market Analysis):** Geography-specific competitive data
-```python
-# UKPN Implementation
-ukpn_data = load_market_data('ukpn-flexibility-dispatches.csv')  # 2,981 events
-
-# Netherlands Adaptation
-gopacs_data = load_market_data('gopacs-activation-history.csv')  # Source: EPEX/TenneT
-# Analyze: Dutch aggregator shares, zone-specific pricing, event frequency
-
-# Sweden Adaptation  
-pielo_data = load_market_data('pielo-node-auctions.csv')  # Source: Pielo API
-# Analyze: Node-level prices, 15-min clearing patterns, seasonal hydro impacts
-```
-
-**Module 02 (Fleet Generator):** Infrastructure and climate calibration
-```python
-# Key Parameters to Update:
-CP_DISTRIBUTION = {
-    'uk': {'7.4kW': 0.90, '3.7kW': 0.07, '11kW': 0.03},
-    'netherlands': {'7.4kW': 0.60, '11kW': 0.30, '3.7kW': 0.10},
-    'sweden': {'11kW': 0.70, '7.4kW': 0.25, '22kW': 0.05},
-    'norway': {'7.4kW': 0.85, '11kW': 0.12, '3.7kW': 0.03}
-}
-
-SEASONAL_EFFICIENCY = {
-    'uk': {'winter': 1.26, 'summer': 1.10},
-    'netherlands': {'winter': 1.20, 'summer': 1.08},
-    'sweden': {'winter': 1.35, 'summer': 1.12},
-    'norway': {'winter': 1.45, 'summer': 1.15}  # Extreme cold
-}
-
-BEHAVIORAL_PUNCTUALITY = {
-    'uk': {'reliable': 0.80, 'late': 0.10, 'irregular': 0.05, 'early': 0.05},
-    'sweden': {'reliable': 0.90, 'late': 0.03, 'irregular': 0.04, 'early': 0.03},  # Structured work culture
-    'netherlands': {'reliable': 0.85, 'late': 0.05, 'irregular': 0.05, 'early': 0.05}
-}
-```
-
-**Module 03 (Operational Requirements):** Minimal changes (energy physics universal)
-
-**Module 04 (Baseline Forecasting):** Time resolution adjustments
-```python
-# UKPN: 48 PTUs (30-min)
-PTU_DURATION_HOURS = 0.5
-NUM_PTUS = 48
-
-# Netherlands/Sweden: 96 PTUs (15-min)
-PTU_DURATION_HOURS = 0.25
-NUM_PTUS = 96
-# All baseline logic unchanged, just finer time granularity
-```
-
-**Module 05 (Optimization):** Settlement-specific constraints
-```python
-# UKPN: Peak hours 17:00-20:00
-DNO_PEAK_HOURS = list(range(34, 40))  # PTUs 34-39
-
-# Netherlands: Peak 18:00-21:00 (estimated)
-DNO_PEAK_HOURS = list(range(36, 42))  # PTUs 36-41
-
-# Sweden: Node-specific (varies)
-DNO_PEAK_HOURS = get_node_peak_hours(node_id)  # Dynamic lookup
-```
-
-**Module 06 (Penalties):** Market-specific settlement rules
-```python
-# UKPN Schedule Accuracy Factor
-def ukpn_penalty(accuracy):
-    if accuracy >= 95.0:
-        return 1.00  # No penalty
-    elif accuracy <= 63.0:
-        return 0.00  # Zero payment
-    else:
-        return max(0.0, 1.0 - 0.03 * (95.0 - accuracy))
-
-# Netherlands (GOPACS) - NEEDS VALIDATION
-def gopacs_penalty(accuracy):
-    # Hypothesis: Simpler spot-market structure = less gaming risk
-    # May use marginal pricing (no penalty) or simpler threshold
-    # CRITICAL: Validate with GOPACS settlement docs
-    pass
-
-# Sweden (Pielo) - NEEDS VALIDATION  
-def pielo_penalty(accuracy):
-    # Hypothesis: Similar to UKPN (accuracy-based)
-    # CRITICAL: Scrape Pielo settlement methodology
-    pass
-```
-
-**Module 09 (Risk Analysis):** Event frequency recalibration
-```python
-# UKPN Scenario Matrix
-EVENT_FREQUENCY_SCENARIOS = {
-    'mild': 15,    # Mild winter
-    'normal': 40,  # Baseline
-    'harsh': 60,   # Severe winter
-    'crisis': 80   # 2017-18 level
-}
-
-# Netherlands Adaptation (ESTIMATED)
-EVENT_FREQUENCY_SCENARIOS = {
-    'mild': 10,
-    'normal': 25,   # Lower urban density than London
-    'harsh': 35,
-    'crisis': 50
-}
-
-# Sweden Adaptation (ESTIMATED)
-EVENT_FREQUENCY_SCENARIOS = {
-    'mild': 20,
-    'normal': 45,   # Grid constraints despite hydro
-    'harsh': 65,
-    'crisis': 90
-}
-```
-
----
-
-## Part V: Market Entry Risk: Buffer Calibration Framework
-
-### Why UK's 15.5% Buffer Doesn't Transfer Directly
-
-The current model's **15.5% safety buffer** (10% operational + 5% behavioral) is calibrated for a **mature UK R2H fleet** with 18-24 months of operational history. Three behavioral risk factors compound when entering new markets:
-
-**Integrated Buffer Formula:**
-```
-Buffer_Required = Buffer_Base × (1 + α_OptOut + α_GuestVehicles + α_Maturity)
-
-Where:
-  Buffer_Base = 10% (physical risks: traffic, route deviations)
-  α_OptOut = Participation risk adjustment (0.05-0.15)
-  α_GuestVehicles = Unrecognized vehicle risk (0.00-0.20)
-  α_Maturity = Historical data availability (0.05-0.15)
-```
-
-### Risk Factor 1: Opt-Out Rate (Driver Participation)
-
-| Market Stage | Opt-Out Rate | Effective Fleet | Forecasting Error | Buffer Adjustment |
-|--------------|--------------|----------------|-------------------|-------------------|
-| **UK Mature** | 7% | 93% of fleet | ±10% | +5% (α = 0.05) |
-| **New Market (Month 0-6)** | 20-25% | 75-80% of fleet | ±15% | +15% (α = 0.15) |
-| **Growth (Month 6-18)** | 12-18% | 82-88% of fleet | ±12% | +10% (α = 0.10) |
-
-**Mathematical Basis:** Forecasting error scales with √(1/N_effective)
-- 95 vehicles: ±10% error
-- 75 vehicles: ±13% error (+30% worse)
-
-### Risk Factor 2: Guest Vehicles (Infrastructure Unpredictability)
-
-| Fleet Type | Guest Vehicle Rate | Impact | Buffer Adjustment |
-|-----------|-------------------|--------|-------------------|
-| **R2H (Home)** | 0% (1 vehicle = 1 CP) | None | +0% (α = 0.00) |
-| **Depot (Shared)** | 20-30% (contractors, pool cars) | High | +20% (α = 0.20) |
-
-**Why R2H Fleets Outperform Depots:**
-- WS1 (R2H): £215/vehicle @ 15.5% buffer
-- WS2 (Depot): £45/vehicle @ 18-20% buffer
-- **Key difference:** Zero guest vehicle uncertainty + no CP sharing = tighter buffers = higher bids
-
-### Risk Factor 3: Historical Participation (Market Maturity)
-
-| Timeline | Historical Data | Baseline Accuracy | Buffer Adjustment |
-|----------|-----------------|-------------------|-------------------|
-| **Month 0-6** | 0-10% | 75-80% | +15% (α = 0.15) |
-| **Month 6-12** | 10-20% | 82-88% | +10% (α = 0.10) |
-| **Month 12-18** | 20-30% | 88-92% | +7% (α = 0.07) |
-| **Month 18+ (UK)** | 30-40% | 92-95% | +5% (α = 0.05) |
-
-### Example Calculations: Market Entry Scenarios
-
-**Scenario 1: UK Mature R2H (Current Model)**
-```
-Buffer = 10% × (1 + 0.05 + 0.00 + 0.05)
-       = 10% × 1.10  
-       = 11% physical + 5% behavioral = 15.5% total ✓
-```
-
-**Scenario 2: Netherlands Year 1 R2H**
-```
-Buffer = 10% × (1 + 0.15 + 0.00 + 0.15)
-       = 10% × 1.30
-       = 13% physical + 5% behavioral = 18% total
-
-Revenue Impact:
-  - UK: 210 kW capacity → £201/vehicle
-  - NL Year 1: 185 kW capacity (-12%) → £165/vehicle (-18%)
-```
-
-**Scenario 3: UK Depot Fleet**
-```
-Buffer = 10% × (1 + 0.10 + 0.20 + 0.05)
-       = 10% × 1.35
-       = 13.5% physical + 5% behavioral = 18.5% total
-
-Explains WS2 depot underperformance:
-  - Tighter buffer (18.5% vs R2H 15.5%)
-  - Shorter flexibility windows (depot: 3-5h vs R2H: 8-10h)
-  - Result: £45/vehicle vs £215/vehicle
-```
-
-### Strategic Implication: The Learning Curve IS the Business Case
-
-**Netherlands Market Entry Timeline:**
-```
-Month 0-6:   25% buffer → €126/vehicle (70% of steady-state)
-Month 6-12:  22% buffer → €145/vehicle (81% of steady-state)
-Month 12-18: 18% buffer → €162/vehicle (91% of steady-state)
-Month 18+:   16% buffer → €178/vehicle (100% steady-state)
-```
-
-**Competitive Moat:** Axle Energy with 3+ years UK operational data can bid 15-20% more aggressively than new market entrants, creating revenue advantages that persist for 18-24 months until competitors close the maturity gap.
-
----
-
-## Part VI: Rapid Market Assessment Protocol (2-Week Sprint)
-
-### Week 1: Data Extraction & Technical Validation
-
-**Day 1-2: Settlement Structure (30% weight)**
-- [ ] Request DSO settlement documentation
-- [ ] Map penalty formula (if exists): threshold, grace window, zero floor
-- [ ] Identify baseline methodology: forecast vs. metered vs. historical average
-- [ ] Measurement window: 15:00-21:00 (UK) vs. full 24h vs. dynamic?
-- [ ] **Decision criteria:** If penalty >5%/accuracy point → HIGH RISK (price premium required)
-
-**Day 3: Market Structure (25% weight)**
-- [ ] Minimum bid size (kW or MW threshold)
-- [ ] Procurement window: Day-ahead (12h) vs. week-ahead vs. month-ahead
-- [ ] Gate closure timing (affects forecasting accuracy)
-- [ ] Aggregator licensing: None (UK) vs. registration vs. full license
-- [ ] **Decision criteria:** If >500 kW minimum → need 70+ vehicles (pilot scale issue)
-
-**Day 4: Pricing Intelligence (20% weight)**
-- [ ] Scrape marketplace historical data (if public)
-- [ ] Calculate average clearing price, min/max range
-- [ ] Seasonal patterns (winter vs. summer, hydro vs. demand-driven)
-- [ ] Estimate event frequency from DSO constraint reports
-- [ ] **Decision criteria:** If avg price <€200/MWh AND <30 events/year → LOW REVENUE
-
-**Day 5: Technical Requirements (15% weight)**
-- [ ] Service type: Demand turn-down vs. V2G vs. frequency response
-- [ ] Response time: Minutes (OK) vs. seconds (V2G likely) vs. sub-second (TSO only)
-- [ ] Bidirectional requirement: Deal-breaker check (€2k+ capex)
-- [ ] Grid code compliance: Simple (G99/G98) vs. complex (droop curves)
-- [ ] **Decision criteria:** If V2G mandatory → DEFER (cost-benefit negative)
-
-### Week 2: Revenue Modeling & Go/No-Go Decision
-
-**Day 6-8: Adapt Quantitative Engine**
-- [ ] Update Module 02 parameters (CP distribution, seasonal factors, behavioral personas)
-- [ ] Recalibrate Module 05 constraints (peak hours, minimum charging thresholds)
-- [ ] Implement Module 06 penalty structure (if different from UK SAF)
-- [ ] Run optimization for 3 representative weeks (mild/normal/harsh weather)
-- [ ] Calculate revenue/vehicle range: pessimistic/base/optimistic scenarios
-
-**Day 9-10: Competitive & Regulatory Assessment**
-- [ ] LinkedIn search: "[Country] flexibility aggregator" OR "[Country] EV DSR"
-- [ ] Identify 3-5 active aggregators, estimate market shares (if data available)
-- [ ] Contact 2 aggregators: "15-min informational call" (market intelligence)
-- [ ] Regulatory check: Independent aggregation legal framework, metering requirements
-- [ ] **Decision criteria:** If >60% market share held by 1 player → HIGH COMPETITION
-
-**Day 11-13: Pilot Design (If Go)**
-- [ ] Target geography: High-density urban area (fleet scale + constraint overlap)
-- [ ] Fleet size: Calculate minimum viable (based on bid threshold + buffer)
-- [ ] Partner identification: Fleet operators, CPOs, utilities
-- [ ] Timeline: 3-month pilot → 6-month expansion → 12-month maturity
-- [ ] Budget: Adaptation costs + pilot operations + fail-fast milestones
-
-**Day 14: Recommendation Brief (2 Pages)**
-```markdown
-## [Market] Market Entry Assessment
-
-**Summary:** GO / NO-GO / DEFER
-
-**Similarity Score:** [X]% (Settlement: [X]%, Structure: [X]%, Pricing: [X]%, Technical: [X]%, Competition: [X]%)
-
-**Revenue Estimate:**
-  - Pessimistic: €[X]/vehicle (20th percentile scenario)
-  - Base Case: €[X]/vehicle (50th percentile)
-  - Optimistic: €[X]/vehicle (80th percentile)
-
-**Key Risks:**
-  1. [Primary risk]
-  2. [Secondary risk]  
-  3. [Tertiary risk]
-
-**Adaptation Effort:** [LOW/MEDIUM/HIGH] ([X] person-days)
-
-**Pilot Proposal (If GO):**
-  - City: [Target urban area]
-  - Fleet size: [X] vehicles (minimum [Y] to meet bid threshold)
-  - Timeline: Month 1-3 (adaptation) → Month 4-9 (pilot) → Month 10-12 (scale decision)
-  - Budget: €[X]k (adaptation) + €[Y]k (operations)
-  - Success criteria: >€[Z]/vehicle by Month 9, <15% penalty rate
-
-**Recommendation Rationale:** [3-sentence justification]
-```
-
----
-
-## Part VII: Summary - Market Prioritization Matrix
-
-| Market | Similarity | Revenue Est. | Effort | Timeline | Priority | Next Action |
-|--------|-----------|--------------|--------|----------|----------|-------------|
-| **Netherlands (GOPACS)** | 77% | €180-250/vehicle | Low-Med (3 weeks) | Month 1-3 | 🎯 **#1** | 2-week validation sprint |
-| **Sweden (Pielo)** | 75% | €200-300/vehicle | Medium (4 weeks) | Month 2-4 | 🎯 **#2** | 15-min MILP development |
-| **Norway (BKK/Elvia)** | 60% | €120-180/vehicle | Med-High (5 weeks) | Month 4+ | ⚠️ **#3** | Monitor quarterly, defer pilot |
-| **Germany (TSO)** | 30% | €180-250/vehicle* | High (8+ weeks) | N/A | ❌ **Defer** | V2G barrier (€2k+ capex) |
-
-\* Revenue attractive but V2G requirement eliminates most fleets from addressable market
-
-**Strategic Sequencing:**
-1. **Months 1-3:** Netherlands validation → pilot design → 20-vehicle deployment
-2. **Months 4-6:** Sweden 15-min optimization → node selection → 30-vehicle pilot
-3. **Months 7-12:** Assess Norway maturity (data availability, aggregator competition)
-4. **Year 2+:** Germany if V2G economics improve (battery costs ↓, V2G tariffs ↑)
-
-**Key Insight for International Expansion:**
-The quantitative engine's modularity enables **rapid market screening** (2 weeks) and **low-cost adaptation** (3-5 weeks), but the **learning curve** (18-24 months to reach UK-equivalent buffers) is the primary barrier to profitability. First-mover advantages in emerging markets (Sweden, Norway) justify accepting lower Year 1 revenues to establish behavioral datasets that become competitive moats by Year 2.
-
 ## <a id="limitations"></a> Limitations & Assumptions
 
 ## <a id="references"></a> References
@@ -1549,303 +1140,6 @@ md_file = os.path.splitext(notebook_file)[0] + '.md'
 with open(md_file, 'w', encoding='utf-8') as f:
     f.write(body)
 ```
-
-## <a id="model-validation"></a> Model Validation and Benchmarking
-
-### Why WS1 Validation Matters
-
-Three criteria justify using WS1 as the primary benchmark:
-
-1. **Real DSO events:** 60+ actual UKPN flexibility dispatches during crisis-year winter 2017/18
-2. **Documented economics:** Published gross (£215) and net (£172) revenues with transparent 20% aggregator fee structure
-3. **Behavioral evidence:** Observed opt-out rates (10%), delivery reliability (95%), and rebound peaks (<30%)—data unavailable elsewhere
-
-Alternative benchmarks fail these tests:
-- **WS2 depot trials:** £45/vehicle (structural differences: guest vehicles, shared charge points, shorter flexibility windows)
-- **Competitor revenue claims:** Unpublished methodologies, no peer-reviewed validation
-- **Academic studies:** Theoretical models without operational deployment data
-
-**WS1 remains the only publicly documented, operationally validated benchmark for UK domestic EV flexibility.**
-
----
-
-### Benchmark Context (WS1 Trials)
-
-The WS1 trials operated during winter 2017/18 ("Beast from the East"), a crisis year with over 60 flexibility events. The fleet consisted of 65 return-to-home commercial EVs participating in real UKPN congestion relief events.
-
-**Published outcomes:**
-
-| Metric | Value | Context |
-|--------|-------|---------|
-| **Gross DNO payment** | £215/vehicle | Before aggregator fees |
-| **Third-party aggregator fee** | 20% (£43/vehicle) | Industry standard for flexibility management platforms (forecasting, bidding, settlement, customer support) |
-| **Net to fleet operator** | £172/vehicle | Final economic benefit |
-| **Peak reduction** | 50% | During constraint events |
-| **Delivery reliability** | ~95% | Weekday performance |
-| **Opt-out rate** | ~10% | Final participation after trial maturity |
-| **Rebound peak** | <30% | Post-event load recovery |
-| **Load factor improvement** | +0.15 | Grid utilization efficiency gain |
-
-These figures define the validation standard for any credible model.
-
----
-
-### Like-for-Like Test Conditions
-
-To ensure apples-to-apples comparison, we configure the model identically to WS1 operational parameters:
-
-| Parameter | WS1 Trials | Our Model | Match |
-|-----------|-----------|-----------|-------|
-| **Fleet size** | 65 vehicles | 65 vehicles (54 active after 10kW threshold) | ✅ |
-| **Event frequency** | 60 events/year | 60 events/year | ✅ |
-| **Fleet type** | Commercial R2H | Commercial R2H (weekday-dominant patterns) | ✅ |
-| **Season** | Winter 2017/18 | UKPN winter constraints | ✅ |
-| **Aggregator fee** | 20% | 20% | ✅ |
-| **Settlement structure** | Schedule Accuracy Factor | SAF with 91% predicted accuracy | ✅ |
-
-**Intentional difference: Pricing strategy**
-- **WS1:** £549/MWh (crisis-year emergency pricing)
-- **Our model:** £436/MWh (sustainable competitive pricing reflecting post-crisis market maturation)
-
-**Rationale:** WS1 operated during a supply crisis. Our model targets repeatable, competitive market conditions rather than once-per-decade emergency events.
-
----
-
-### Revenue Validation: Deconstructing the Gap
-
-**Model Result:** £149/vehicle net revenue  
-**WS1 Actual:** £172/vehicle net revenue  
-**Gap:** -£23/vehicle (-13.4%)
-
-#### **Multiplicative Factor Analysis**
-
-The 13.4% gap results from two offsetting effects:
-
-**Effect 1: Price differential (downward pressure)**
-
-$$
-\text{Price ratio} = \frac{436}{549} = 0.794 \text{ (79.4% of WS1 price)}
-$$
-
-**Effect 2: SAF accuracy advantage (upward pressure)**
-
-$$
-\text{SAF ratio} = \frac{0.91}{0.80} = 1.138 \text{ (13.8% better forecasting)}
-$$
-
-**Combined scaling (multiplicative):**
-
-$$
-0.794 \times 1.138 = 0.904 \text{ (90.4% of WS1 revenue predicted)}
-$$
-
-**Actual performance:**
-
-$$
-\frac{149}{172} = 0.866 \text{ (86.6% of WS1 revenue achieved)}
-$$
-
-**Effect 1: Price differential (downward pressure)**
-
-$$
-\mathrm{Price\ ratio} = \frac{436}{549} = 0.794 \; (79.4\% \text{ of WS1 price})
-$$
-
-**Effect 2: SAF accuracy advantage (upward pressure)**
-
-$$
-\mathrm{SAF\ ratio} = \frac{0.91}{0.80} = 1.138 \; (13.8\% \text{ better forecasting})
-$$
-
-**Combined scaling (multiplicative):**
-
-$$
-0.794 \times 1.138 = 0.904 \; (90.4\% \text{ of WS1 revenue predicted})
-$$
-
-**Actual performance:**
-
-$$
-\frac{149}{172} = 0.866 \; (86.6\% \text{ of WS1 revenue achieved})
-$$
-
-**Residual gap:** 90.4% (predicted by pricing + SAF factors) vs 86.6% (actual model output) = **3.8 percentage points**
-
-This 3.8pp residual falls within acceptable model variance (±5%) and reflects:
-1. **Conservative buffer assumptions:** 15.5% safety margin vs WS1's leaner 12-13% operations
-2. **Threshold exclusions:** 11 vehicles below 10kW minimum bid size (reducing fleet scale economics)
-3. **Optimization conservatism:** MILP solver prioritizes constraint satisfaction over revenue maximization
-
----
-
-### Interpretation: Strategic Trade-Offs
-
-The model **deliberately sacrifices revenue margin for operational stability:**
-
-| Dimension | WS1 Trials | Our Model | Strategic Choice |
-|-----------|-----------|-----------|------------------|
-| **Pricing** | £549/MWh | £436/MWh (-21%) | Competitive positioning over crisis pricing |
-| **SAF accuracy** | ~80% | 91% (+14%) | Penalty resilience over aggressive bidding |
-| **Buffer** | 12-13% | 15.5% (+20%) | Reliability guarantees over capacity maximization |
-| **Result** | £172/vehicle | £149/vehicle (-13%) | **Sustainable scalability over peak performance** |
-
-This 13.4% revenue sacrifice translates to:
-- **+6% higher win rate** (competitive pricing)
-- **+11% penalty avoidance** (SAF accuracy buffer)
-- **+20% operational margin** (vehicle readiness guarantees)
-
-**Business implication:** The model optimizes for Year 2+ steady-state operations in competitive markets, not Year 1 crisis-year windfall revenues.
-
----
-
-### Technical & Behavioral Alignment
-
-Across all non-price dimensions, the model independently reproduces WS1 outcomes without curve-fitting:
-
-| Metric | WS1 Observed | Model Output | Deviation | Confidence | Explanation |
-|--------|-------------|--------------|-----------|------------|-------------|
-| **Peak reduction** | 50% | 51.1% | +1.1pp | **HIGH** | Physical constraint (1.4kW charging floor + vehicle energy requirements) |
-| **Delivery reliability** | 95% | 99.0% | +4.0pp | **MEDIUM** | Optimistic UX assumption (mature operations vs WS1 pilot phase with early adopters) |
-| **Opt-out rate** | 10% | 7.1% | -2.9pp | **MEDIUM** | Behavioral persona distribution (80% reliable commercial drivers) |
-| **Rebound peak** | <30% | 25.0% | -5.0pp | **HIGH** | Conservative post-event load recovery modeling |
-| **Load factor** | +0.15 | +0.14 | -0.01 | **HIGH** | Equivalent within rounding error |
-
-**Note on reliability deviation:** The +4pp difference reflects mature-state operations with established customer relationships, whereas WS1 represented first-generation pilot operations with learning-curve friction.
-
----
-
-### Why These Metrics Aren't Curve-Fitted
-
-Critics might suspect we "tuned" parameters to match WS1. Three design decisions prove otherwise:
-
-**1. Peak reduction (51.1%):** Emerges from **minimum charging constraint** (1.4kW floor due to charge point behavior below 6A) combined with vehicle energy requirements. This is a physical consequence of equipment limitations, not a target parameter. If WS1 had reported 40% peak reduction, our model would still predict 51%—we don't adjust physics to match benchmarks.
-
-**2. Opt-out rate (7.1%):** Derived from **behavioral persona distribution** (80% reliable, 10% irregular, 5% late, 5% early bird) based on general UK commercial fleet patterns documented in transport surveys. This distribution was defined before WS1 comparison, not calibrated to match its 10% opt-out rate.
-
-**3. SAF accuracy (91%):** Result of **conservative baseline forecasting** (15.5% buffer comprising 10% operational + 5% behavioral risk) combined with MILP optimization that prioritizes feasibility over revenue. The 15.5% buffer was derived from first-principles risk analysis, not back-fitted to WS1's 80% accuracy.
-
-**If WS1 had reported different values, our structural parameters would remain unchanged.**
-
----
-
-### Validation Confidence Assessment
-
-| Metric | WS1 | Model | Deviation | Confidence | Validation Status |
-|--------|-----|-------|-----------|------------|-------------------|
-| **Net revenue** | £172 | £149 | -13.4% | **HIGH** | ✅ Explained by strategic pricing + buffer trade-offs |
-| **Peak reduction** | 50% | 51.1% | +1.1pp | **HIGH** | ✅ Physical constraint match |
-| **Reliability** | 95% | 99.0% | +4.0pp | **MEDIUM** | ⚠️ Optimistic (assumes mature operations) |
-| **Opt-out rate** | 10% | 7.1% | -2.9pp | **MEDIUM** | ⚠️ Optimistic (assumes established trust) |
-| **Rebound peak** | <30% | 25.0% | -5.0pp | **HIGH** | ✅ Within acceptable range |
-| **Load factor** | +0.15 | +0.14 | -0.01 | **HIGH** | ✅ Equivalent |
-
-**Overall Validation Score:** **88.2/100** (from automated scoring algorithm)
-
-**Assessment:** Model achieves **87% of WS1 revenue** under different pricing strategy (competitive vs crisis). Technical and behavioral metrics align within ±5% (well within year-to-year operational variance for weather, driver behavior, and market conditions).
-
-**Confidence Level:** **85% (High)** 
-- ✅ Suitable for strategic decision-making and business case development
-- ✅ Appropriate for investor presentations and market entry analysis
-- ⚠️ Not suitable for contract performance guarantees without 6-12 month operational validation period
-
----
-
-### Reconciling Deterministic vs Risk-Adjusted Results
-
-Two revenue figures appear throughout this analysis, serving different planning purposes:
-
-#### **1. Deterministic Baseline (Module 05): £149/vehicle**
-
-**Assumptions:**
-- 60 events/year (crisis-year frequency)
-- Normal winter conditions maintained
-- Baseline device uptime (90%)
-- Competitive market equilibrium
-- Good forecasting accuracy (91% SAF)
-
-**Use cases:**
-- Year 2-3 steady-state revenue planning
-- Operational budgeting for mature portfolios
-- Comparable to: WS1 crisis-year actual performance
-
-**Confidence:** 60% probability this revenue level is achievable in year with 50-70 constraint events
-
----
-
-#### **2. Risk-Adjusted Expected Value (Module 09): £138/vehicle**
-
-**Incorporates 192 scenarios across:**
-- **Grid conditions:** Weather variance (10-80 events/year)
-- **Device performance:** Uptime degradation (60-93% participation)
-- **Market competition:** Pricing pressure (£370-£502/MWh effective)
-- **Forecasting accuracy:** SAF penalties (40-100% revenue recovery)
-
-**Use cases:**
-- Year 1 budgeting (unproven forecasting systems)
-- Investor presentations (conservative projections)
-- Cash flow planning (probability-weighted)
-- Risk capital allocation decisions
-
-**Confidence:** 50% probability this revenue level is achievable across 5-year average including mild winters, competitive pressure, and operational learning curve
-
----
-
-#### **Gap Explanation: Why £149 vs £138 (-7.4%)**
-
-The £11/vehicle difference reflects **real-world variance** ignored by deterministic models:
-
-| Risk Factor | Probability | Downside Impact | Revenue Effect |
-|-------------|-------------|-----------------|----------------|
-| **Mild winter** | 20% | 15-20 events (vs 60) | -£100/vehicle |
-| **Device failures** | 20% | 80-85% uptime (vs 90%) | -£16/vehicle |
-| **Price wars** | 20% | £370/MWh (vs £436) | -£23/vehicle |
-| **SAF penalties** | 20% | 70-85% accuracy | -£22/vehicle |
-
-**Expected loss from combined risks:** £11/vehicle = 7.4% haircut to deterministic baseline
-
----
-
-#### **Comparative Context: WS1 Operating Year**
-
-**WS1 operated in 2017/18—a crisis year aligning with our deterministic £149 scenario:**
-
-| Condition | WS1 2017/18 | Normal Year | Impact on Revenue |
-|-----------|-------------|-------------|-------------------|
-| **Events** | 60 (crisis) | 35-45 (typical) | -30% in normal year |
-| **Pricing** | £549/MWh (emergency) | £410/MWh (competitive) | -25% in normal year |
-| **Weather** | "Beast from the East" | Mild 2023/24 winter | -40% in mild year |
-
-**Implication:** If WS1 had run during a typical (non-crisis) year, revenues would have been **£75-100/vehicle**—validating our downside scenarios.
-
-**Our risk-adjusted £138/vehicle represents the probability-weighted average across crisis years (£149), normal years (£120), and mild years (£75).**
-
----
-
-### Strategic Planning Guidance
-
-| Planning Context | Use This Figure | Rationale |
-|-----------------|----------------|-----------|
-| **Investor pitch** | £138/vehicle | Conservative, accounts for market variance |
-| **Year 1 budget** | £120/vehicle | Learning curve buffer (15% below expected value) |
-| **Year 2-3 target** | £149/vehicle | Mature operations in competitive market |
-| **Crisis-year upside** | £215-291/vehicle | Harsh winter + good execution (20-25% probability) |
-| **Worst-case reserve** | £32/vehicle | 5th percentile for financial stress testing |
-
-**Cash buffer recommendation:** Maintain reserves covering 3-6 months at £32/vehicle downside scenario = £5,200 for 54-vehicle fleet.
-
----
-
-### Validation Conclusion
-
-The model **passes validation** with high confidence:
-
-✅ **Revenue alignment:** 87% of WS1 under different pricing strategy (explained variance)  
-✅ **Technical accuracy:** Peak reduction, load factor, rebound within ±5%  
-✅ **Behavioral realism:** Opt-out rates, reliability within pilot-to-mature evolution range  
-✅ **Risk coverage:** Downside scenarios (£32-75/vehicle) align with mild-winter empirical estimates  
-✅ **Upside capture:** Best-case scenarios (£291-346/vehicle) consistent with crisis-year WS1 performance (£215)
-
-**The model is production-ready for strategic decision-making** with appropriate hedging (6-12 month validation period before contract guarantees, 15-20% revenue buffer for Year 1 operations).
 
 
 ```python
