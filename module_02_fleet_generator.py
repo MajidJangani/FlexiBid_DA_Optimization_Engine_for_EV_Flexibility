@@ -388,7 +388,7 @@ def generate_ws1_realistic_fleet(num_vehicles=100, vehicle_specs_path='data/vehi
         avg_factor = fleet_df[fleet_df['season'] == season]['seasonal_efficiency_factor'].mean()
         print(f"   {season.title()}: {count} vehicles ({count/num_vehicles*100:.1f}%), Factor: {avg_factor:.2f}x")
     winter_factor = fleet_df[fleet_df['season'] == 'winter']['seasonal_efficiency_factor'].mean()
-    print(f"   WS2 Winter Factor: +26% ({'✓' if abs(winter_factor - 1.26) < 0.01 else '⚠️'})")
+    print(f"   WS2 Winter Factor: +26% ({'✓' if abs(winter_factor - 1.26) < 0.01 else 'Need Review'})")
     
     # Plug-in time validation
     def time_to_hour(time_str):
@@ -397,9 +397,9 @@ def generate_ws1_realistic_fleet(num_vehicles=100, vehicle_specs_path='data/vehi
     
     fleet_df['plug_in_hour'] = fleet_df['plug_in_time'].apply(time_to_hour)
     reliable_plug_in = fleet_df[fleet_df['behavioral_profile'] == 'reliable']['plug_in_hour'].mean()
-    print(f"\n⏰ PLUG-IN TIME VALIDATION:")
+    print(f"\n PLUG-IN TIME VALIDATION:")
     print(f"   Reliable Drivers Avg: {reliable_plug_in:.2f}:00")
-    print(f"   WS1 Peak: 17:00 ({'✓' if abs(reliable_plug_in - 17.0) < 0.5 else '⚠️'})")
+    print(f"   WS1 Peak: 17:00 ({'✓' if abs(reliable_plug_in - 17.0) < 0.5 else 'Need Review'})")
     
     return fleet_df
 

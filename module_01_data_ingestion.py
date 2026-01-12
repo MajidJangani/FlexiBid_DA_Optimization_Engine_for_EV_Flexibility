@@ -50,10 +50,10 @@ class OctopusTariffFetcher:
         start_date = df['start_time_utc'].min()
         end_date = df['start_time_utc'].max()
         
-        print(f"📅 UKPN Date Range:")
-        print(f"   Start: {start_date}")
-        print(f"   End: {end_date}")
-        print(f"   Duration: {(end_date - start_date).days} days")
+        print(f" UKPN Date Range:")
+        print(f" Start: {start_date}")
+        print(f" End: {end_date}")
+        print(f" Duration: {(end_date - start_date).days} days")
         
         return start_date, end_date
     
@@ -91,11 +91,11 @@ class OctopusTariffFetcher:
                     df['valid_to'] = pd.to_datetime(df['valid_to'], utc=True)
                     return df
                 else:
-                    print(f"   ⚠️  No data returned for {period_from.date()} to {period_to.date()}")
+                    print(f"  No data returned for {period_from.date()} to {period_to.date()}")
                     return None
                 
             except requests.exceptions.RequestException as e:
-                print(f"   ⚠️  Attempt {attempt + 1}/{retry_count} failed: {str(e)[:100]}")
+                print(f"  Attempt {attempt + 1}/{retry_count} failed: {str(e)[:100]}")
                 if attempt < retry_count - 1:
                     time.sleep(2)  # Wait before retry
                 else:
@@ -135,15 +135,15 @@ class OctopusTariffFetcher:
             
             if chunk_data is not None:
                 all_data.append(chunk_data)
-                print(f"✅ {len(chunk_data)} records")
+                print(f" {len(chunk_data)} records")
             else:
-                print(f"❌ Failed")
+                print(f" Failed")
             
             current_start = current_end
             time.sleep(0.5)  # Rate limiting
         
         if not all_data:
-            print("\n❌ No tariff data fetched successfully!")
+            print("\n No tariff data fetched successfully!")
             return None
         
         # Combine all chunks
@@ -153,7 +153,7 @@ class OctopusTariffFetcher:
         # Remove duplicates
         combined = combined.drop_duplicates(subset=['valid_from'], keep='first')
         
-        print(f"\n✅ Fetched {len(combined)} tariff periods")
+        print(f"\n Fetched {len(combined)} tariff periods")
         print(f"   Date range: {combined['valid_from'].min()} to {combined['valid_to'].max()}")
         print(f"   Price range: {combined['value_inc_vat'].min():.2f}p - {combined['value_inc_vat'].max():.2f}p/kWh")
         
@@ -204,7 +204,7 @@ class OctopusTariffFetcher:
             if len(gaps) > 5:
                 print(f"   ... and {len(gaps) - 5} more gaps")
         else:
-            print(f"\n✅ No gaps detected - complete timeline!")
+            print(f"\n No gaps detected - complete timeline!")
         
         return gaps
     
@@ -302,7 +302,7 @@ class OctopusTariffFetcher:
             result = result.sort_values('valid_from').reset_index(drop=True)
             
             filled_count = result['is_filled'].sum()
-            print(f"✅ Filled {filled_count} missing periods ({filled_count/len(result)*100:.1f}% of total)")
+            print(f" Filled {filled_count} missing periods ({filled_count/len(result)*100:.1f}% of total)")
             
             return result
         
@@ -338,8 +338,8 @@ class OctopusTariffFetcher:
         with open(metadata_path, 'w') as f:
             json.dump(metadata, f, indent=2)
         
-        print(f"✅ Tariff data saved to {filepath}")
-        print(f"✅ Metadata saved to {metadata_path}")
+        print(f" Tariff data saved to {filepath}")
+        print(f" Metadata saved to {metadata_path}")
 
 
 def fetch_and_prepare_tariff_data(ukpn_filepath, output_path='data/octopus_tariffs.csv', 
@@ -371,7 +371,7 @@ def fetch_and_prepare_tariff_data(ukpn_filepath, output_path='data/octopus_tarif
     tariff_data = fetcher.fetch_full_timeline(start_date, end_date)
     
     if tariff_data is None:
-        print("\n❌ Failed to fetch tariff data. Exiting.")
+        print("\n Failed to fetch tariff data. Exiting.")
         return None
     
     # Step 3: Identify gaps
@@ -396,4 +396,4 @@ if __name__ == "__main__":
     )
     
     if tariff_data is not None:
-        print(f"\n✅ SUCCESS: {len(tariff_data)} tariff periods ready for use")
+        print(f"\n SUCCESS: {len(tariff_data)} tariff periods ready for use")

@@ -266,14 +266,14 @@ class BaselineForecaster:
         
         print(f"\n   WS1 Context: {ws1_note}")
         print(f"   Scale-Appropriate Peak: {expected_range[0]:.1f}:00-{expected_range[1]:.1f}:00")
-        print(f"   Validation: {'✓ CORRECT' if ws1_aligned else '⚠️ Review'}")
+        print(f"   Validation: {'✓ CORRECT' if ws1_aligned else ' Review'}")
         
         # Energy validation
         total_energy_kwh = sum(baseline_kw) * 0.5
         expected_energy = self.data[self.data['will_participate'] == True]['energy_to_charge_kwh'].sum()
         energy_match = abs(total_energy_kwh - expected_energy) / expected_energy < 0.25 if expected_energy > 0 else True
         
-        print(f"\n⚡ ENERGY VALIDATION:")
+        print(f"\n ENERGY VALIDATION:")
         print(f"   Baseline Total: {total_energy_kwh:.1f} kWh")
         print(f"   Required Total: {expected_energy:.1f} kWh")
         print(f"   Match: {'✓' if energy_match else ' MISMATCH'}")
@@ -375,7 +375,7 @@ def validate_baseline_against_ws1(self, baseline_profile):
     expected_energy = self.data[self.data['will_participate'] == True]['energy_to_charge_kwh'].sum()
     energy_match = abs(total_energy_kwh - expected_energy) / expected_energy < 0.25 if expected_energy > 0 else True
     
-    print(f"\n⚡ ENERGY VALIDATION:")
+    print(f"\n ENERGY VALIDATION:")
     print(f"   Baseline Total: {total_energy_kwh:.1f} kWh")
     print(f"   Required Total: {expected_energy:.1f} kWh")
     print(f"   Match: {'✓' if energy_match else ' MISMATCH'}")
@@ -436,7 +436,7 @@ if __name__ == "__main__":
     print(f"\n{'='*70}")
     print(f"MODULE 04: BASELINE FORECASTING COMPLETE")
     print(f"{'='*70}")
-    print(f"✅ 48-PTU baseline profile generated")
-    print(f"✅ WS1 validation: {'PASSED' if validation['ws1_aligned'] else 'REVIEW NEEDED'}")
-    print(f"✅ Secondary peak risk: {secondary_risk:.2f}x ({'LOW' if secondary_risk < 0.3 else 'HIGH'})")
-    print(f"✅ Ready for Module 05 (Flexibility Optimization)")
+    print(f" 48-PTU baseline profile generated")
+    print(f" WS1 validation: {'PASSED' if validation['ws1_aligned'] else 'REVIEW NEEDED'}")
+    print(f" Secondary peak risk: {secondary_risk:.2f}x ({'LOW' if secondary_risk < 0.3 else 'HIGH'})")
+    print(f" Ready for Module 05 (Flexibility Optimization)")

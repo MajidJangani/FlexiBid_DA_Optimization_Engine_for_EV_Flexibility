@@ -2,66 +2,6 @@
 Module 05: Flexibility Optimization Engine (FINAL - RISK-AWARE PRICING!)
 ===============================================================================
 FU-centric MILP optimization for Day-Ahead flexibility bidding
-
-REFINEMENTS IMPLEMENTED:
-✅ Product B-specific objective (maximize turn-down, not just minimize peak)
-✅ Time-of-Use cost calculation (Chalmers Eq 3.1-3.4)
-✅ WS1 secondary peak constraint (±12% threshold)
-✅ WS1 trial validation framework
-✅ Portfolio-grade metrics (ROI, load factor, competitiveness)
-✅ Enhanced visualizations for career showcase
-
-FIXES #9 & #10 (Real Tariff & Penalties):
-✅ Real Octopus Agile tariff data (London, Winter Weekdays, 27K records)
-✅ Schedule accuracy factor penalty (Product B settlement)
-✅ Source-accurate revenue calculation (no "energy savings")
-✅ Aggregator fee deduction (20%)
-✅ Realistic event frequency (60)
-
-FIX #11 (Zero-Load Prevention):
-✅ Minimum peak charging constraint (25% of baseline)
-✅ Models driver anxiety and behavioral risk from sources
-✅ Prevents zero-load while allowing 50-75% flexibility
-✅ Aligns with WS1 trial findings on opt-out pressure
-
-FIX #12 (Risk-Aware Pricing - MARGINAL COST REMOVED!):
-✅ Market-based pricing (zone-specific UKPN data)
-✅ Penalty risk adjustment (accuracy-based premium)
-✅ Competitiveness factor (confidence-based bidding)
-✅ NO artificial marginal cost floor (flexibility has no real cost!)
-✅ Source-aligned: historic prices + penalty risk + competition
-
-Based on:
-- Chalmers thesis MILP formulation (Equations 3.1-3.16)
-- UKPN market structure (19 FUs, zone-specific pricing)
-- WS1/WS2 operational constraints and trial findings
-- Real Octopus Agile pricing data (May 2024 - Dec 2025)
-- Product B settlement methodology (schedule accuracy factor)
-- Behavioral constraints from driver anxiety studies
-
-ARCHITECTURE NOTE: Aggregation Strategy
-========================================
-Module 04 generates FLEET-WIDE baseline (interim pedagogical step):
-  - Shows total fleet behavior (284 kW for 65 vehicles)
-  - Useful for understanding overall demand pattern
-  
-Module 05 recalculates FU-SPECIFIC baselines (operational reality):
-  - Each FU calculates its own baseline from its vehicles
-  - FU-Cockfosters: 8 vehicles → 60 kW baseline
-  - FU-Brandon: 5 vehicles → 40 kW baseline
-  - Total: Sum of FU baselines ≈ Fleet baseline (validates energy balance)
-
-WHY THIS APPROACH:
-  1. Educational: Shows fleet → zone hierarchy clearly
-  2. Realistic: UKPN bids are zone-specific, not fleet-wide
-  3. Independent: Each FU optimizes separately (different zones)
-  4. Validated: Energy balance check (fleet sum = ΣFU baselines)
-
-ALTERNATIVE (Zone-First):
-  - Could calculate FU baselines in Module 04 directly
-  - No material difference in results (same optimization)
-  - Current approach clearer for understanding architecture
-...
 """
 
 import pyomo.environ as pyo
@@ -196,7 +136,7 @@ class FUOptimizer:
         # Calculate AVERAGE reduction across measurement window
         reduction_pct = (baseline_penalty - optimized_penalty) / baseline_penalty
         
-        # ✅ RECALIBRATED THRESHOLDS (accounting for measurement window dilution)
+        # RECALIBRATED THRESHOLDS (accounting for measurement window dilution)
         # Most FUs will show 50-70% avg reduction in measurement window
         # This should map to 95% accuracy (WS1 validation)
         
@@ -207,9 +147,9 @@ class FUOptimizer:
             # Very aggressive (75-85%) - Pushing limits
             predicted_accuracy = 92.0  # 9% penalty
         elif reduction_pct >= 0.45:
-            # ✅ TYPICAL RANGE (45-75% avg reduction in 6-hour window)
+            # TYPICAL RANGE (45-75% avg reduction in 6-hour window)
             # Maps to WS1: 50% peak reduction → ~55% measurement window → 95%
-            predicted_accuracy = 95.0  # NO PENALTY ✅
+            predicted_accuracy = 95.0  # NO PENALTY 
         elif reduction_pct >= 0.25:
             # Conservative (25-45%)
             predicted_accuracy = 96.0  # NO PENALTY
@@ -306,7 +246,7 @@ class FUOptimizer:
         
         # Typical event duration: evening peak window (17:00-20:00 = 3 hours)
         # From sources: "flexibility events for two to three hours"
-        EVENT_DURATION_HOURS = 2.0 # Typical Product B event length
+        EVENT_DURATION_HOURS = 2.0 # Typical Product DA event length
         
         # CRITICAL: WS1 validation depends on this!
         # - WS1 actual: £215/vehicle (60 events, crisis year)
@@ -327,9 +267,9 @@ class FUOptimizer:
         
         # For informational purposes, predict MONTHLY SAF
         monthly_saf = self._predict_monthly_saf(baseline_kw, optimized_kw)
-        print(f"\n      📉 MONTHLY SAF PROJECTION (Not applied per-event):")
-        print(f"         Expected monthly SAF: {monthly_saf:.2f} (averaged across all events in month)")
-        print(f"         This would be measured on ~26 non-flexibility days/month")
+        print(f"\n  MONTHLY SAF PROJECTION (Not applied per-event):")
+        print(f"  Expected monthly SAF: {monthly_saf:.2f} (averaged across all events in month)")
+        print(f"  This would be measured on ~26 non-flexibility days/month")
 
         # 5. Annualize with realistic event frequency
         # From sources: "due to frequency of flexibility events... 
@@ -788,11 +728,11 @@ class FUOptimizer:
         optimization_mode : str
             'flexibility', 'cost', or 'hybrid'
         """
-        print(f"      Building MILP model (mode: {optimization_mode})...")
+        print(f" Building MILP model (mode: {optimization_mode})...")
         model = self.build_milp_model(optimization_mode=optimization_mode)
         
         # PRE-SOLVE FEASIBILITY CHECKS
-        print(f"         🔍 Pre-solve diagnostics:")
+        print(f" Pre-solve diagnostics:")
         
         # Check 1: Energy feasibility
         for v_idx, vehicle in self.vehicles.iterrows():
@@ -805,8 +745,8 @@ class FUOptimizer:
             max_possible = window_ptus * 0.5 * vehicle['effective_cp_max_kw']
             
             if max_possible < energy_required:
-                print(f"            ❌ Vehicle {v_idx}: Needs {energy_required:.1f}kWh but max capacity {max_possible:.1f}kWh")
-                print(f"               Window: {window_ptus} PTUs ({window_ptus*0.5:.1f}h), CP: {vehicle['effective_cp_max_kw']:.1f}kW")
+                print(f" Vehicle {v_idx}: Needs {energy_required:.1f}kWh but max capacity {max_possible:.1f}kWh")
+                print(f"  Window: {window_ptus} PTUs ({window_ptus*0.5:.1f}h), CP: {vehicle['effective_cp_max_kw']:.1f}kW")
         
         # Check 2: Peak constraint feasibility
         total_energy_needed = sum(self.vehicles['energy_to_charge_kwh'])
@@ -828,7 +768,7 @@ class FUOptimizer:
         print(f"            Capacity during peak (6 PTUs): {total_capacity_during_peak:.1f} kWh")
         
         if total_capacity_during_peak < total_energy_needed * 0.5:
-            print(f"            ⚠️  Peak capacity tight - may need off-peak charging")
+            print(f"   Peak capacity tight - may need off-peak charging")
         
         num_vars = len(self.vehicles) * len(self.PTUs) * 2 + 3
         num_constraints = len(self.vehicles) * (1 + len(self.PTUs) * 3) + len(self.PTUs) + 8
@@ -853,13 +793,13 @@ class FUOptimizer:
         
         # Check solution status
         if results.solver.termination_condition == pyo.TerminationCondition.optimal:
-            print(f"      ✅ Optimal solution found!")
+            print(f"  Optimal solution found!")
             return model, results
         elif results.solver.termination_condition == pyo.TerminationCondition.maxTimeLimit:
-            print(f"      ⚠️  Time limit reached, using best solution")
+            print(f" Time limit reached, using best solution")
             return model, results
         else:
-            print(f"      ❌ Solver failed: {results.solver.termination_condition}")
+            print(f" Solver failed: {results.solver.termination_condition}")
             return None, results
     
     def extract_solution(self, model):
@@ -876,12 +816,12 @@ class FUOptimizer:
         baseline_load = self.baseline_kw  # Use FU-specific baseline
         
         # DEBUG: Show peak hour comparison
-        print(f"\n      🔍 Peak hour analysis (PTU 34-39):")
+        print(f"\n   Peak hour analysis (PTU 34-39):")
         for t in range(34, 40):
             baseline_t = baseline_load[t]
             optimized_t = optimized_load[t]
             diff = baseline_t - optimized_t
-            status = "✅" if diff >= 0 else "❌"
+            status = "Ok" if diff >= 0 else "NOT OK"
             print(f"         PTU {t}: {baseline_t:.1f}kW → {optimized_t:.1f}kW = {diff:+.1f}kW {status}")
         
         # REFINEMENT: Enhanced metrics with SAFETY CHECKS
@@ -973,11 +913,11 @@ class FUOptimizer:
         
         # Diagnostic output (show savings from load shifting)
         if electricity_cost_delta < 0:
-            print(f"      💰 Load shifting saves: £{abs(electricity_cost_delta):.2f}")
-            print(f"         (Lower electricity cost, NOT revenue)")
+            print(f" Load shifting saves: £{abs(electricity_cost_delta):.2f}")
+            print(f"  (Lower electricity cost, NOT revenue)")
         elif electricity_cost_delta > 10:
-            print(f"      💸 Load shifting costs: £{electricity_cost_delta:.2f}")
-            print(f"         (Higher electricity cost)")
+            print(f"  Load shifting costs: £{electricity_cost_delta:.2f}")
+            print(f"  (Higher electricity cost)")
         
         # Create schedule DataFrame
         schedule_data = []
@@ -1025,11 +965,11 @@ class FlexibilityBiddingEngine:
         Initialize complete bidding engine
         """
         print("\n" + "="*70)
-        print("🚀 FLEXIBILITY BIDDING ENGINE - PORTFOLIO-PERFECT VERSION")
+        print(" FLEXIBILITY BIDDING ENGINE - PORTFOLIO-PERFECT VERSION")
         print("="*70)
         
         # Load data
-        print("\n📂 Loading data files...")
+        print("\n Loading data files...")
         self.operational_df = pd.read_csv(operational_csv)
         self.flexible_units = pd.read_csv(flexible_units_csv)
         self.baseline = pd.read_csv(baseline_csv)
@@ -1037,13 +977,13 @@ class FlexibilityBiddingEngine:
         try:
             self.ukpn_market = pd.read_csv(ukpn_market_csv)
             self.has_market_data = True
-            print(f"   ✅ Operational data: {len(self.operational_df)} vehicles")
-            print(f"   ✅ Flexible Units: {len(self.flexible_units)} FUs")
-            print(f"   ✅ Baseline profile: 48 PTUs")
-            print(f"   ✅ UKPN market data: {len(self.ukpn_market)} events")
+            print(f" Operational data: {len(self.operational_df)} vehicles")
+            print(f" Flexible Units: {len(self.flexible_units)} FUs")
+            print(f" Baseline profile: 48 PTUs")
+            print(f" UKPN market data: {len(self.ukpn_market)} events")
         except:
             self.has_market_data = False
-            print(f"   ⚠️  UKPN market data not found - using default pricing")
+            print(f" UKPN market data not found - using default pricing")
         
         # Extract market intelligence
         if self.has_market_data:
@@ -1059,7 +999,7 @@ class FlexibilityBiddingEngine:
         FIX #9: Load REAL Octopus Agile data (London, Winter Weekdays)
         Based on 27,030 records (May 2024 - Dec 2025)
         """
-        print("\n💡 Loading tariff data...")
+        print("\n Loading tariff data...")
         
         try:
             # Load real Octopus Agile winter weekday profile
@@ -1077,19 +1017,19 @@ class FlexibilityBiddingEngine:
             if len(self.tariff_prices) != 48:
                 raise ValueError(f"Expected 48 PTUs, got {len(self.tariff_prices)}")
             
-            print(f"   ✅ Real Octopus Agile (London, Winter Weekdays)")
-            print(f"   📊 Range: {self.tariff_prices.min():.1f}-{self.tariff_prices.max():.1f} p/kWh")
-            print(f"   🔥 Peak (PTU 34, 17:00): {self.tariff_prices[34]:.1f} p/kWh")
-            print(f"   🌙 Night (PTU 6, 03:00): {self.tariff_prices[6]:.1f} p/kWh")
-            print(f"   📉 Gap: {self.tariff_prices[34] - self.tariff_prices[6]:.1f} p/kWh")
+            print(f" Real Octopus Agile (London, Winter Weekdays)")
+            print(f" Range: {self.tariff_prices.min():.1f}-{self.tariff_prices.max():.1f} p/kWh")
+            print(f" Peak (PTU 34, 17:00): {self.tariff_prices[34]:.1f} p/kWh")
+            print(f" Night (PTU 6, 03:00): {self.tariff_prices[6]:.1f} p/kWh")
+            print(f" Gap: {self.tariff_prices[34] - self.tariff_prices[6]:.1f} p/kWh")
             
         except Exception as e:
-            print(f"   ⚠️  Could not load real tariff data: {e}")
-            print(f"   📊 Falling back to synthetic tariff")
+            print(f" Could not load real tariff data: {e}")
+            print(f" Falling back to synthetic tariff")
             
             # Fallback: synthetic tariff
             self.tariff_prices = np.linspace(15, 55, 48)
-            print(f"   ✅ Synthetic tariff: {self.tariff_prices.min():.1f}-{self.tariff_prices.max():.1f} p/kWh")
+            print(f" Synthetic tariff: {self.tariff_prices.min():.1f}-{self.tariff_prices.max():.1f} p/kWh")
     
     def _extract_market_intelligence(self):
         """Extract competitive intelligence from UKPN data"""
@@ -1118,9 +1058,9 @@ class FlexibilityBiddingEngine:
             'total_revenue': (axle_data['utilisation_mwh_req'] * axle_data['utilisation_price']).sum()
         }
         
-        print(f"   ✅ Analyzed {len(self.zone_prices)} zones")
-        print(f"   ✅ Axle benchmark: £{self.axle_benchmark['avg_price']:.0f}/MWh")
-        print(f"      Market share: {self.axle_benchmark['market_share']:.1%}")
+        print(f"  Analyzed {len(self.zone_prices)} zones")
+        print(f"  Axle benchmark: £{self.axle_benchmark['avg_price']:.0f}/MWh")
+        print(f"  Market share: {self.axle_benchmark['market_share']:.1%}")
     
     def predict_schedule_accuracy_factor(self, baseline_kw, optimized_kw):
         """
@@ -1143,7 +1083,7 @@ class FlexibilityBiddingEngine:
         # Calculate AVERAGE reduction across measurement window
         reduction_pct = (baseline_penalty - optimized_penalty) / baseline_penalty
         
-        # ✅ RECALIBRATED THRESHOLDS (accounting for measurement window dilution)
+        # RECALIBRATED THRESHOLDS (accounting for measurement window dilution)
         # Most FUs will show 50-70% avg reduction in measurement window
         # This should map to 95% accuracy (WS1 validation)
         
@@ -1154,9 +1094,9 @@ class FlexibilityBiddingEngine:
             # Very aggressive (75-85%) - Pushing limits
             predicted_accuracy = 92.0  # 9% penalty
         elif reduction_pct >= 0.45:
-            # ✅ TYPICAL RANGE (45-75% avg reduction in 6-hour window)
+            #  TYPICAL RANGE (45-75% avg reduction in 6-hour window)
             # Maps to WS1: 50% peak reduction → ~55% measurement window → 95%
-            predicted_accuracy = 95.0  # NO PENALTY ✅
+            predicted_accuracy = 95.0  # NO PENALTY 
         elif reduction_pct >= 0.25:
             # Conservative (25-45%)
             predicted_accuracy = 96.0  # NO PENALTY
@@ -1277,7 +1217,7 @@ class FlexibilityBiddingEngine:
         REFINEMENT: Product B-specific optimization mode
         """
         print("\n" + "="*70)
-        print("📊 STEP 1: OPTIMIZING FLEXIBLE UNITS (PRODUCT B)")
+        print(" STEP 1: OPTIMIZING FLEXIBLE UNITS (PRODUCT B)")
         print("="*70)
         
         fu_solutions = {}
@@ -1286,7 +1226,7 @@ class FlexibilityBiddingEngine:
             fu_id = fu_row['fu_id']
             zone = fu_row['ukpn_constraint_zone']
             
-            print(f"\n🔧 Optimizing FU: {fu_id}")
+            print(f"\n Optimizing FU: {fu_id}")
             print(f"   Zone: {zone}")
             print(f"   Vehicles: {fu_row['num_vehicles']}")
             
@@ -1297,7 +1237,7 @@ class FlexibilityBiddingEngine:
             ]
             
             if len(fu_vehicles) == 0:
-                print(f"   ⚠️  No participating vehicles - skipping")
+                print(f" No participating vehicles - skipping")
                 continue
             
             # REFINEMENT: Pass tariff prices AND total fleet size to optimizer
@@ -1328,8 +1268,8 @@ class FlexibilityBiddingEngine:
             # From sources: "Minimum Utilisation Volume: 10kW" for Product B
             MIN_BID_CAPACITY = 10  # kW minimum for Product B (UKPN requirement)
             if solution['max_turndown'] < MIN_BID_CAPACITY:
-                print(f"   ⚠️  Capacity {solution['max_turndown']:.1f}kW below minimum {MIN_BID_CAPACITY}kW")
-                print(f"   ❌ FU excluded from bidding (below market threshold)")
+                print(f"  Capacity {solution['max_turndown']:.1f}kW below minimum {MIN_BID_CAPACITY}kW")
+                print(f"  FU excluded from bidding (below market threshold)")
                 continue
             
             # Calculate optimal price
@@ -1369,16 +1309,16 @@ class FlexibilityBiddingEngine:
             
             fu_solutions[fu_id] = fu_bid
             
-            print(f"   ✅ Capacity: {solution['max_turndown']:.1f} kW")
-            print(f"   ✅ Price: £{optimal_price:.0f}/MWh ({strategy})")
-            print(f"   ✅ Confidence: {solution['delivery_confidence']:.1%}")
-            print(f"   ✅ Peak Reduction: {solution['peak_reduction_pct']:.1f}%")
-            print(f"\n      📊 Revenue Breakdown (CORRECT - Monthly SAF):")
+            print(f"   Capacity: {solution['max_turndown']:.1f} kW")
+            print(f"   Price: £{optimal_price:.0f}/MWh ({strategy})")
+            print(f"   Confidence: {solution['delivery_confidence']:.1%}")
+            print(f"   Peak Reduction: {solution['peak_reduction_pct']:.1f}%")
+            print(f"\n       Revenue Breakdown (CORRECT - Monthly SAF):")
             print(f"         Gross per event: £{revenue_breakdown['gross_payment_per_event']:.2f}")
             print(f"         Aggregator fee (20%): £{revenue_breakdown['aggregator_fee']:.2f}")
             print(f"         Net per event (before SAF): £{revenue_breakdown['revenue_after_fee']:.2f}")
             print(f"         ")
-            print(f"         📉 MONTHLY SAF PROJECTION:")
+            print(f"         MONTHLY SAF PROJECTION:")
             print(f"         Expected monthly SAF: {revenue_breakdown['monthly_saf']:.2f}")
             print(f"         Annual (60 events, before SAF): £{revenue_breakdown['annual_revenue_gross']:.0f}")
             print(f"         Per vehicle (before SAF): £{revenue_breakdown['annual_per_vehicle_gross']:.0f}/year")
@@ -1390,13 +1330,13 @@ class FlexibilityBiddingEngine:
             total_benefit_per_vehicle = revenue_breakdown['annual_per_vehicle_expected'] + (electricity_savings_per_vehicle * 40)
 
             print(f"         DNO Revenue: £{revenue_breakdown['annual_per_vehicle_expected']:.0f}/vehicle/year")
-            print(f"\n      💡 DUAL BENEFIT ANALYSIS:")
+            print(f"\n       DUAL BENEFIT ANALYSIS:")
             print(f"         Electricity Savings: £{electricity_savings_per_vehicle * 40:.0f}/vehicle/year")
             print(f"         Total Benefit: £{total_benefit_per_vehicle:.0f}/vehicle/year")
         
         # CRITICAL FIX #8: Energy distribution diagnostics
         print("\n" + "="*70)
-        print("🔍 ENERGY DISTRIBUTION DIAGNOSTICS")
+        print(" ENERGY DISTRIBUTION DIAGNOSTICS")
         print("="*70)
         
         zero_load_fus = []
@@ -1413,19 +1353,19 @@ class FlexibilityBiddingEngine:
             
             if peak_energy_optimized == 0:
                 zero_load_fus.append((fu_id, bid['num_vehicles']))
-                print(f"   ❌ {fu_id} ({bid['num_vehicles']}v): ZERO charging during peak!")
+                print(f"  {fu_id} ({bid['num_vehicles']}v): ZERO charging during peak!")
             elif peak_energy_optimized < peak_energy_baseline * 0.15:
                 pct = (peak_energy_optimized / peak_energy_baseline * 100) if peak_energy_baseline > 0 else 0
                 low_energy_fus.append((fu_id, pct, bid['num_vehicles']))
-                print(f"   ⚠️  {fu_id} ({bid['num_vehicles']}v): Only {pct:.1f}% of baseline energy")
+                print(f"  {fu_id} ({bid['num_vehicles']}v): Only {pct:.1f}% of baseline energy")
         
         if not zero_load_fus and not low_energy_fus:
-            print("   ✅ All FUs maintain realistic charging levels during peak")
+            print("  All FUs maintain realistic charging levels during peak")
         else:
-            print(f"\n   📊 Summary:")
-            print(f"      Zero-load FUs: {len(zero_load_fus)} ({sum(v for _, v in zero_load_fus)} vehicles)")
-            print(f"      Low-energy FUs: {len(low_energy_fus)} ({sum(v for _, _, v in low_energy_fus)} vehicles)")
-            print(f"      ⚠️  This may indicate over-aggressive optimization")
+            print(f"\n Summary:")
+            print(f"   Zero-load FUs: {len(zero_load_fus)} ({sum(v for _, v in zero_load_fus)} vehicles)")
+            print(f"  Low-energy FUs: {len(low_energy_fus)} ({sum(v for _, _, v in low_energy_fus)} vehicles)")
+            print(f"  This may indicate over-aggressive optimization")
         
         # FIX #3: Fleet participation diagnostics
         total_fus_attempted = len(self.flexible_units)
@@ -1433,15 +1373,15 @@ class FlexibilityBiddingEngine:
         accepted_fus = len(fu_solutions)
         accepted_vehicles = sum(bid['num_vehicles'] for bid in fu_solutions.values())
         
-        print(f"\n   📊 FLEET PARTICIPATION SUMMARY:")
+        print(f"\n  FLEET PARTICIPATION SUMMARY:")
         print(f"      Total FUs: {total_fus_attempted}")
         print(f"      Accepted FUs: {accepted_fus} ({accepted_fus/total_fus_attempted*100:.1f}%)")
         print(f"      Total Vehicles: {total_vehicles_in_fleet}")
         print(f"      Active Vehicles: {accepted_vehicles} ({accepted_vehicles/total_vehicles_in_fleet*100:.1f}%)")
         
         if accepted_fus < total_fus_attempted * 0.5:
-            print(f"      ⚠️  LOW PARTICIPATION: {total_fus_attempted - accepted_fus} FUs excluded (below 10kW UKPN threshold)")
-            print(f"      💡 Consider: Aggregating small FUs to reach 10kW minimum per zone")
+            print(f" LOW PARTICIPATION: {total_fus_attempted - accepted_fus} FUs excluded (below 10kW UKPN threshold)")
+            print(f" Consider: Aggregating small FUs to reach 10kW minimum per zone")
         
         return fu_solutions
     
@@ -1450,7 +1390,7 @@ class FlexibilityBiddingEngine:
         REFINEMENT 4: Portfolio-grade metrics for career showcase
         """
         print("\n" + "="*70)
-        print("📊 CALCULATING PORTFOLIO METRICS")
+        print(" CALCULATING PORTFOLIO METRICS")
         print("="*70)
         
         # Aggregate data
@@ -1519,15 +1459,15 @@ class FlexibilityBiddingEngine:
         }
         
         # Print metrics
-        print(f"\n🎯 OPTIMIZATION PERFORMANCE:")
+        print(f"\n OPTIMIZATION PERFORMANCE:")
         for key, value in metrics['optimization_performance'].items():
             print(f"   {key.replace('_', ' ').title():30} {value:>8}")
         
-        print(f"\n🏆 MARKET COMPETITIVENESS:")
+        print(f"\n MARKET COMPETITIVENESS:")
         for key, value in metrics['market_competitiveness'].items():
             print(f"   {key.replace('_', ' ').title():30} {value:>8}")
         
-        print(f"\n💰 BUSINESS VALUE:")
+        print(f"\n BUSINESS VALUE:")
         for key, value in metrics['business_value'].items():
             print(f"   {key.replace('_', ' ').title():30} {value:>8}")
         
@@ -1538,7 +1478,7 @@ class FlexibilityBiddingEngine:
         REFINEMENT 5: WS1 trial validation framework
         """
         print("\n" + "="*70)
-        print("🔬 WS1 TRIAL VALIDATION")
+        print(" WS1 TRIAL VALIDATION")
         print("="*70)
         
         # WS1 trial findings (from British Gas WS1)
@@ -1566,7 +1506,7 @@ class FlexibilityBiddingEngine:
         }
         
         # Comparison with safety checks
-        print(f"\n📊 COMPARISON WITH WS1 BRITISH GAS TRIAL:")
+        print(f"\n COMPARISON WITH WS1 BRITISH GAS TRIAL:")
         print(f"{'Metric':<35} {'WS1 Trial':>12} {'Our Model':>12} {'Diff %':>10} {'Status':>8}")
         print("-" * 80)
         
@@ -1588,11 +1528,11 @@ class FlexibilityBiddingEngine:
             
             # Determine status
             if abs(diff_pct) < 15:
-                status = "✅"
+                status = "OK"
             elif abs(diff_pct) < 30:
-                status = "⚠️"
+                status = "Needs Review"
             else:
-                status = "❌"
+                status = "Not OK"
             
             metric_display = metric.replace('_', ' ').title()
             print(f"{metric_display:<35} {ws1_value:>12.1f} {our_value:>12.1f} {diff_pct:>9.1f}% {status:>8}")
@@ -1605,14 +1545,14 @@ class FlexibilityBiddingEngine:
             avg_abs_diff = 100
             validation_score = 0
         
-        print(f"\n📈 OVERALL VALIDATION SCORE: {validation_score:.1f}/100")
+        print(f"\n OVERALL VALIDATION SCORE: {validation_score:.1f}/100")
         
         if avg_abs_diff < 20:
-            print(f"   ✅ EXCELLENT: Model closely matches WS1 trial results")
+            print(f" EXCELLENT: Model closely matches WS1 trial results")
         elif avg_abs_diff < 35:
-            print(f"   ⚠️  GOOD: Model reasonably aligned with WS1 findings")
+            print(f" GOOD: Model reasonably aligned with WS1 findings")
         else:
-            print(f"   ❌ REVIEW NEEDED: Significant deviations from WS1 baseline")
+            print(f" REVIEW NEEDED: Significant deviations from WS1 baseline")
         
         return {
             'ws1_findings': ws1_findings,
@@ -1625,7 +1565,7 @@ class FlexibilityBiddingEngine:
         STEP 2: Generate business case analysis
         """
         print("\n" + "="*70)
-        print("💰 STEP 2: BUSINESS CASE ANALYSIS")
+        print(" STEP 2: BUSINESS CASE ANALYSIS")
         print("="*70)
         
         # Aggregate metrics using NEW revenue calculation
@@ -1673,19 +1613,19 @@ class FlexibilityBiddingEngine:
         }
         
         # Print summary
-        print(f"\n📈 RESULTS:")
+        print(f"\n RESULTS:")
         print(f"   Fleet Size: {business_case['fleet_size']} vehicles")
         print(f"   Flexible Units: {business_case['num_fus']} FUs")
         print(f"   Total Capacity: {business_case['total_capacity_kw']:.1f} kW")
         print(f"   Average Price: £{business_case['avg_price_gbp_mwh']:.0f}/MWh")
-        print(f"\n💰 REVENUE:")
+        print(f"\n REVENUE:")
         print(f"   Annual (Fleet): £{business_case['total_annual_revenue']:,.0f}")
         print(f"   Per Vehicle: £{business_case['revenue_per_vehicle_annual']:.0f}/year")
-        print(f"\n📊 BENCHMARKS:")
+        print(f"\n BENCHMARKS:")
         print(f"   vs WS1 Trials: {business_case['vs_ws1_benchmark_pct']:+.1f}%")
         if self.has_market_data:
             print(f"   vs Axle Energy: {business_case['vs_axle_price_pct']:+.1f}%")
-        print(f"\n⚠️  RISK:")
+        print(f"\n  RISK:")
         print(f"   Avg Confidence: {business_case['avg_delivery_confidence']:.1%}")
         print(f"   Avg Monthly SAF: {business_case['avg_monthly_saf']:.1%}")
         print(f"   Aggregator Fees: £{business_case['total_aggregator_fees']:.2f}/year")
@@ -1696,7 +1636,7 @@ class FlexibilityBiddingEngine:
         """
         REFINEMENT 6: Portfolio-grade visualizations
         """
-        print("\n📊 Creating portfolio visualizations...")
+        print("\n Creating portfolio visualizations...")
         
         fig = plt.figure(figsize=(18, 12))
         gs = fig.add_gridspec(3, 3, hspace=0.3, wspace=0.3)
@@ -1866,7 +1806,7 @@ class FlexibilityBiddingEngine:
         ax7.set_title('Cost vs Revenue Breakdown (Annual)', fontweight='bold')
         
         plt.savefig('outputs/portfolio_visualization.png', dpi=300, bbox_inches='tight')
-        print(f"✅ Portfolio visualization saved to outputs/portfolio_visualization.png")
+        print(f" Portfolio visualization saved to outputs/portfolio_visualization.png")
     
     def execute_complete_pipeline(self, solver='glpk', save_outputs=True, optimization_mode='flexibility'):
         """
@@ -1892,7 +1832,7 @@ class FlexibilityBiddingEngine:
             self._save_outputs(fu_solutions, business_case, portfolio_metrics, ws1_validation)
         
         print("\n" + "="*70)
-        print("✅ PORTFOLIO-PERFECT PHASE 1 COMPLETE")
+        print(" PORTFOLIO-PERFECT PHASE 1 COMPLETE")
         print("="*70)
         
         return {
@@ -1904,7 +1844,7 @@ class FlexibilityBiddingEngine:
     
     def _save_outputs(self, fu_solutions, business_case, portfolio_metrics, ws1_validation):
         """Save outputs to CSV and JSON"""
-        print("\n💾 Saving outputs...")
+        print("\n Saving outputs...")
         
         # FU bids CSV
         fu_bids_data = []
@@ -1917,16 +1857,16 @@ class FlexibilityBiddingEngine:
                 'price_gbp_mwh': bid['price_gbp_mwh'],
                 'pricing_strategy': bid['pricing_strategy'],
                 'delivery_confidence': bid['delivery_confidence'],
-                'monthly_saf': bid['monthly_saf'],  # ✅ NEW FIELD
-                'annual_revenue_per_vehicle_gross': bid['annual_revenue_per_vehicle_gross'],  # ✅ NEW FIELD
-                'annual_revenue_per_vehicle_expected': bid['annual_revenue_per_vehicle_expected'],  # ✅ NEW FIELD
+                'monthly_saf': bid['monthly_saf'],  #  NEW FIELD
+                'annual_revenue_per_vehicle_gross': bid['annual_revenue_per_vehicle_gross'],  #  NEW FIELD
+                'annual_revenue_per_vehicle_expected': bid['annual_revenue_per_vehicle_expected'],  #  NEW FIELD
                 'peak_reduction_pct': bid['peak_reduction_pct'],
                 'vs_ws1_benchmark_pct': bid['vs_ws1_benchmark_pct']
             })
         
         fu_bids_df = pd.DataFrame(fu_bids_data)
         fu_bids_df.to_csv('data/fu_bids_day_ahead.csv', index=False)
-        print("   ✅ data/fu_bids_day_ahead.csv")
+        print(" data/fu_bids_day_ahead.csv")
         
         # Comprehensive JSON output
         complete_results = {
@@ -1938,13 +1878,13 @@ class FlexibilityBiddingEngine:
         
         with open('data/business_case_summary.json', 'w') as f:
             json.dump(complete_results, f, indent=2)
-        print("   ✅ data/business_case_summary.json")
+        print("  data/business_case_summary.json")
         
         # Schedules (first 3 FUs)
         for i, (fu_id, bid) in enumerate(list(fu_solutions.items())[:3]):
             schedule_path = f"data/schedule_{fu_id}.csv"
             bid['schedule'].to_csv(schedule_path, index=False)
-            print(f"   ✅ {schedule_path}")
+            print(f" {schedule_path}")
 
 
 def main():
