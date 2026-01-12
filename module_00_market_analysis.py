@@ -66,9 +66,9 @@ class UKPNMarketAnalyzer:
         # Calculate duration in hours
         df['duration_hours'] = (df['end_time_utc'] - df['start_time_utc']).dt.total_seconds() / 3600
         
-        print(f"✅ Loaded {len(df)} events from UKPN dataset")
-        print(f"   Date range: {df['start_time_utc'].min()} to {df['start_time_utc'].max()}")
-        print(f"   Total market value: £{df['revenue'].sum():,.2f}")
+        print(f" Loaded {len(df)} events from UKPN dataset")
+        print(f" Date range: {df['start_time_utc'].min()} to {df['start_time_utc'].max()}")
+        print(f" Total market value: £{df['revenue'].sum():,.2f}")
         
         return df
     
@@ -221,7 +221,7 @@ class UKPNMarketAnalyzer:
         axle_data = self.df[self.df['company_name'] == 'Axle Energy Limited']
         
         if len(axle_data) == 0:
-            print("⚠️  No Axle Energy data found")
+            print("  No Axle Energy data found")
             return None
         
         axle_strategy = {
@@ -253,7 +253,7 @@ class UKPNMarketAnalyzer:
         Run all analyses and return consolidated results
         """
         print("\n" + "="*70)
-        print("🔍 UKPN DAY-AHEAD FLEXIBILITY MARKET ANALYSIS")
+        print(" UKPN DAY-AHEAD FLEXIBILITY MARKET ANALYSIS")
         print("="*70)
         
         # Run all analyses
@@ -266,18 +266,18 @@ class UKPNMarketAnalyzer:
         axle = self.analyze_axle_strategy()
         
         # Print key findings
-        print(f"\n📊 MARKET OVERVIEW")
+        print(f"\n MARKET OVERVIEW")
         print(f"   Total Events: {overview['total_events']:,}")
         print(f"   Total Revenue: £{overview['total_revenue']:,.2f}")
         print(f"   Average Price: £{overview['avg_price_per_mwh']:.2f}/MWh")
         print(f"   Median Price: £{overview['median_price_per_mwh']:.2f}/MWh")
         
-        print(f"\n🏆 TOP 3 COMPETITORS")
+        print(f"\n TOP 3 COMPETITORS")
         for i, (company, row) in enumerate(competitors.head(3).iterrows(), 1):
             print(f"   {i}. {company}")
             print(f"      Revenue: £{row['revenue']:,.2f} | Events: {row['num_events']:,} | Market Share: {row['market_share_pct']:.1f}%")
         
-        print(f"\n⚡ AXLE ENERGY BENCHMARK (Market Leader)")
+        print(f"\n AXLE ENERGY BENCHMARK (Market Leader)")
         if axle:
             print(f"   Events: {axle['total_events']:,} ({axle['market_share_pct']:.1f}% market share)")
             print(f"   Avg Price: £{axle['avg_price']:.2f}/MWh")
@@ -285,13 +285,13 @@ class UKPNMarketAnalyzer:
             print(f"   Peak Hour: {axle['peak_hour']}:00")
             print(f"   Operating Zones: {axle['unique_zones']}")
         
-        print(f"\n⏰ TEMPORAL INSIGHTS")
+        print(f"\n TEMPORAL INSIGHTS")
         peak_hour = hourly['num_events'].idxmax()
         print(f"   Peak Demand Hour: {peak_hour}:00 ({hourly.loc[peak_hour, 'num_events']} events)")
         peak_day = daily['num_events'].idxmax()
         print(f"   Peak Day: {peak_day} ({daily.loc[peak_day, 'num_events']} events)")
         
-        print(f"\n💰 PRICING BENCHMARKS")
+        print(f"\n PRICING BENCHMARKS")
         print(f"   25th Percentile: £{price_stats['q25']:.2f}/MWh")
         print(f"   50th Percentile: £{price_stats['median']:.2f}/MWh")
         print(f"   75th Percentile: £{price_stats['q75']:.2f}/MWh")
@@ -386,7 +386,7 @@ class UKPNMarketAnalyzer:
             plt.savefig(f'{save_dir}/top_zones.png', dpi=300, bbox_inches='tight')
             plt.close()
         
-        print(f"✅ All visualizations saved to {save_dir}/")
+        print(f" All visualizations saved to {save_dir}/")
 
 
 # Convenience function for quick analysis
