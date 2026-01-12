@@ -1,74 +1,10 @@
 # Project Overview
 
-##### Competitive Market Intelligence: UKPN Flexibility Market Analysis
-##### Reverse-Engineering Aggregator Economics for International Expansion
+This project develops a quantitative bidding engine for electric vehicle (EV) fleet aggregators participating in Distribution System Operator (DSO) flexibility markets. Using 18 months of UK Power Networks dispatch data (14,813 events, £425k market value), the model optimizes fleet capacity (kW turn-down) under operational constraints and determines competitive utilization prices (£/MWh) that balance profitability with penalty risk. The framework combines mixed-integer linear programming (MILP) for capacity optimization, market-based pricing incorporating settlement penalties, and Monte Carlo scenario analysis across 192 market condition combinations, achieving 88% validation accuracy against real-world trial benchmarks.
 
-**Objective:** Deconstruct UK Power Networks' Day-Ahead market to identify 
-transferable patterns for Netherlands/German/Australian market entry assessment.
+As EV adoption and renewable generation increase, local networks face rising evening-peak constraints. Rather than costly infrastructure upgrades, DSOs pay EV fleets to temporarily reduce or shift charging. Flexibility Service Providers (FSPs) can monetize this opportunity, earning £130–£215 per vehicle per year by shifting load during 17:00–20:00. Aggregators face complex challenges: submitting accurate 24-hour schedules, forecasting baselines with 95%+ accuracy, avoiding secondary peaks, pricing competitively, and maintaining consumer trust. This model automates the process, combining market intelligence extraction, technical optimization respecting smart-charging constraints, and commercial risk quantification to support operational and strategic decisions.
 
-**Key Finding:** Market leader (Axle Energy) captures 47.7% share through 
-premium pricing strategy (£478/MWh avg, 16% above market) while maintaining 
-highest volume (1,272 events). This "quality + scale" approach is replicable 
-in markets with similar structural characteristics.
-
-This project develops a quantitative bidding engine for electric vehicle (EV) fleet aggregators participating in Distribution Network Operator (DNO) flexibility markets. Using 18 months of UK Power Networks dispatch data (14,813 events, £425k market value), the model optimizes two interconnected problems: calculating maximum deliverable capacity (kW turn-down) under operational constraints, and determining competitive utilization prices (£/MWh) that balance profitability with penalty risk. The framework combines mixed-integer linear programming (MILP) for capacity optimization, risk-adjusted pricing models incorporating settlement penalties, and Monte Carlo scenario analysis across 36 combinations of market conditions. **Core achievement:** 84.6% validation accuracy against real-world trial benchmarks (£148/vehicle modeled vs £172/vehicle achieved in Optimise Prime trials).
-
-As renewable generation and EV adoption increase, local electricity networks are becoming more constrained—particularly during the evening peak. Rather than investing in costly network reinforcements, Distribution Network Operators (DNOs are increasingly procuring demand flexibility, paying EV fleets to temporarily reduce or shift charging. Flexibility Service Providers (FSPs) that manage EV fleets with predictable charging patterns can monetise this opportunity, earning £130–£215 per vehicle per year by shifting charging away from peak hours (17:00–20:00). The main challenge lies in bidding complexity. Aggregators must submit 24-hour schedules up to 14 hours in advance, forecast baseline demand with over 95% accuracy to avoid penalties, avoid creating secondary peaks, price bids competitively against established players, and—at the same time—build and maintain consumer trust.This model automates that process, demonstrating first-principles market analysis (extracting competitive dynamics from 2,981 events), technical optimization (MILP respecticnt physical and nonphysical smart-charging constraints), and commercial risk quantification.
-
-The engine targets Day-Ahead Scheduled Utilisation markets—the highest-margin product (£439/MWh) with lowest forecasting risk (12-hour notice vs month-ahead). Return-to-home (R2H) fleets are modeled rather than depots due to superior baseline predictability (95% accuracy vs 70-85%). The framework is geography-agnostic and is built using representative UK commercial EV fleet behaviour derived from the WS1 project. It is implemented in a modular structure that allows key parameters to be adjusted, enabling systematic exploration of multiple international flexibility markets and assessment of revenue potential using the same underlying methodology. Validated outputs: £170/vehicle baseline revenue, 1.5-hour average event duration, £441/MWh optimal pricing, 15.5% safety buffer requirement, and 36-scenario risk analysis identifying event frequency (23% revenue variance) and driver participation (42% variance) as primary uncertainty drivers.
-
-
-#### UKPN Flexibility Market: Competitive Landscape Analysis (For Axle)
-
-##### Executive Summary
-
-This project deconstructs UK Power Networks' Day-Ahead flexibility market 
-by analyzing 2,981 dispatch events across 18 months to understand competitive 
-dynamics, pricing strategies, and market concentration patterns.
-
-**Primary Finding:** Axle Energy's market dominance (47.7% share, £158k revenue) 
-stems from a "premium volume" strategy—bidding 16% above market average 
-(£478/MWh) while capturing highest event volume (1,272 events). This suggests 
-DNOs value reliability over cost minimization.
-
-**Strategic Application:** The analytical framework (competitive decomposition, 
-pricing pattern extraction, risk quantification) is geography-agnostic and 
-has been applied to assess Netherlands GOPACS and Swedish Pielo markets for 
-international expansion feasibility.
-
-#### Project Objective
-
-Reverse-engineer aggregator economics from public auction data to:
-1. Validate market entry assumptions for new geographies
-2. Identify competitive positioning strategies
-3. Quantify revenue potential and risk factors
-4. Build replicable assessment methodology
-
-#### EV Fleet Flexibility: Retail Supplier Hedging Strategy (For Fuse)
-
-#### Executive Summary
-
-This project quantifies how retail energy suppliers can use EV demand flexibility 
-to reduce wholesale market exposure and improve retail margins. By optimizing 
-when customer EVs charge, suppliers can hedge imbalance costs, reduce peak 
-demand charges, and offer competitive tariffs.
-
-**Primary Finding:** Suppliers controlling 100-vehicle EV fleets can reduce 
-wholesale costs by £17,000-21,500 annually (£170-215/vehicle) through strategic 
-demand shifting. This margin improvement enables price-competitive tariffs 
-while maintaining profitability.
-
-**Strategic Application:** The optimization framework calculates customer 
-incentive levels, tariff structures, and hedging value for suppliers building 
-renewable-aligned portfolios.
-
-#### Project Objective
-
-Model supplier-side flexibility economics to:
-1. Calculate wholesale cost reduction potential
-2. Design customer incentive programs
-3. Optimize tariff structures for demand shifting
-4. Quantify retail margin improvement
+The engine targets Day-Ahead Scheduled Utilisation markets, the highest-margin product (£439/MWh) with lower forecasting risk. It models Return-to-Home fleets for predictability and uses representative UK commercial fleet behavior from the WS1 project. The modular, geography-agnostic design allows systematic exploration of international flexibility markets, assessing revenue potential using validated outputs: £170/vehicle baseline revenue, 1.5-hour average event duration, £441/MWh optimal pricing, a 15.5% safety buffer, and 192-scenario risk analysis highlighting event frequency (23% variance) and driver participation (42% variance) as primary uncertainties. This framework underpins both international market expansion analysis and DER portfolio hedging and revenue stacking for FSPs, demonstrating a replicable methodology for assessing new markets and monetizing distributed flexibility assets.
 
 # Table of Contents
 
@@ -86,13 +22,14 @@ Model supplier-side flexibility economics to:
 12. [References](#references)
 
 ## <a id="introduction"></a> Introduction – The Flexibility Market Opportunity
-Globally, electricity grids are under pressure as renewable energy grows and electric vehicles become widespread. Wind and solar make power supply more variable, while EV charging increases demand. The biggest strain occurs in the early evening (5–8pm), when household electricity use peaks and commercial EV fleets plug in as vehicles return to base. Even a small number of EVs charging simultaneously can overload local equipment. Reinforcing the grid is expensive, and these costs are ultimately passed on to consumers.
 
-Smart EV charging is a practical solution. By shifting charging to later, low-demand hours, EVs can reduce pressure on the grid rather than add to it. We focus on the UK power market as a case study: by 2030, Britain could have 14 million EVs, with wind and solar already supplying over 40% of electricity. UK Power Networks demonstrated this approach through the Optimise Prime trials (2019–2023).
+Globally, electricity grids are coming under increasing strain as renewable generation scales and electric vehicles become mainstream. Wind and solar introduce supply-side variability, while EV charging adds a new, highly concentrated source of demand. The pressure is most acute in the early evening (5–8pm), when household electricity use peaks at the same time commercial EV fleets return to base and begin charging. Even a relatively small number of EVs charging simultaneously can overload local transformers and feeders.
 
-Instead of building new infrastructure, Distribution Network Operators now procure demand flexibility—paying EV fleets to temporarily reduce charging during constrained periods. This is cheaper than grid upgrades (£2,000–5,000 per connection) and creates new revenue streams for commercial fleets. In UKPN’s day-ahead flexibility market, fleets earned approximately £170–215 per vehicle per year. The main challenge is complexity: fleets must accurately forecast charging demand and bid competitively to avoid penalties.
+Traditionally, the response to this problem has been physical grid reinforcement. However, upgrading local network assets is expensive—typically £2,000–5,000 per connection—and these costs are ultimately borne by consumers. As EV adoption accelerates, this approach is neither scalable nor cost-effective.Smart EV charging offers a more efficient alternative. By shifting or temporarily pausing charging during peak periods, EVs can act as a flexible demand resource, reducing network stress rather than exacerbating it. The UK provides a useful case study: by 2030, Britain is expected to have around 14 million EVs, while wind and solar already account for over 40% of electricity generation. Between 2019 and 2023, UK Power Networks demonstrated the viability of this approach through the Optimise Prime trials.
 
-The engine follows a six-stage pipeline: (1) Market Analysis – competitive benchmarking from 14,813 UKPN events; (2) Fleet Simulation – stochastic vehicle behavior modeling; (3) Baseline Forecasting – unmanaged demand prediction for settlement; (4) Capacity Optimization – MILP-based turndown maximization under operational constraints; (5) Economic Pricing – margin optimization with penalty-adjusted revenues; and (6) Risk Assessment – Monte Carlo analysis across 36 market scenarios. The modules are sequentially dependent: market analysis informs pricing strategy, fleet simulation feeds baseline forecasting, and baseline accuracy directly determines penalty exposure in the economic model. Finally, we assess the potential for international application, examining how this framework can be adapted to other markets, what regulatory and market factors introduce risk, and which technical constraints require recalibration.
+Rather than building new infrastructure, distribution network operators (DNOs) now procure flexibility through local flexibility markets (LFMs), paying EV fleets to reduce charging during constrained periods. This approach is materially cheaper than grid upgrades and creates a new revenue stream for fleet operators. In UKPN’s day-ahead flexibility market, commercial fleets have earned approximately £110–215 per vehicle per year by participating in a single product such as Day-Ahead Scheduled Utilisation (DA SU). The core challenge is operational and economic complexity: fleets must accurately forecast charging demand, optimize capacity bids, and avoid penalties for under-delivery.
+
+We designed a retrospective, market-mirroring optimization engine that simulates how a real EV fleet would have bid into local flexibility markets under historical conditions. At its core is a mixed-integer linear program (MILP) that reconstructs day-ahead bidding decisions using observed market rules, settlement mechanics, and fleet constraints. The engine follows a six-stage pipeline. First, market analysis benchmarks competitive behavior using 14,813 historical UKPN flexibility events. Second, a stochastic fleet simulation generates realistic vehicle availability, arrival times, and energy needs, calibrated to observed commercial fleet behavior. Third, baseline forecasting predicts unmanaged charging demand, which is later used for settlement and penalty calculations. Fourth, the MILP optimizes charge turndown capacity under operational and behavioral constraints, producing feasible bids that mirror real-world dispatchability. Fifth, an economic layer calculates competitive bid prices accounting for expected penalties and margin targets. Finally, a scenario-based risk module evaluates outcomes across 192 market scenarios, translating operational uncertainty into probability-weighted revenue distributions. Because each module feeds directly into the next, forecasting accuracy and fleet behavior propagate through to realized revenue. The same modular structure also enables international extension, where only market rules, penalties, and fleet parameters must be recalibrated rather than the optimization logic itself.
 
 ## <a id="market-analysis"></a> Market Analysis – UKPN Historical Data
 
@@ -111,8 +48,7 @@ TABLE 1: UKPN Product Portfolio
 **Residential-Addressable Market:**
 This analysis focuses specifically on the residential-addressable DSO market, covering four key products: Peak Reduction, Day-Ahead, Long-Term Utilisation, and Scheduled Availability.
 
-Only flexibility derived from EV Charger DSR technologies with the demand turn-down dispatch type (curtailment, not generation) is included. By strategically excluding the industrial-focused products such as Dynamic and Secure, we successfully isolate the market portion accessible to aggregators operating household-scale assets (e.g., 5–10 kW EV chargers, 5 kW home batteries). This sharp focus aligns the market analysis directly with the core objective of the quantitative bidding engine: optimizing the revenue from these domestic fleets.
-
+Only flexibility derived from EV Charger DSR technologies with the demand turn-down dispatch type is included. By excluding the industrial-focused products such as Dynamic and Secure, we isolate the market portion accessible to aggregators operating household-scale assets (e.g., 5–10 kW EV chargers, 5 kW home batteries). This focus aligns the market analysis directly with the core objective of the quantitative bidding engine: optimizing the revenue from these domestic fleets.
 
 
 ```python
@@ -137,7 +73,7 @@ fig1 = plot_dso_market_evolution_timeline(ukpn_dispatched, save_path='figures/ds
     
 
 
-## Revenue Distribution and Product Economics
+#### Revenue Distribution and Product Economics
 
 The residential-addressable flexibility market (£425k over 18 months) shows clear differences across products in terms of pricing, volume, and event frequency:
 
@@ -147,15 +83,15 @@ The residential-addressable flexibility market (£425k over 18 months) shows cle
 | Long-Term Utilisation   | 0.131            | 3,545.13      | 36.86             | 4,451        | 30.0%          |
 | Scheduled Availability  | 0.101            | 648.47        | 155.91            | 3,097        | 20.9%          |
 | Peak Reduction          | 0.039            | 543.11        | 71.24             | 4,598        | 31.0%          |
-| Total / Avg             | 0.425            | 5,088.15      | 83.51†            | 14,813       | 100.0%         |
+| Total / Avg             | 0.425            | 5,088.15      | 83.51             | 14,813       | 100.0%         |
 
 Despite representing less than one-fifth of events, Day-Ahead generates the largest share of revenue. Each product plays a distinct role in the market, reflecting different risk, reward, and operational requirements.
 
 - 1. High-Value, Low-Volume: Day-Ahead:  
-Day-Ahead clears at an average price of £439.50/MWh—around three times higher than any other product—while accounting for just 7% of total energy volume (351 MWh). This premium reflects its role as a scarcity product, used when short-term forecasts indicate acute local network constraints. For aggregators, Day-Ahead offers high margins, but only where delivery accuracy remains high enough to avoid penalty erosion.
+Day-Ahead clears at an average price of £439.50/MWh—around three times higher than any other product—while accounting for just 7% of total energy volume (351 MWh). This reflects its role as a scarcity product, used when short-term forecasts indicate acute local network constraints. For aggregators, Day-Ahead offers high margins, but only where delivery accuracy remains high enough to avoid penalty erosion.
 
 - 2. Low-Value, High-Volume: Long-Term Utilisation:
-Long-Term Utilisation delivers the majority of energy volume (70%, or 3,545 MWh) at a much lower price point of £36.86/MWh. These forward contracts secure flexibility months in advance, prioritising revenue certainty over margin. This product typically suits large industrial participants with stable, predictable demand profiles and low operational risk tolerance.
+Long-Term Utilisation delivers the majority of energy volume (70%, or 3,545 MWh) at a much lower price point of £36.86/MWh. These forward contracts secure flexibility months in advance, prioritising revenue certainty over margin. 
 
 - 3. Balanced Hybrid: Scheduled Availability:
 Scheduled Availability sits between the two extremes. With an average utilization price of £155.91/MWh and a combination of availability and dispatch payments, it offers a more balanced risk–return profile. This structure appeals to aggregators seeking diversification, with moderate forecasting requirements and more consistent revenues than Day-Ahead.
@@ -172,7 +108,7 @@ fig = plot_tier_price_distribution_VALUE_WEIGHTED(ukpn_dispatched); plt.show()
     
 
 
-### 3.3 Pricing Tier Analysis
+#### Pricing Tier Analysis
 
 To understand how value is distributed across the flexibility market, events are grouped into three pricing tiers based on utilization price quantiles from the full dataset (all products).
 
@@ -206,7 +142,6 @@ Focusing exclusively on the Day-Ahead product reveals an even sharper concentrat
 Here, fewer than 1 in 30 Day-Ahead events account for nearly a quarter of total Day-Ahead revenue. Capturing these high-price scarcity events has an outsized impact on overall returns, making accurate forecasting, availability, and competitive pricing critical for fleet operators participating in the market.
 
 
-
 ```python
 from plotting import plot_zone_product_frequency_value
 df = ukpn_dispatched
@@ -219,7 +154,7 @@ fig2= plot_zone_product_frequency_value(df,  top_n=30,  sort_by_product='Day-Ahe
     
 
 
-### Geographic Concentration
+#### Geographic Concentration
 
 Day-Ahead revenue is highly concentrated. The top 10 zones account for 72% of total Day-Ahead value, equivalent to £111k of the £154k total
 
@@ -233,7 +168,7 @@ Zones with a “pure” Day-Ahead profile (greater than 95% of revenue from Day-
 
 From a deployment perspective, margin matters more than headline revenue. Worthing Grid A generates £38.6k through premium pricing (£730/MWh × 53 MWh). Trowse Grid 33 generates £19.7k through volume (£237/MWh × 83 MWh), but requires roughly three times the capacity to approach similar returns. The model’s £441/MWh baseline is well suited to competitive zones but requires zone-specific adjustment: £650+ for premium zones and £300–380 for volume zones.
 
-### Temporal Patterns: Hourly and Seasonal Concentration
+#### Temporal Patterns: Hourly and Seasonal Concentration
 
 Day-Ahead value is heavily concentrated around the evening residential peak.
 
@@ -244,8 +179,7 @@ Day-Ahead value is heavily concentrated around the evening residential peak.
 | 3      | 15:00      | 19.0k                  | 32            | Transition window with limited standalone value relative to the peak. |
 
 A single hour dominates the market. The 17:00 UTC interval accounts for 49% of total Day-Ahead revenue (£76.4k) and 50% of total MWh requested (174 MWh). This represents a fifteen-fold difference compared with 15:00 (£5.1k).
-
-From a bidding perspective, the optimisation engine must prioritise vehicle availability between 16:00 and 18:00. Fleets with high plug-in rates at 17:00–18:30, typical of return-to-home schedules, are best positioned to offer turn-down capacity precisely when prices peak.
+From a bidding perspective, the optimisation engine must prioritise vehicle availability between 16:00 and 19:00. Fleets with high plug-in rates at 17:00–18:30, typical of return-to-home schedules, are best positioned to offer turn-down capacity precisely when prices peak.
 
 #### Seasonal Revenue Distribution
 
@@ -260,42 +194,45 @@ Average Day-Ahead value per event is 23% higher in summer (£65) than in winter 
 1. Winter events occur more frequently but clear at lower margins, potentially due to long-term contracts absorbing peak demand.
 2. Summer events are less frequent but command higher prices, likely driven by unexpected heatwave-related demand such as air conditioning.
 
-From a risk perspective, the observed winter-to-summer event ratio of 1.1:1 (rather than the initially assumed 11.6:1) implies that revenue forecasts should not overweight winter months. The 40 events per year baseline should be distributed more evenly across seasons than typical energy-crisis-driven assumptions would suggest.
+The observed winter-to-summer event ratio of 1.4:1 (1,554 winter events vs 1,113 summer events) shows moderate seasonal concentration. While network stress remains winter-biased, the gap is narrower than energy-crisis narratives suggest. Our risk model's 40-event baseline assumes typical winter conditions, with harsh winter scenarios (60 events) representing crisis-year extremes rather than routine seasonal variance."
 
+**Why This Project Models Day-Ahead Only:**
 
-## <a id="behavioural-fleet"></a> Behavioural Fleet Generation & Operational
+Day-Ahead represents the highest revenue density (£410/MWh vs £37-245/MWh for alternative products) and provides the clearest validation benchmark—WS1 trials documented Day-Ahead performance exclusively (£172/vehicle net, 60 events, 95% delivery reliability over month-ahead long-term Products). The 12-24 hour procurement window enables more accurate forecasting than long-term products: Royal Mail trials showed Day-Ahead achieved 15% higher delivery reliability than month-ahead procurement because providers could incorporate real-time operational data (current SoC, weather impacts, vehicle availability) invisible weeks in advance. This shorter forecasting horizon reduces baselining risk and SAF penalties, making Day-Ahead the most predictable product for portfolio optimization modeling and international market comparison frameworks.
 
-For the bidding engine, we need **realistic fleet data** that reflects UK operations and supports **international market exploration**, enabling feasible project evaluation and **reliable revenue and risk estimates**. Many markets lack telematics, so we designed a **synthetic fleet** using **data-backed behavioral analysis** based on public trials (WS1/WS2), vehicle specifications, and market statistics. For UK Power Networks (UKPN), this fleet was calibrated to the UK context and validated against Centrica's WS1/WS2 trials, achieving **98.2% fidelity** across daily mileage, plug-in timing, energy requirements, and flexibility margins. The fleet mirrors observed UK commercial composition: **35% vans, 60% standard cars, 5% premium vehicles**, with batteries spanning **40–100 kWh** and efficiencies **150–220 Wh/km**.
+# <a id="behavioural-fleet"></a> Behavioural Fleet Generation & Operational
 
-Home charging infrastructure reflects typical UK installations: **90% at 7.4 kW, 5% at 3.7 kW, and 5% at 11 kW**, with effective charge rate determined by the **minimum of CP rating and vehicle capability**. Together with vehicle types, battery capacities, and behavioral patterns, these characteristics define the **physical and behavioral boundaries** the MILP optimizer respects, enabling scalable and realistic scheduling.
+The bidding engine requires realistic fleet data reflecting UK operational patterns while remaining adaptable for international market assessment. Since target markets lack accessible telematics data, we constructed a synthetic fleet using physical EV charging principles and behavioral patterns documented in public trials (WS1/WS2), vehicle specifications, and UK fleet statistics. 
+
+For UKPN validation, the synthetic fleet was calibrated to match observed UK commercial composition: 35% vans, 60% standard cars, 5% premium vehicles, with battery capacities spanning 40–100 kWh and efficiencies of 150–220 Wh/km. The generated fleet reproduces key operational metrics from Centrica's WS1/WS2 trials—daily mileage distributions, plug-in timing patterns, energy requirements, and flexibility margins—achieving close alignment across all dimensions.
+
+Home charging infrastructure reflects typical UK installations: 90% at 7.4 kW, 5% at 3.7 kW, and 5% at 11 kW, with effective charge rate determined by the minimum of CP rating and vehicle capability. Together with vehicle types, battery capacities, and behavioral patterns, these characteristics define the physical and behavioral boundaries the MILP optimizer respects, enabling scalable and realistic scheduling.
+
 
 #### Behavioral Modelling and Temporal Patterns
 
-The synthetic fleet replicates real-world heterogeneity using **four WS1-derived driver personas**, each defined by plug-in timing, predictability, and opt-out risk:  
+The synthetic fleet replicates real-world heterogeneity using four WS1-derived driver personas, each defined by plug-in timing, predictability, and opt-out risk:  
 
+- Reliable (80%): plug-in ~17:00 ($\mu=17.0$, $\sigma=0.5$ hr, clipped 16:30–18:00), 95% predictability, 5% opt-out. Operational backbone enabling confident baseline forecasting.  
+- Late Arrival (10%): plug-in ~19:30 ($\mu=19.5$, $\sigma=0.75$ hr, clipped 18:30–21:00), 75% predictability, 15% opt-out. Variable schedules require conservative scheduling buffers.  
+- Irregular (5%): plug-in uniform 17:00–21:00, 60% predictability, 30% opt-out. High-risk tail, mostly excluded to avoid penalty exposure.  
+- Early Bird (5%): plug-in ~16:30 ($\mu=16.5$, $\sigma=0.5$ hr, clipped 15:30–17:30), 90% predictability, 3% opt-out. Premium reliability enabling early-window flexibility.
 
-- **Reliable (80%)**: plug-in ~17:00 ($\mu=17.0$, $\sigma=0.5$ hr, clipped 16:30–18:00), 95% predictability, 5% opt-out. Operational backbone enabling confident baseline forecasting.  
-- **Late Arrival (10%)**: plug-in ~19:30 ($\mu=19.5$, $\sigma=0.75$ hr, clipped 18:30–21:00), 75% predictability, 15% opt-out. Variable schedules require conservative scheduling buffers.  
-- **Irregular (5%)**: plug-in uniform 17:00–21:00, 60% predictability, 30% opt-out. High-risk tail, mostly excluded to avoid penalty exposure.  
-- **Early Bird (5%)**: plug-in ~16:30 ($\mu=16.5$, $\sigma=0.5$ hr, clipped 15:30–17:30), 90% predictability, 3% opt-out. Premium reliability enabling early-window flexibility.
+Weekend behavior reduces predictability to 60–70%, reflecting discretionary schedules. Fleet-weighted opt-out risk is 7%, meaning 93% of the fleet participates, consistent with WS1 trials showing opt-out decline from 15–25% to 5–7% over 12–18 months.
 
-Weekend behavior reduces predictability to 60–70%, reflecting discretionary schedules. **Fleet-weighted opt-out risk is 7%**, meaning **93% of the fleet participates**, consistent with WS1 trials showing opt-out decline from 15–25% to 5–7% over 12–18 months.
+#### Constraint Engineering: From Stochastic Behavior to Deterministic Guarantees
 
+As fleet operators, the primary constraint is simple: every vehicle must reach its required departure state by morning—not probabilistically, but with deterministic guarantees. Framing the problem this way resolves the core tension between maximizing flexibility revenue and eliminating operational risk. It also makes explicit the separation between operational need (what vehicles require to drive) and the charging task (what the infrastructure must deliver).
 
-## Constraint Engineering: From Stochastic Behavior to Deterministic Guarantees
-
-As fleet operators, we must ensure that every vehicle **reaches its required departure state by morning**—not just probabilistically, but with **deterministic guarantees**. This resolves a critical tension: **maximizing flexibility revenue** while eliminating operational risk. The approach makes explicit the separation between **operational need** (what vehicles require to drive) and **charging task** (what the infrastructure must deliver).
-
-To deliver this certainty, we impose **hard constraints** based on:  
+To deliver this certainty, we impose hard constraints based on:  
 - Battery capacities  
 - Charger ratings  
 - Temporal windows  
 - Operational buffers calibrated from WS1/WS2 trial outcomes  
 
-Guaranteed readiness is implemented through a **five-step methodology** that converts stochastic fleet behavior into deterministic operational constraints, ensuring every MILP optimizer schedule is both **operationally feasible** and **commercially reliable**.
+Guaranteed readiness is implemented through a five-step methodology that converts stochastic fleet behavior into deterministic operational constraints, ensuring every MILP optimizer schedule is both operationally feasible and commercially reliable.
 
-
-## Energy Requirement Calculation: The Five-Step Methodology
+#### Energy Requirement Calculation: The Five-Step Methodology
 
 Step 1: Operational Need (Driving Energy Requirement)
 
@@ -334,7 +271,7 @@ $$
 E^{\text{charge}}_v = \max\left((\text{SoC}^{\text{target}}_v - \text{SoC}^{\text{return}}_v) \times B^{\text{usable}}_v \times 1.05, 2.0\right)
 $$
 
-This SoC gap method, validated in WS1 trials, restores the battery from its return state to the target state while including losses. The **5% behavioral buffer protects against:
+This SoC gap method, validated in WS1 trials, restores the battery from its return state to the target state while including losses. The 5% behavioral buffer protects against:
 
 - Late plug-in events: Drivers delaying connection after arrival  
 - Unexpected additional trips: Evening errands or emergency use  
@@ -370,72 +307,76 @@ This step ensures that every vehicle scheduled by the MILP optimizer can achieve
 
 #### Flexibility Margin—The Core Business Metric
 
-The **flexibility margin** is defined as the difference between available charging time and the minimum required charging time:
+The flexibility margin is defined as the difference between available charging time and the minimum required charging time:
 
 $$
 M_v = T^{\text{available}}_v - T^{\text{min}}_v
 $$
 
-This margin, typically **8–10 hours**, represents the shiftable load window:  
+This margin, typically 8–10 hours, represents the shiftable load window:  
 
-- Vehicles with **large margins (10+ hours)** can defer charging past midnight, avoiding the evening peak.  
-- Vehicles with **tight margins (2–4 hours)** must begin charging earlier, forming the **"charging floor"**, the irreducible base load.
+- Vehicles with large margins (10+ hours) can defer charging past midnight, avoiding the evening peak.  
+- Vehicles with tight margins (2–4 hours) must begin charging earlier, forming the "charging floor", the irreducible base load.
 
 #### Critical Latest Start Time
 
-The **latest possible start time** for charging is a hard boundary:
+The latest possible start time for charging is a hard boundary:
 
 $$
 T^{\text{critical}}_v = T_{\text{out},v} - T^{\text{min}}_v
 $$
 
-For example, a vehicle departing at 07:30 with a 4.5-hour charge requirement has a **critical latest start of 03:00**. Any schedule starting later will fail to achieve the target SoC. The MILP optimizer treats this as a **hard constraint**, taking absolute precedence over revenue maximization.
+For example, a vehicle departing at 07:30 with a 4.5-hour charge requirement has a critical latest start of 03:00. Any schedule starting later will fail to achieve the target SoC. The MILP optimizer treats this as a hard constraint, taking absolute precedence over revenue maximization.
 
-**Validation:** A high-demand vehicle requiring **24.7 kWh** from minimum to maximum SoC achieves a **4× feasibility margin**, confirming that the **15.5% safety buffer** protects against worst-case scenarios while preserving **10.5 hours of shiftable load** for grid services.
+Validation: A high-demand vehicle requiring 24.7 kWh from minimum to maximum SoC achieves a 4× feasibility margin, confirming that the 15.5% safety buffer protects against worst-case scenarios while preserving 10.5 hours of shiftable load for grid services.
 
 **Operational Implications:**  
-- **Vans** require **71% more energy than cars** (14.4 vs 8.4 kWh) but achieve **half the feasibility ratio** (7.7× vs 15.7×), forming the **charging floor** that constrains early-evening schedules.  
-- **Cars** provide the bulk of **time-shifting flexibility**, allowing the MILP optimizer to defer charging to off-peak periods (post-midnight) while vans are scheduled immediately (17:00–22:00).  
-- A **65% car composition** maximizes flexibility agility while maintaining sufficient volume to meet **DNO minimum capacity thresholds (10 kW per Flexible Unit).**
+
+- Vans require 71% more energy than cars (14.4 vs 8.4 kWh) but achieve half the feasibility ratio (7.7× vs 15.7×), forming the charging floor that constrains early-evening schedules.  
+- Cars provide the bulk of time-shifting flexibility, allowing the MILP optimizer to defer charging to off-peak periods (post-midnight) while vans are scheduled immediately (17:00–22:00).  
+- A 65% car composition maximizes flexibility agility while maintaining sufficient volume to meet DSO minimum capacity thresholds (10 kW per Flexible Unit).
 
 
-## Physical Infrastructure Constraints
+#### Physical Infrastructure Constraints
 
-Beyond temporal feasibility, **infrastructure imposes hard control limits** that determine whether schedules are deliverable.
+Beyond temporal feasibility, infrastructure imposes hard control limits that determine whether schedules are deliverable.
 
 #### Charge Point Stability Floor (1.4 kW Minimum)
 
-The **minimum stable charge rate** is 1.4 kW (6A at 230V). WS1 and WS2 trials show that charge points below this threshold exhibit **hunting behavior**: erratic cycling, command rejection, or failure to resume charging after flexibility events. This translates into a **binary constraint**:
+The minimum stable charge rate is 1.4 kW (6A at 230V). WS1 and WS2 trials show that charge points below this threshold exhibit hunting behavior: erratic cycling, command rejection, or failure to resume charging after flexibility events. This translates into a binary constraint:
 
 $$
 P_{v,t} \geq 1.4 \text{ kW} \quad \text{or} \quad P_{v,t} = 0
 $$
 
-The optimizer **cannot request 0.8 kW**—vehicles either charge at ≥1.4 kW or remain off.  
+The optimizer cannot request 0.8 kW—vehicles either charge at ≥1.4 kW or remain off.  
 
-- This reduces theoretical turn-down capacity by **10–15%** but ensures **physical deliverability**.  
-- Conservative constraints sacrifice some theoretical flexibility to maintain **95%+ delivery accuracy** and **driver trust**.  
-- Aggressive optimization (e.g., allowing 0.5 kW) may increase modeled capacity but causes **15–25% operational failures**, eroding long-term revenue reliability.
+- This reduces theoretical turn-down capacity by 10–15% but ensures physical deliverability.  
+- Conservative constraints sacrifice some theoretical flexibility to maintain 95%+ delivery accuracy and driver trust.  
+- Aggressive optimization (e.g., allowing 0.5 kW) may increase modeled capacity but causes 15–25% operational failures, eroding long-term revenue reliability.
 
-#### Vehicle Constraint Parameters for MILP Optimization
+#### Fleet Generation: Parameter Definition and Validation
 
-Each vehicle is defined by eight parameters that fully capture its operational envelope for MILP scheduling across 18 UKPN zones:
+The synthetic fleet is defined by eight operational parameters per vehicle, calibrated against WS1/WS2 trial observations to ensure realistic constraint modeling:
 
-| Parameter | Description |
-|-----------|-------------|
-| **Plug-in time** ($T_{\text{in},v}$) | When charging becomes possible |
-| **Departure time** ($T_{\text{out},v}$) | When vehicle must be ready |
-| **Energy requirement** ($E^{\text{charge}}_v$) | Guaranteed charging obligation (kWh) |
-| **Minimum charge rate** ($P^{\text{min}}_v = 1.4$ kW) | Stability floor |
-| **Maximum charge rate** ($P^{\text{max}}_v$) | Infrastructure/vehicle limit |
-| **Charging efficiency** ($\eta = 0.93$) | Conversion losses |
-| **Return SoC** ($\text{SoC}^{\text{return}}_v$) | Starting state-of-charge |
-| **Target SoC** ($\text{SoC}^{\text{target}}_v$) | Guaranteed readiness for next-day use |
+| Parameter | Description | WS1/WS2 Observed | Synthetic Fleet |
+|-----------|-------------|------------------|-----------------|
+| Plug-in time ($T_{\text{in},v}$) | When charging becomes possible | Peak 17:00-18:30 | 17:00 ± 0.5 hr (80% reliable) | 
+| Departure time ($T_{\text{out},v}$) | When vehicle must be ready | ~07:30 (commercial) | 07:30 ± 0.5 hr | 
+| Energy requirement ($E^{\text{charge}}_v$) | Guaranteed charging obligation (kWh) | Vans: 12-16 kWh, Cars: 7-10 kWh | Vans: 14.4 ± 3 kWh, Cars: 8.4 ± 2 kWh | 
+| Daily mileage | Distance driven per day | Vans: 75-85 km, Cars: 60-70 km | Vans: 80 ± 15 km, Cars: 65 ± 12 km |
+| Minimum charge rate ($P^{\text{min}}_v$) | Stability floor (CP behavior) | 1.4 kW (6A threshold) | 1.4 kW | 
+| Maximum charge rate ($P^{\text{max}}_v$) | Infrastructure/vehicle limit | 90% @ 7.4 kW, 7% @ 3.7 kW, 3% @ 11 kW | 90% @ 7.4 kW, 5% @ 3.7 kW, 5% @ 11 kW | 
+| Charging efficiency ($\eta$) | AC/DC conversion + battery losses | ~90-95% | 0.93 (93%) | 
+| Return SoC ($\text{SoC}^{\text{return}}_v$) | Starting state-of-charge | 45-65% (after day's travel) | 55% ± 10% | 
+| Target SoC ($\text{SoC}^{\text{target}}_v$) | Guaranteed readiness | 85-90% (commercial) | 85-90% (clipped 30-90%) | 
+| Opt-out rate | Driver non-participation | 5-7% (mature operations) | 7% (fleet-weighted) |
+| Winter efficiency penalty | Temperature-driven losses | +20-30% energy | +26% (α = 1.26) | 
+| Delivery accuracy | Schedule adherence | 90-95% | 95%+ (15.5% buffer) | 
 
-These parameters define the **complete operational envelope** for MILP optimization in all 18 UKPN zones, ensuring every schedule is operationally feasible and commercially reliable.
+These parameters define the complete operational envelope for MILP optimization across all 18 UKPN zones, ensuring every schedule is physically deliverable, operationally feasible, and commercially reliable.
 
-
-## <a id="baseline-forecasting"></a> Baseline Forecasting for Day-Ahead Market Submission
+# <a id="baseline-forecasting"></a> Baseline Forecasting for Day-Ahead Market Submission
 
 The baseline represents the unmanaged charging profile—how vehicles would charge immediately upon plug-in without smart control—and serves as the contractual reference for flexibility services. It defines available flexibility as the difference between the baseline and the optimized schedule, and it determines revenue and penalties through the Schedule Accuracy Factor (SAF).
 
@@ -448,24 +389,24 @@ The resulting baseline reflects realistic fleet activity—plug-in timing, energ
 In production deployments, this simulation is replaced by real fleet telematics and time-series forecasting. Here, it illustrates DAU-compliant behavioural modelling, provides realistic test data for Module 05, and supports an architecture adaptable to international market requirements.
 
 
-## Baseline Generation Methodology
+### Baseline Generation Methodology
 
 By unmanaged charging we mean that the vehicles begin charging immediately upon plug-in at their maximum available AC power and continue until their required energy is delivered. WS1 trials validated this pattern, observing immediate charging in approximately 93% of arrivals when smart charging controls were inactive.
 
 Behavioural variation is incorporated via profile-specific probabilities (defined in Module 02): Reliable (95%), Early Bird (98%), Late Arrival (90%), and Irregular (80%). These probabilities determine whether a vehicle participates in immediate charging within the baseline forecast.
-For each participating vehicle \( v \) and programme time unit (PTU) \( t \), baseline power is defined as:
+For each participating vehicle $v$ and programme time unit (PTU) $ t $, baseline power is defined as:
 
-\[
+$$
 P^{\text{base}}_{v,t} =
 \begin{cases}
 P^{\max}_v \cdot \alpha_v \cdot \delta_v & \text{if } t \geq T^{\text{in}}_v \text{ and } E^{\text{charged}}_{v,t} < E^{\text{charge}}_v \\
 0 & \text{otherwise}
 \end{cases}
-\]
+$$
 
-Here, \(P^{\max}_v\) denotes the vehicle’s effective maximum AC charge rate, \(\alpha_v\) the probability of immediate charging based on the assigned behavioural profile, and \(\delta_v\) an adjustment factor accounting for public or workplace charging. Charging is permitted only after the vehicle’s plug-in time \(T^{\text{in}}_v\), and continues until the required energy \(E^{\text{charge}}_v\), as determined in Module 03, has been delivered.
+Here, $P^{\max}_v$ denotes the vehicle's effective maximum AC charge rate, $\alpha_v$ the probability of immediate charging based on the assigned behavioural profile, and $\delta_v$ an adjustment factor accounting for public or workplace charging. Charging is permitted only after the vehicle's plug-in time $T^{\text{in}}_v$, and continues until the required energy $E^{\text{charge}}_v$, as determined in Module 03, has been delivered.
 
-### Forecast Uncertainty Modeling
+#### Forecast Uncertainty Modeling
 
 Baseline forecasts include day-type–dependent uncertainty calibrated to WS1 predictability: weekdays assume ~95% predictability with ±5% variance, while weekends reflect lower certainty (60–70%) with ±30–40% variance. This is applied as $\hat{P}_t = P_t (1 + \epsilon_t)$, where $\epsilon_t \sim \mathcal{N}(0, \sigma^2)$ and $\sigma$ scales by day type. The result supports confident weekday bidding with low SAF exposure and more conservative weekend offers to manage penalty risk.
 
@@ -480,8 +421,7 @@ Baseline construction proceeds as follows:
 7. Overnight continuity: Allow charging to roll past midnight.  
 8. Forecast uncertainty: Apply controlled weekday and weekend variability.
 
-
-Handling Overnight Charging
+**Handling Overnight Charging**
 
 Many vehicles plug in late in the evening but finish charging after midnight. To make sure this load is captured correctly, the baseline allows charging to roll over into the early morning periods rather than stopping at the end of the day.
 
@@ -489,11 +429,10 @@ $$
 \text{PTU}_{\text{charging}} = \left(T^{\text{in}}_v + \text{offset}\right) \bmod 48
 $$
 
+In practice, this means that if a vehicle plugs in after 20:00 and still needs energy, its charging continues into the 00:00–03:00 window. This avoids “dropping” load simply because the day boundary has been reached and ensures the full charging requirement is reflected in the baseline. For example, a vehicle arriving at 20:45 begins charging in the 20:30–21:00 interval and continues charging across successive half-hour periods. If charging extends past midnight, it naturally rolls over into the first PTUs of the next day.This approach preserves energy balance and accurately reflects the overnight load seen in real fleets, where late-arriving vehicles continue charging into the early morning hours.
 
-In practice, this means that if a vehicle plugs in after 20:00 and still needs energy, its charging continues into the 00:00–03:00 window. This avoids “dropping” load simply because the day boundary has been reached and ensures the full charging requirement is reflected in the baseline.For example, a vehicle arriving at 20:45 begins charging in the 20:30–21:00 interval and continues charging across successive half-hour periods. If charging extends past midnight, it naturally rolls over into the first PTUs of the next day.This approach preserves energy balance and accurately reflects the overnight load seen in real fleets, where late-arriving vehicles continue charging into the early morning hours.
 
-
-### Verified Baseline Characteristics
+#### Verified Baseline Characteristics
 
 The resulting baseline profile exhibits clear and intuitive load patterns across the day, reflecting observed fleet behaviour.
 
@@ -509,8 +448,7 @@ The resulting baseline profile exhibits clear and intuitive load patterns across
 | 19:00–20:00 | 38–39 | 240–280 | 32–36 | Late Arrival profile contribution |
 | 22:00–00:00 | 44–47 | 60–25 | 8–3 | Tail-end completion |
 
-
-### Secondary Peak Risk Assessment
+#### Secondary Peak Risk Assessment
 
 A key risk in flexibility optimisation is creating a new peak after the original evening peak has been reduced. WS1 trials showed that poorly managed demand shifting can produce secondary peaks up to 12% higher than the original. To quantify this, the primary baseline peak is identified and post-peak load behaviour over the next three hours is analysed. The secondary peak ratio is calculated as:
 
@@ -518,7 +456,7 @@ $$
 r_{\text{secondary}} = \frac{\max(L^{\text{post-peak}})}{P_{\text{peak}}}
 $$
 
-For this fleet, the maximum post-peak load of 310.2 kW at PTU 36 gives a ratio of 0.94, indicating demand remains at 94% of the original peak. Secondary peak risk is classified as low when post-peak demand falls sharply, medium when it reduces gradually, and high when it remains near the peak; here, the fleet is **high risk**. 
+For this fleet, the maximum post-peak load of 310.2 kW at PTU 36 gives a ratio of 0.94, indicating demand remains at 94% of the original peak. Secondary peak risk is classified as low when post-peak demand falls sharply, medium when it reduces gradually, and high when it remains near the peak; here, the fleet is high risk. 
 
 To mitigate this, Module 05 applies a secondary peak constraint:
 
@@ -528,15 +466,11 @@ $$
 
 This ensures flexibility actions reduce peak load without simply shifting it to later periods.
 
-## <a id="bidding-optimisation"></a> Flexibility Bidding Optimisation
-
-# Module 05: MILP Optimization for Commercial Flexibility
+# <a id="bidding-optimisation"></a> MILP Bidding  Optimization for Commercial Flexibility
 
 Module 05 converts technical flexibility into commercial value using a Mixed-Integer Linear Programming (MILP) model implemented in Pyomo and solved with GLPK for day-ahead optimisation. Building on baseline forecasting and behavioural modelling (Modules 02–04), it schedules charging across 48 half-hour PTUs to maximise turn-down during UKPN’s evening constraint window while ensuring all vehicles are fully charged, maintaining operational readiness, hardware reliability, and driver trust. The optimisation runs once per day ahead of market submission.
 
-## Purpose and Market Context
-
-The optimisation reflects real-world fleet complexity: 65 vehicles with energy requirements of 8.4–24.7 kWh, plug-in times between 17:00–20:00, and morning departures 07:00–08:00. It balances four objectives:
+The optimizer receives fleet parameters from Module 03-04 (energy requirements, time windows, charge rates) and generates charging schedules that maximize turn-down capacity during UKPN's constraint window, while satisfying all operational, hardware, and behavioral constraints.
 
 - Reduce charging during the DNO peak window (17:00–20:00)  
 - Ensure every vehicle is fully charged for service  
@@ -545,22 +479,22 @@ The optimisation reflects real-world fleet complexity: 65 vehicles with energy r
 
 The goal is to generate reliable flexibility revenue while maintaining operational integrity.
 
-### Decision Variables
+#### Decision Variables
 
-- Continuous power \(p_{v,t} \in [0,50]\) kW for vehicle \(v\) at PTU \(t\)  
-- Binary on/off \(x_{v,t} \in \{0,1\}\) to enforce minimum stable power through Big-M coupling  
+- Continuous power $p_{v,t} \in [0,50]$ kW for vehicle $v$ at PTU $t$  
+- Binary on/off $x_{v,t} \in \{0,1\}$ to enforce minimum stable power through Big-M coupling  
 
 For 65 vehicles: 6,240 total decision variables (3,120 continuous, 3,120 binary). Binary logic is required because vehicles either charge at ≥1.4 kW or not at all; fractional power causes hardware issues.
 
-### Auxiliary Variables
+**Auxiliary Variables**
 
-- \(C_{\text{turndown}}\): Average peak-hour turn-down (kW), primary commercial output for DAUS bids  
-- \(\text{Cost}_{\text{total}}\): Total charging cost (£) under Time-of-Use tariffs  
-- \(z_{\text{peak}}\): Maximum aggregate load (kW) to track and prevent secondary peaks  
+- $C_{\text{turndown}}$: Average peak-hour turn-down (kW), primary commercial output for DAUS bids  
+- $\text{Cost}_{\text{total}}$: Total charging cost (£) under Time-of-Use tariffs  
+- $z_{\text{peak}}$: Maximum aggregate load (kW) to track and prevent secondary peaks  
 
 This framework ensures that flexibility is both commercially valuable and operationally feasible.
 
-## Objective Functions: Three Optimization Modes Strategy Modes: Flexibility, Cost, or Both
+#### Objective Functions: Three Optimization Modes Strategy Modes: Flexibility, Cost, or Both
 
 Our system implements three distinct optimization strategies, each solving a different mathematical formulation. Rather than switching between pre-computed solutions, each mode creates and solves its own Mixed-Integer Linear Program with a unique objective function, offering flexibility-first, cost-first, or hybrid strategies.
 
@@ -585,11 +519,15 @@ $$
 $$  
 Prioritises flexibility while exploiting low-cost periods without violating network constraints.
 
-**Normalization Rationale:** Turn-down capacity (~100 kW scale) and electricity cost (~£10 scale) require scaling to similar magnitudes for balanced weighting. Division by 100/10 normalizes both terms to 1-10 range.
+**Three optimization modes serve different market conditions:**
 
-**Commercial Rationale:** Balances flexibility revenue maximization with operational cost minimization—realistic for fleets participating in flexibility markets while maintaining cost consciousness. The 70/30 weighting prioritizes revenue but captures cost-saving opportunities when they don't compromise flexibility value.
+1. Flexibility mode (default for Day-Ahead): Maximizes kW turn-down during 17:00-20:00 constraint window
+2. Cost mode: Minimizes electricity cost by shifting to off-peak hours (used when no flexibility events scheduled)
+3. Hybrid mode (α=0.7): Balances turn-down capacity with cost savings
 
-## Core Constraints: Seven Interconnected Rules
+Pricing, revenue calculation, and commercial strategy are detailed in Section [Pricing & Revenue]."
+
+#### Core Constraints: Seven Interconnected Rules
 
 Module 05 implements seven constraint categories ensuring operational feasibility, hardware compatibility, and behavioral acceptability. All constraints formulated as linear inequalities compatible with MILP solvers.
 
@@ -606,7 +544,7 @@ Module 05 implements seven constraint categories ensuring operational feasibilit
 Total Constraints: ~9,505 for 65-vehicle × 48-PTU problem  
 Constraint Types: Equality (1), Bounds (2), Big-M binary coupling (3-4), Aggregate inequality (5-7)
 
-† Count = number of constraint instances for typical 65-vehicle fleet
+Count = number of constraint instances for typical 65-vehicle fleet
 
 - Hardware Compatibility (C3-C4): 1.4-7.4 kW window reflects empirical CP stability from WS1/WS2 trials across 44 charger models. Below 1.4 kW: oscillation. Above 7.4 kW: requires three-phase (unavailable in most homes).
 
@@ -616,106 +554,181 @@ Grid Impact Mitigation (C7): The 12% rebound limit prevents "flexibility whack-a
 
 **Constraint Validation Example (Vehicle EV007):**
 
-✓ C1 Energy: 7.4 kW × 4h × 0.93 = 27.5 kWh ≥ 24.7 kWh required (11% margin)
-✓ C2 Window: Charging only during 34-47 (17:00-00:00), zero at PTU 0-33
-✓ C3-C4 Power: All PTUs satisfy 0 kW or 1.4-7.4 kW (no intermediate values)
-✓ C5 Peak: 17:00-20:00 total load = 185 kW ≤ 210 kW baseline (25 kW turndown)
-✓ C6 Min Peak: 17:00-20:00 total = 185 kW ≥ 52.5 kW (25% × 210 kW baseline)
-✓ C7 Rebound: 20:00-00:00 peak load = 198 kW ≤ 235 kW (1.12 × 210 kW baseline)
+- C1 Energy: 7.4 kW × 4h × 0.93 = 27.5 kWh ≥ 24.7 kWh required (11% margin)
+- C2 Window: Charging only during 34-47 (17:00-00:00), zero at PTU 0-33
+- C3-C4 Power: All PTUs satisfy 0 kW or 1.4-7.4 kW (no intermediate values)
+- C5 Peak: 17:00-20:00 total load = 185 kW ≤ 210 kW baseline (25 kW turndown)
+- C6 Min Peak: 17:00-20:00 total = 185 kW ≥ 52.5 kW (25% × 210 kW baseline)
+- C7 Rebound: 20:00-00:00 peak load = 198 kW ≤ 235 kW (1.12 × 210 kW baseline)
+
+### Commercial Output: Capacity and Price
+
+The optimizer produces two commercial outputs for each zone:
+
+1. Maximum sustained turn-down capacity ($C_{\text{turndown}}$): Average kW reduction held across the full constraint window (17:00-20:00)
+2. Baseline forecast accuracy (predicted): Used to estimate Schedule Accuracy Factor (SAF) for penalty modeling
+
+These outputs feed into the pricing and revenue model (Section [Pricing & Revenue]), which determines bid price, expected revenue per vehicle, and risk-adjusted returns accounting for forecast uncertainty and market competition.
+
+Example Output (West Letchworth, 13 vehicles):
+- Baseline peak: 63.8 kW (PTU 34, 17:00-17:30)
+- Optimized minimum: 1.4 kW (PTU 35, 17:30-18:00)
+- Turn-down capacity: 49.7 kW (78% reduction from baseline)
+- Predicted SAF: 0.91 (92% forecast accuracy expected)
+
+This capacity-price pair enables Day-Ahead bids that balance competitiveness (high win rate) with profitability (sustainable margins).
+
+# <a id="pricing-revenue"></a> Pricing, Revenue, and SAF Modelling
+
+Module 05's optimization produces technical flexibility capacity (kW turn-down) and predicted forecast accuracy. This section converts those technical outputs into commercial value through strategic pricing, revenue modeling, and penalty-adjusted settlement calculations. The model prioritises bid acceptance probability over headline prices, recognising that flexibility revenue scales with event frequency and volume, not one-off spikes. Winning 70% of events at £436/MWh generates more predictable revenue than 30% at £549/MWh, and with smart charging's near-zero marginal cost, utilisation matters more than per-event price.
 
 
-## <a id="pricing-revenue"></a> Pricing, Revenue, and SAF Modelling
+#### Competitive Pricing Strategy.
 
-Module 05 converts technical flexibility into commercial value using a pricing and revenue model grounded in UKPN auction data, settlement mechanics, and observed delivery risk from WS1 trials and live deployments. The model prioritises **bid acceptance probability** over headline prices, recognising that flexibility revenue scales with event frequency and volume, not one-off spikes. In practice, winning 70% of events at ~£436/MWh generates more predictable revenue than 30% at £549/MWh. With smart charging in place, marginal cost is near zero, so utilisation matters more than per-event price.
+By 2024, UKPN’s day-ahead flexibility market has clearly matured: competition has increased, clearing prices have normalized, and event volumes have stabilized outside of crisis conditions. In this environment, bidding strategy must prioritize consistency over opportunistic pricing. We position bids at £436/MWh, representing a modest premium (~6%) over the prevailing market leader, calibrated dynamically based on market maturity, leader market share, and observed clearing dispersion. This premium is intentionally tunable: in highly competitive zones with many active aggregators, it compresses toward the median; in less contested zones, it widens to reflect reliability and execution confidence. 
 
-### Day-Ahead Scheduled Utilisation Settlement
+The objective is not to maximize revenue per event, but to sustain a 70–80% win rate, trading a small reduction in unit margin for materially higher event participation and significantly lower revenue volatility—ultimately increasing annual revenue while reducing dependence on rare, extreme system conditions.
 
-Revenue depends on sustained turn-down, event duration, market price, forecast accuracy, and aggregator fees. The optimiser is incentivised to deliver reliable, sustained reductions rather than short-lived or fragile shifts.
+#### Bid Price Construction
 
-**Event revenue:**
+Each zone receives a tailored bid price combining three elements:
+
+$$
+P_{\text{final}} = P_{\text{zone}} \times (1 + m) \times \gamma_{\text{confidence}}
+$$
+
+Where:
+- **$P_{\text{zone}}$** = Historical zone median price (£390-450/MWh across 18 UKPN zones)
+- **$m = 0.12$** = Competitive margin (12% markup)
+- **$\gamma_{\text{confidence}} \in [0.95, 1.05]$** = Reliability adjustment factor
+
+**Component 1: Zone-Specific Base Price**
+
+UKPN's 18 flexibility zones show 3× price variance (£237-730/MWh observed range). Rather than bid uniformly at £436, we anchor to local market conditions:
+- **Premium zones** (Worthing Grid A, Central Harpenden): £650+ baseline → bid £720/MWh
+- **Competitive zones** (West Letchworth, Sundon): £390-450 baseline → bid £436/MWh
+- **Volume zones** (Trowse Grid 33): £237 baseline → bid £280/MWh
+
+This zone-specific strategy avoids systematic under-bidding in premium markets while remaining competitive in price-sensitive zones.
+
+**Component 2: 12% Competitive Margin**
+
+Smart charging marginal cost is near-zero (electricity already purchased under fleet contracts). The 12% margin reflects:
+- Operational overhead (forecasting systems, monitoring, customer support)
+- Aggregator fees (20% of gross revenue, passed through to fleet)
+- Penalty risk buffer (SAF exposure from forecasting errors)
+- Target ROI for flexibility platform investment
+
+**Component 3: Confidence-Based Adjustment**
+
+High-reliability fleets (95%+ predicted delivery accuracy) receive -5% price adjustment (γ = 0.95), improving win rate while maintaining profitability. Low-reliability fleets (+5%, γ = 1.05) compensate for higher penalty risk. This dynamic pricing aligns bid competitiveness with operational capability.
+
+**Example: West Letchworth Zone**
+- Zone median: £410/MWh
+- Competitive margin: £410 × 1.12 = £459/MWh
+- Confidence adjustment: £459 × 0.95 = **£436/MWh** (high reliability discount)
+
+
+#### Day-Ahead Settlement Structure
+
+Revenue depends on sustained turn-down capacity, event duration, market price, forecast accuracy, and aggregator fees:
+
 $$
 R_{\text{event}} = C^{\max}_{\text{turndown}} \times \tau_{\text{event}} \times \frac{P_{\text{bid}}}{1000} \times SAF \times (1 - \phi)
 $$
 
-Where $C^{\max}_{\text{turndown}}$ = max sustained reduction (kW), $\tau_{\text{event}} = 1.5$ h typical, $P_{\text{bid}}$ = bid price (£/MWh), $SAF \in [0,1]$ = forecast accuracy factor, $\phi = 0.2$ = aggregator fee.  
+Where:
+- $C^{\max}_{\text{turndown}}$ = Maximum sustained reduction (kW) held for full event duration
+- $\tau_{\text{event}} = 1.5-2.0$ hours typical (90-120 minutes)
+- $P_{\text{bid}}$ = Bid price (£/MWh)
+- $SAF \in [0,1]$ = Schedule Accuracy Factor (forecasting penalty)
+- $\phi = 0.20$ = Third-party aggregator fee (20% of gross)
 
-**Annual revenue:**
-$$
-R_{\text{annual}} = R_{\text{event}} \times N_{\text{events}}, \quad N_{\text{events}} = 40 \text{ per year (realistic)}
-$$
-
-### Bid Price Construction
-
-Each bid combines three elements:
+**Annual revenue scales with event frequency:**
 
 $$
-P_{\text{final}} = P_{\text{zone}} \times 1.12 \times \gamma_{\text{confidence}}
+R_{\text{annual}} = R_{\text{event}} \times N_{\text{events}}
 $$
 
-- **Market Base (£410/MWh):** Zone-specific median prices from historical UKPN auctions.  
-- **Competitive Margin (12%):** Low marginal cost and repeat participation strategy.  
-- **Confidence Adjustment (0.95–1.05×):** Adjusts for predicted delivery reliability; high-confidence fleets priced slightly lower to improve acceptance.
+Where $N_{\text{events}} = 40$ represents typical winter conditions (baseline assumption), with harsh winters reaching 60 events and mild winters dropping to 20 events.
 
-Typical clearing prices are ~£436/MWh, ~6% above market leader, justified by higher delivery reliability.
 
-### Schedule Accuracy Factor (SAF) and Penalties
+#### Schedule Accuracy Factor (SAF): The Anti-Gaming Mechanism
 
-The **Schedule Accuracy Factor (SAF)**, also called Monthly Performance Factor ($MP_{sm}$), aligns financial incentives with operational reliability. UKPN compares submitted baselines against actual measured load on non-flexibility days (PTUs 30–42). Accurate forecasts yield full payment; deviations trigger penalties.
+**Why SAF Exists:**
 
-**Delivery Performance ($DP_{sm}$):**
+Without penalties for forecasting errors, aggregators could systematically inflate baselines to exaggerate flexibility capacity—submitting 100 kW "unmanaged" forecasts while knowing actual demand would be 70 kW, then claiming 30 kW "flexibility" that never existed. SAF prevents this gaming by measuring forecast accuracy on **non-flexibility days** (days when no flexibility event occurs), comparing submitted baselines against actual measured load during the same hours (PTUs 30-42, typically 15:00-21:00).
+
+**Delivery Performance Calculation:**
+
+UKPN measures monthly baseline accuracy across all non-flexibility days:
+
 $$
 DP_{sm} = \left( 1 - \frac{1}{|T_m|} \sum_{t \in T_m} \frac{|L^{\text{actual}}_t - L^{\text{forecast}}_t|}{L^{\text{actual}}_t} \right) \times 100\%
 $$
 
-**SAF calculation:**
+Where $T_m$ = set of non-flexibility PTUs in month $m$, typically 20-26 days × 12 PTUs/day = 240-312 measurements.
+
+**SAF Penalty Curve:**
+
 $$
 SAF = \max\left(0, 1 - 0.03 \times (95 - DP_{sm})\right)
 $$
 
-**Monthly penalty impact on revenue:**
-$$
-R_{\text{final}} = R_{\text{annual}} \times \mathbb{E}[\text{SAF}]
-$$
+**Penalty structure:**
+- 95-100% accuracy: No penalty (SAF = 1.00) → full revenue
+- 90-94% accuracy: Linear penalty (SAF = 0.85-0.97) → -3% to -15% revenue
+- 85-89% accuracy: Steep penalty (SAF = 0.70-0.82) → -18% to -30% revenue
+- <63% accuracy: Zero payment (SAF = 0.00) → total revenue forfeiture
 
-**Penalty risk example:**
+**Our Conservative Approach:**
 
-| Predicted Accuracy | SAF Impact | Likelihood | Risk Description |
-|-------------------|------------|------------|-----------------|
-| 95–100%           | 1.00       | 20%        | No penalty      |
-| 91–94%            | 0.88–0.97  | 60%        | -3% to -9%      |
-| 85–90%            | 0.70–0.85  | 15%        | -15% to -30%    |
-| <85%              | <0.70      | 5%         | >-30%           |
+The 15.5% safety buffer (10% operational + 5% behavioral) is designed to achieve 91-95% baseline accuracy, targeting SAF ≥ 0.91. 
 
-For 92% accuracy:
-$$
-SAF = 1 - 0.03 \times (95 - 92) = 0.91
-$$
-Applied to revenue:  
-$$
-160 \times 0.91 = £146 \text{ per vehicle per year}
-$$
+**Expected SAF = 0.91** (probability-weighted average), reducing annual revenue by ~9% but nearly eliminating catastrophic penalty risk (<5% probability of SAF < 0.70).
 
-### Per-Vehicle Revenue Formula
+This accuracy advantage partially offsets our lower bid price (£436 vs £549/MWh), recovering 13 percentage points of the 21% price discount through reduced penalties.
+
+
+**Per-Vehicle Revenue Model**
+
+Per-vehicle revenue is computed as:
 
 $$
-R_{\text{per-vehicle}} = \frac{C \times 2.0 \times (P/1000) \times 0.80 \times N \times SAF}{|V|}
+R_{\text{vehicle}} = \frac{C \times 2.0 \times (P/1000) \times 0.80 \times N \times SAF}{|V|}
 $$
 
-Where:  
-- C = Capacity (kW), P = Price (£/MWh), N = Events/year, SAF = expected accuracy, |V| = fleet size.
+where $C$ is fleet capacity (kW), $P$ is the bid price (£/MWh), $N$ is annual event count, $SAF$ is the expected delivery accuracy factor, and $|V|$ is fleet size.
 
-**Validation Example (West Letchworth, 13 vehicles):**  
-C = 49.7 kW, P = £436, N = 60, SAF = 0.91, |V| = 13
+Example — West Letchworth Zone
 
-$$
-R = \frac{49.7 \times 2.0 \times (436/1000) \times 0.80 \times 60 \times 0.91}{13} = £146/\text{vehicle/year}
-$$
-
-This is ~15% below WS1 outcomes (gross £172), reflecting lower bid prices but better forecast accuracy. The trade-off favours **reliable, repeatable revenue** over high one-off prices, which aligns with a near-zero marginal cost, high-frequency flexibility market.
+Applying this model to a 13-vehicle fleet with $C = 49.7$ kW, $P = £436$/MWh, $N = 60$ events/year, and $SAF = 0.91$ yields £146 per vehicle per year.
 
 
-## <a id="model-validation"></a> Model Validation and Benchmarking NO2
-# Model Validation 
+We accept 15% lower gross revenue per vehicle to achieve:
+
+1. A 2–3× higher win rate, capturing roughly 70% of events instead of 30% under crisis pricing assumptions, resulting in materially more dispatched events.
+2. Reduced dependence on extreme weather conditions, with the model remaining viable in typical 40-event years rather than relying on rare 60-event crisis scenarios.
+3. Greater penalty resilience, as an SAF of 0.91 compared to 0.55 allows approximately 65% more revenue to be retained after settlement.
+4. Improved scalability, since competitive pricing supports expansion across multiple zones without eroding win rates or operational stability.
+
+In a mature, repeat-participation market with near-zero marginal cost, volume and reliability beat margin and volatility.
+
+#### Revenue Drivers: Sensitivity Analysis
+
+| Parameter | Baseline | ±10% Change | Revenue Impact |
+|-----------|----------|-------------|----------------|
+| **Capacity (kW)** | 49.7 kW | ±5 kW | ±£15/vehicle (-10%/+10%) |
+| **Event frequency** | 60/year | ±6 events | ±£15/vehicle (-10%/+10%) |
+| **Bid price** | £436/MWh | ±£44/MWh | ±£15/vehicle (-10%/+10%) |
+| **SAF accuracy** | 0.91 | ±0.09 | ±£14/vehicle (-10%/+10%) |
+
+All four factors contribute equally to revenue variance (~£15/vehicle per 10% change). This balanced sensitivity confirms that:
+- No single optimization lever dominates
+- Portfolio performance depends on executing across all dimensions
+- Weather risk (event frequency) is uncontrollable but manageable through geographic diversification
+
+## <a id="model-validation"></a> Model Validation and Benchmarking 
 
 To validate the model, we compare its outputs against a real-world reference point. We use the WS1 trials to test whether the model reproduces the same orders of magnitude and operational trade-offs, without tuning inputs to match observed outcomes.
 
@@ -727,11 +740,13 @@ The objective is straightforward: to confirm that the model produces the same or
 
 [pic1](pic)!
 
+**Revenue Decomposition:**
+
 Revenue is expected to scale with both clearing price and delivery accuracy:
 
-- **Price effect:** £436/MWh versus £549/MWh implies revenue at ~79% of WS1, all else equal.  
-- **Delivery accuracy effect:** A 91% schedule accuracy factor versus ~80% in WS1 increases recovered revenue by ~14%.  
-- **Combined effect:** Applying both factors multiplicatively implies revenue at ~90% of WS1 levels.
+- Price effect: £436/MWh versus £549/MWh implies revenue at ~79% of WS1, all else equal.  
+- Delivery accuracy effect: A 91% schedule accuracy factor versus ~80% in WS1 increases recovered revenue by ~14%.  
+- Combined effect: Applying both factors multiplicatively implies revenue at ~90% of WS1 levels.
 
 The model produces ~87% of WS1 revenue in practice. The remaining ~4 percentage point difference falls within expected model variance and reflects:
 
@@ -741,29 +756,22 @@ The model produces ~87% of WS1 revenue in practice. The remaining ~4 percentag
 
 [pic2](pic!)
 
-### Model Design Decisions Behind Key Metrics
-**1. Peak reduction (51.1%):** Determined by the **minimum charging constraint** (1.4 kW floor due to charge point behavior below 6 A) and vehicle energy requirements. This reflects physical limitations of equipment.  
+**Model Design Decisions Behind Key Metrics**
 
-**2. Opt-out rate (7.1%):** Based on a **behavioral persona distribution** (80% reliable, 10% irregular, 5% late, 5% early bird) derived from general UK commercial fleet patterns documented in transport surveys.  
+These metrics emerge from structural design choices, not calibration to WS1
 
-**3. SAF accuracy (91%):** Result of **conservative baseline forecasting** with a 15.5% buffer (10% operational + 5% behavioral) and MILP optimization prioritizing feasibility over revenue.
+1. Peak reduction (51.1%): Determined by the minimum charging constraint (1.4 kW floor due to charge point behavior below 6 A) and vehicle energy requirements. This reflects physical limitations of equipment.  
+2. Opt-out rate (7.1%): Based on a behavioral persona distribution (80% reliable, 10% irregular, 5% late, 5% early bird) derived from general UK commercial fleet patterns documented in transport surveys.  
+3. SAF accuracy (91%): Result of conservative baseline forecasting with a 15.5% buffer (10% operational + 5% behavioral) and MILP optimization prioritizing feasibility over revenue.
+Overall Validation Score: 88.2/100 (from automated scoring algorithm)
 
-**Overall Validation Score:** **88.2/100** (from automated scoring algorithm)
+The model captures 87% of WS1 revenue under a deliberately different pricing strategy, reflecting competitive market conditions rather than crisis-era pricing. Core technical and behavioral outputs remain aligned within ±5%, which is well inside normal year-to-year operational variance driven by weather, driver behavior, and market dynamics. The automated validation framework assigns an overall score of 88.2/100, indicating strong internal consistency and robustness.
 
-**Assessment:** Model achieves **87% of WS1 revenue** under different pricing strategy (competitive vs crisis). Technical and behavioral metrics align within ±5% (well within year-to-year operational variance for weather, driver behavior, and market conditions).
+ With an estimated 85% confidence (high), the model is suitable for strategic decision-making, business case development, and early-stage market entry analysis, providing a reliable foundation for comparing opportunities and prioritizing investment.
 
-**Confidence Level:** **85% (High)** 
-- Suitable for strategic decision-making and business case development
-- Appropriate for investor presentations and market entry analysis
-- Not suitable for contract performance guarantees without 6-12 month operational validation period
+# <a id="risk-scenario"></a> Risk-Based Scenario Analysis
 
-## Risk-Based Scenario Analysis
-
-### Overview and Methodology
-
-Under baseline assumptions (60 constraint events per year, 90% fleet participation, competitive pricing, and 91% forecast accuracy), deterministic modelling produces £149 per vehicle per year. While useful as a reference, this estimate is fragile because it assumes risks act independently and average out over time.
-
-In practice, risks compound. Weather-driven reductions in grid constraints lower revenue and strand capacity; device outages reduce deliverable volume and increase Schedule Accuracy Factor (SAF) penalties; and market saturation compresses clearing prices. To capture these interactions, we replace point estimates with a scenario-based approach.
+Under baseline assumptions (60 constraint events per year, 90% fleet participation, competitive pricing, and 91% forecast accuracy), deterministic modelling produces £149 per vehicle per year. While useful as a reference, this estimate is fragile because it assumes risks act independently and average out over time. In practice, risks compound. Weather-driven reductions in grid constraints lower revenue and strand capacity; device outages reduce deliverable volume and increase Schedule Accuracy Factor (SAF) penalties; and market saturation compresses clearing prices. To capture these interactions, we replace point estimates with a scenario-based approach.
 
 We model 192 joint scenarios by combining discrete outcomes across four risk dimensions, with probabilities informed by historical precedent and operational assumptions:
 
@@ -774,10 +782,9 @@ We model 192 joint scenarios by combining discrete outcomes across four risk dim
 
 Scenario probabilities are calculated multiplicatively, and revenues are derived by applying the corresponding multipliers to the £149 baseline to produce probability-weighted outcomes rather than a single deterministic estimate.
 
-
 ### Risk Dimensions
 
-#### 1. Grid Conditions (Event Frequency – Uncontrollable)
+**1. Grid Conditions (Event Frequency – Uncontrollable)**
 
 Winter severity drives UK distribution stress, with historical UKPN data showing multi-fold variation in constraint events. The 40-event “normal” winter is scaled from WS1’s 60-event crisis year, with mild and harsh cases representing ±50% variance. Mitigation focuses on geographic diversification, product blending, and liquidity buffers.
 
@@ -788,7 +795,7 @@ Winter severity drives UK distribution stress, with historical UKPN data showing
 | Harsh Winter | 60 | 20% | 1.95× | Winter 2017/18 (“Beast from the East”) |
 | Summer Low | 10 | 5% | 0.21× | Typical summer conditions |
 
-#### 2. Fleet Participation (Partially Controllable)
+**2. Fleet Participation (Partially Controllable)**
 
 Fleet participation directly affects deliverable capacity and forecast accuracy. Baseline participation is 90% (WS1 observed ~10% opt-out), with deviations reflecting service quality, UX clarity, and driver trust. Participation swings account for ~15–20% of revenue volatility.
 
@@ -801,7 +808,7 @@ Fleet participation directly affects deliverable capacity and forecast accuracy.
 
 Mitigation levers include OEM SLAs, real-time earnings transparency, and phased pilot rollouts.
 
-#### 3. Market Competition (Pricing Pressure – Uncontrollable)
+**3. Market Competition (Pricing Pressure – Uncontrollable)**
 
 Flexibility markets are competitive, with prices set by supply–demand dynamics across multiple aggregators. The £436/MWh baseline reflects an optimized competitive bid, with ±15% scenarios calibrated to historical clearing price variance.
 
@@ -813,7 +820,7 @@ Flexibility markets are competitive, with prices set by supply–demand dynamics
 
 Mitigation focuses on delivery reliability, constrained-zone targeting, and long-term DNO relationships.
 
-#### 4. Forecasting Accuracy (SAF Penalty Risk – Controllable)
+**4. Forecasting Accuracy (SAF Penalty Risk – Controllable)**
 
 Forecast errors trigger SAF penalties, with accuracy below 95% incurring proportional payment reductions. Our model predicts ~91% accuracy (WS1 trials ~80%), with 95% representing the penalty-free threshold.
 
@@ -824,11 +831,11 @@ Forecast errors trigger SAF penalties, with accuracy below 95% incurring proport
 | Poor | 85% | 0.70 | 15% | 0.70× |
 | Critical Miss | <80% | 0.40 | 5% | 0.40× |
 
-### Visual Analysis: Four-Panel Risk Dashboard
+**Visual Analysis: Four-Panel Risk Dashboard**
 
 ![Risk Scenario Analysis](outputs/risk_scenario_analysis.png)
 
-#### Revenue Distribution Analysis (Top Panels)
+**Revenue Distribution Analysis (Top Panels)**
 Probability-weighted revenue across 192 scenarios produces an expected value of £138 per vehicle, with a median of £134, indicating a right-skewed distribution. Most outcomes cluster between £120–150 under normal winter conditions, while a small number of harsh-winter scenarios lift the long-run average above the median.
 
 Downside risk is material but bounded: the 5th-percentile Value-at-Risk is £32 per vehicle, which defines a conservative stress-testing floor rather than a planning baseline. The deterministic estimate (£149) sits around the 65th percentile, overstating expected outcomes by ignoring downside variance.
@@ -840,13 +847,13 @@ The cumulative distribution function (top-right) translates these probabilities 
 
 [pic panel 2]()
 
-#### Sensitivity and Risk Prioritization (Bottom Panels)
+**Sensitivity and Risk Prioritization (Bottom Panels)**
 
 The tornado diagram ranks uncertainty drivers by revenue impact, identifying grid conditions as the dominant factor with a £239 spread (£7 worst-case to £246 best-case)—over 30× larger than any other variable. This confirms weather-driven event frequency as the primary determinant of annual profitability and the least amenable to operational control. Forecasting accuracy ranks second (£102 range) but is fully controllable, offering the steepest opportunity for risk reduction. Device performance (£46) and market competition (£44) contribute similar secondary uncertainty, with uptime partially controllable via OEM SLAs and pricing pressure largely external.
 
 The risk matrix translates these sensitivities into operational priorities. Normal winter scenarios (≈60% probability) cluster near baseline impact and require no special mitigation. Harsh winters (≈20% probability, +95% impact) justify operational readiness and contractual flexibility, but not permanent overprovisioning. Critical device failures (5% probability, −33% impact) fall into the low-probability, high-impact quadrant, appropriate for contingency planning via multi-OEM redundancy. Competition scenarios show asymmetric risk: price wars and premium pricing have comparable magnitude but opposite impact, implying that investment in delivery reliability can systematically shift outcomes from commodity competition to differentiated pricing. Overall, while weather dominates absolute variance, controllable levers—forecast accuracy and uptime—offer the highest ROI for risk-adjusted value creation.
 
-### Top 10 Scenarios by Probability
+#### Top 10 Scenarios by Probability
 
 
 The ten most likely scenario combinations account for ~62% of total probability mass, representing the outcomes operators should design around.
@@ -866,9 +873,9 @@ The ten most likely scenario combinations account for ~62% of total probability 
 
 The most probable single outcome—normal winter, baseline participation, competitive pricing, and good forecasting—yields £134 per vehicle, defining a realistic “business-as-usual” case. Improving forecasting accuracy alone closes most of the gap to the deterministic baseline, while harsh-winter scenarios deliver substantial upside but occur infrequently, explaining the right-skewed distribution.
 
-### Scenario Calibration and Risk Summary
+#### Scenario Calibration and Risk Summary
 
-Scenario inputs combine historical precedent (WS1 2017/18), trial observations, and engineering judgment. Event frequency, fleet participation, and forecasting accuracy represent plausible operational ranges rather than statistically fitted distributions. Multi-year fleet-level data would be required to empirically validate distributions and learning curves.
+Scenario inputs combine historical precedent (WS1), trial observations,  UKPN market data, and engineering judgment. Event frequency, fleet participation, and forecasting accuracy represent plausible operational ranges rather than statistically fitted distributions. Multi-year fleet-level data would be required to empirically validate distributions and learning curves.
 
 Deterministic revenue (£149/vehicle) reflects favorable, crisis-year conditions and is suitable as an upside benchmark. Risk-adjusted expected revenue (£138/vehicle) accounts for 192 scenarios, incorporating mild winters, operational degradation, and competitive pressure. Outcomes are right-skewed: the median (£134/vehicle) is the conservative anchor for Year 1 budgeting, while £138 represents multi-year expectations.
 
@@ -890,6 +897,126 @@ This distinction defines how the model should be used internationally:
 - Market performance and scaling depend on controllable factors (forecasting accuracy, uptime, driver engagement).
 
 The same scenario-based framework is therefore applied in the following section to European flexibility markets, recalibrated for local settlement rules, event frequency distributions, technical constraints, and behavioral maturity. The objective is not to forecast upside, but to determine which markets clear a minimum risk-adjusted revenue threshold and justify further validation.
+
+# 🌍 International Market Expansion Framework
+
+## Strategic Context: From UK Proof-of-Concept to Global Scalability
+
+This project was designed from the outset as a **geography-agnostic analytical engine**. While validated against UKPN's Day-Ahead market, its core modules—market analysis, fleet simulation, baseline forecasting, MILP optimization, penalty modeling, and scenario-based risk assessment—are structurally portable to any DSO flexibility market with day-ahead congestion products.
+
+The goal of this section is **not** to present fully validated international market entries, but to demonstrate a **systematic, repeatable methodology** for evaluating new markets—precisely the capability required for international expansion roles at Axle.
+
+---
+
+## Market Evaluation Framework: Quantitative & Qualitative Factors
+
+Market assessment mirrors the UK risk-scenario approach by separating **data-driven economics** from **strategic execution risk**.
+
+---
+
+## 📊 Quantitative Factors (Data-Driven, Model-Derived)
+
+These inputs are directly parameterized within the existing modeling framework and can be estimated using public or DSO-level data.
+
+| Factor | Why It Matters | How It’s Modeled | Data Source |
+|------|----------------|------------------|-------------|
+| **Event Frequency** | Drives revenue volume and scalability | Scenario-weighted (mild / normal / harsh winter) | Historical DSO dispatch data |
+| **Clearing Price (£/MWh)** | Determines revenue per event | Benchmarked vs. UKPN (£436/MWh baseline) | Market platforms (Piclo, GOPACS, etc.) |
+| **Penalty Structure** | Directly impacts realized revenue | % payment reduction per accuracy point | DSO settlement documentation |
+| **Minimum Bid Size (kW)** | Determines minimum viable fleet scale | Compared to UKPN’s 10 kW (~2 vehicles) | Market rulebooks |
+| **Forecast Accuracy Threshold** | Drives operational risk exposure | Calibrated from UK baseline (95% SAF) | Trial data / DSO reporting |
+
+---
+
+## 🧠 Qualitative Factors (Strategic, Market-Shaping)
+
+These factors require local engagement and regulatory insight—key responsibilities in international market development.
+
+| Factor | Why It Matters | Assessment Method |
+|------|----------------|------------------|
+| **Regulatory Clarity** | Determines aggregator eligibility and stacking rights | Review energy law, DSO rules, TSO-DSO coordination |
+| **Market Maturity** | Affects predictability and execution risk | Platform age, data transparency, active participants |
+| **Competitive Landscape** | Indicates room for new entrants | Map incumbents (utilities, startups, OEMs) |
+| **Partner Ecosystem** | Enables rapid pilots and scale | Identify CPOs, OEMs, utilities via networks |
+| **Grid Transition Urgency** | Signals long-term demand | Track congestion reports, decarbonization targets |
+
+---
+
+## Candidate Markets: High-Level Assessment
+
+Based on the framework above, markets were prioritized by **structural similarity**, **revenue potential**, and **execution risk**.
+
+| Market | Platform / DSO | Similarity | Key Rationale | Risk | Priority |
+|------|---------------|------------|---------------|------|----------|
+| **Netherlands** | GOPACS (EPEX) | ~85% | Day-ahead products, stacking allowed, high EV uptake | Low | 🥇 Lead |
+| **Sweden** | Pielo | ~75% | 15-min settlement, standardized platform | Medium | 🥈 Secondary |
+| **Norway** | BKK / Elvia | ~60% | Fragmented platforms, climate risk | High | 🥉 Monitor |
+| **Germany** | 50Hertz / Amprion | ~30% | V2G-heavy, TSO-dominated, 1 MW minimums | Very High | ⚠️ Defer |
+
+---
+
+## Deep Dive: Netherlands (GOPACS) — Template Market Entry
+
+The Netherlands represents the **most transferable next market**, closely matching UKPN’s structure while offering additional upside via market stacking.
+
+---
+
+### 🎯 Why the Netherlands Fits the Model
+
+- Same market operator (EPEX) as UKPN Localflex  
+- Day-ahead and intraday congestion products  
+- Clear aggregator participation and stacking rules  
+- High EV density in the Randstad region → frequent congestion  
+
+---
+
+### 🔧 Technical Adaptation Requirements
+
+| Module | Change Needed | Effort | Rationale |
+|------|---------------|--------|-----------|
+| **Baseline Forecasting** | 15-min intervals (96 PTUs/day) | Low | Already supported in simulation logic |
+| **MILP Optimization** | Double time resolution | Medium | Solver performance validation |
+| **Fleet Behavior** | Higher share of 11 kW chargers | Low | Dutch 3-phase charging prevalence |
+| **Revenue Modeling** | Stack DSO + TSO (TenneT) | Medium | ~30% upside potential |
+
+---
+
+### 📈 Financial Estimate (Pre-Validation)
+
+- **Events/year:** 25–35  
+- **Clearing price:** €400–600/MWh  
+- **Revenue/vehicle:** €180–250/year (gross)  
+- **Stacking upside:** +20–40% via TenneT  
+
+---
+
+### 🚀 Validation Sprint (2-Week Plan)
+
+This mirrors the rapid assessment process used for UK modeling.
+
+
+---
+
+### ✅ Go / No-Go Decision Criteria
+
+- >25 annual events in target zones  
+- Penalty structure compatible with fleet forecasting  
+- MILP solves 96 PTUs in <5 minutes  
+- Revenue/vehicle >€150/year post-adaptation  
+
+---
+
+## Why This Framework Fits the Axle Role
+
+This international expansion framework demonstrates:
+
+- **First-principles market analysis** — decomposing markets into economic and operational drivers  
+- **Revenue-per-asset modeling** — extending an existing quantitative engine across geographies  
+- **Rapid validation sprints** — data-to-decision in weeks, not quarters  
+- **Risk-aware prioritization** — expanding first into high-similarity, low-friction markets  
+
+The Netherlands case shows how international expansion can be executed **operationally, not theoretically**—using data, constraints, and validation loops consistent with scaling a flexibility platform globally.
+
 
 # 🌍 International Market Expansion Framework
 
@@ -1113,6 +1240,8 @@ Days 13-14: Decision: Go/No-Go based on data gaps
 - **TCO impact:** +€2,000-3,000 upfront per vehicle eliminates 2-3 years of flexibility revenue
 
 **Verdict:** ❌ **Defer** - Focus on demand-side markets (NL, SE, NO) where V2G not required
+
+
 
 ## <a id="limitations"></a> Limitations & Assumptions
 
