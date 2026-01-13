@@ -3,7 +3,6 @@
 layout: default
 title: "FlexiBid_DA_Optimization_Engine_for_EV_Flexibility"
 ---
-
 # Project Overview
 
 This project develops an automated quantitative bidding engine for electric vehicle fleet aggregators participating in Distribution System Operator (DSO) flexibility markets. As EV adoption accelerates, local networks face evening-peak congestion—traditionally solved through costly substation upgrades (£1-5M, 3-7 years delivery). DSOs now pay EV fleets to temporarily reduce charging during constraint windows (17:00-20:00), creating a £130-215 per vehicle per year monetization opportunity. However, successful participation requires solving complex optimization challenges: submitting accurate 24-hour schedules, forecasting baselines with 95%+ accuracy to avoid penalties, pricing competitively, and maintaining driver trust. This framework automates the end-to-end process—from market intelligence extraction through capacity optimization to commercial risk quantification.
