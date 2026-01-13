@@ -1,9 +1,7 @@
 ---
 layout: default
-title: "FlexiBid_DA_Optimization_Engine_for_EV_Flexibility
-"
+title: "FlexiBid_DA_Optimization_Engine_for_EV_Flexibility"
 ---
-
 
 # Project Overview
 
