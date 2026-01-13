@@ -1,3 +1,6 @@
+
+
+
 # Project Overview
 
 This project develops an automated quantitative bidding engine for electric vehicle fleet aggregators participating in Distribution System Operator (DSO) flexibility markets. As EV adoption accelerates, local networks face evening-peak congestion—traditionally solved through costly substation upgrades (£1-5M, 3-7 years delivery). DSOs now pay EV fleets to temporarily reduce charging during constraint windows (17:00-20:00), creating a £130-215 per vehicle per year monetization opportunity. However, successful participation requires solving complex optimization challenges: submitting accurate 24-hour schedules, forecasting baselines with 95%+ accuracy to avoid penalties, pricing competitively against established aggregators, and maintaining driver trust. This framework automates the end-to-end process—from market intelligence extraction through capacity optimization to commercial risk quantification—enabling both operational bidding and strategic market entry decisions.
@@ -60,12 +63,6 @@ from plotting import plot_dso_market_evolution_timeline
 import matplotlib.pyplot as plt
 fig1 = plot_dso_market_evolution_timeline(ukpn_dispatched, save_path='figures/dso_market_evolution.png'); plt.show()
 ```
-
-    c:\Users\majid\OneDrive\gb_energy_analytics\Final Model\plotting.py:648: UserWarning: Converting to PeriodArray/Index representation will drop timezone information.
-      dso_data['start_time_utc'].dt.to_period('M'),
-    
-
-
     
 ![png](output_5_1.png)
     
