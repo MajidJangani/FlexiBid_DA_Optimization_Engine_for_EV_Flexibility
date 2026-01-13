@@ -1,13 +1,16 @@
 
-
+---
+layout: default
+title: "FlexiBid_DA_Optimization_Engine_for_EV_Flexibility"
+---
 
 # Project Overview
 
-This project develops an automated quantitative bidding engine for electric vehicle fleet aggregators participating in Distribution System Operator (DSO) flexibility markets. As EV adoption accelerates, local networks face evening-peak congestion—traditionally solved through costly substation upgrades (£1-5M, 3-7 years delivery). DSOs now pay EV fleets to temporarily reduce charging during constraint windows (17:00-20:00), creating a £130-215 per vehicle per year monetization opportunity. However, successful participation requires solving complex optimization challenges: submitting accurate 24-hour schedules, forecasting baselines with 95%+ accuracy to avoid penalties, pricing competitively against established aggregators, and maintaining driver trust. This framework automates the end-to-end process—from market intelligence extraction through capacity optimization to commercial risk quantification—enabling both operational bidding and strategic market entry decisions.
+This project develops an automated quantitative bidding engine for electric vehicle fleet aggregators participating in Distribution System Operator (DSO) flexibility markets. As EV adoption accelerates, local networks face evening-peak congestion—traditionally solved through costly substation upgrades (£1-5M, 3-7 years delivery). DSOs now pay EV fleets to temporarily reduce charging during constraint windows (17:00-20:00), creating a £130-215 per vehicle per year monetization opportunity. However, successful participation requires solving complex optimization challenges: submitting accurate 24-hour schedules, forecasting baselines with 95%+ accuracy to avoid penalties, pricing competitively, and maintaining driver trust. This framework automates the end-to-end process—from market intelligence extraction through capacity optimization to commercial risk quantification.
 
-The model combines mixed-integer linear programming (MILP) for fleet scheduling under real-world constraints (charge point hardware limits, behavioral opt-out risk, rebound prevention), market-based pricing balancing win rate against profit margins, and Monte Carlo risk analysis across 192 scenarios spanning weather-driven event frequency, fleet participation rates, competitive dynamics, and forecasting accuracy. Using 18 months of UK Power Networks dispatch data (14,813 events), the framework achieves 88% validation accuracy against the Centrica WS1 trial. Core outputs include £138/vehicle risk-adjusted expected revenue (vs. £149 deterministic baseline), £436/MWh optimal pricing (+6% premium over £410/MWh market leader for superior reliability), 51% peak reduction capability, and 91% baseline forecast accuracy. The risk model identifies event frequency (weather-driven, ±50% variance) and fleet participation (behavioral, 60-93% range) as dominant uncertainties, with forecasting accuracy being the most controllable lever for risk reduction.
+The model combines mixed-integer linear programming (MILP) for fleet scheduling under real-world constraints, market-based pricing balancing win rate against profit margins, and Monte Carlo risk analysis across 192 scenarios. Using 18 months of UK Power Networks dispatch data (14,813 events), the framework achieves 88% validation accuracy against operational trial benchmarks. Core outputs include £138/vehicle risk-adjusted expected revenue, £436/MWh optimal pricing (+6% premium for superior reliability), 51% peak reduction capability, and 91% baseline forecast accuracy. The risk model identifies event frequency (weather-driven, ±50% variance) and fleet participation (behavioral, 60-93% range) as dominant uncertainties.
 
-The modular, geography-agnostic architecture enables systematic international expansion with 6-week adaptation timelines. A detailed Sweden case study (Effekthandel Väst, 588 EVs) demonstrates transferability and reveals critical market-specific insights: baseline methodology dominates business viability (asset capacity baselines deliver 14× higher revenue than historic demand baselines for smart-charging fleets), V2G value varies 300-500% across market structures (historic baseline markets vs. technology profile markets), and product diversity enables portfolio risk management impossible in single-product markets. Priority expansion targets include Netherlands GOPACS (85% UK similarity, year-round operation), Sweden (MaxUsage product uniquely valuable, V2G-optimal), and Norway NorFlex (mature 8-DSO market). This framework supports three commercial applications: operational bidding automation for live market participation, market entry feasibility analysis quantifying revenue potential and technical barriers across geographies, and DER portfolio optimization extending beyond EVs to batteries, heat pumps, and industrial demand response with multi-market revenue stacking strategies.
+The modular, geography-agnostic architecture enables systematic international expansion. A detailed Sweden case study demonstrates transferability and reveals critical market-specific insights: baseline methodology dominates business viability (asset capacity baselines deliver 14× higher revenue than historic demand baselines for smart-charging fleets), V2G value varies 300-500% across market structures, and product diversity enables portfolio risk management. This framework supports operational bidding automation, market entry feasibility analysis across geographies, and DER portfolio optimization extending beyond EVs to batteries and demand response assets.
 
 # Table of Contents
 
@@ -51,22 +54,7 @@ This analysis focuses specifically on the residential-addressable DSO market, co
 
 Only flexibility derived from EV Charger DSR technologies with the demand turn-down dispatch type is included. By excluding the industrial-focused products such as Dynamic and Secure, we isolate the market portion accessible to aggregators operating household-scale assets (e.g., 5–10 kW EV chargers, 5 kW home batteries). This focus aligns the market analysis directly with the core objective of the quantitative bidding engine: optimizing the revenue from these domestic fleets.
 
-
-```python
-import pandas as pd
-ukpn_dispatched = pd.read_csv(r"C:\Users\majid\OneDrive\gb_energy_analytics\Final Model\data\ukpn-flexibility-dispatches.csv")   
-```
-
-
-```python
-from plotting import plot_dso_market_evolution_timeline  
-import matplotlib.pyplot as plt
-fig1 = plot_dso_market_evolution_timeline(ukpn_dispatched, save_path='figures/dso_market_evolution.png'); plt.show()
-```
-    
-![png](output_5_1.png)
-    
-
+![DSO market evolution showing revenue trends across flexibility products from May 2024 to December 2025, with Day-Ahead Scheduled Utilisation emerging as the highest-value product despite lower event frequency](figures/dso_market_evolution.png)
 
 #### Revenue Distribution and Product Economics
 
@@ -91,17 +79,7 @@ Long-Term Utilisation delivers the majority of energy volume (70%, or 3,545 MWh)
 - 3. Balanced Hybrid: Scheduled Availability:
 Scheduled Availability sits between the two extremes. With an average utilization price of £155.91/MWh and a combination of availability and dispatch payments, it offers a more balanced risk–return profile. This structure appeals to aggregators seeking diversification, with moderate forecasting requirements and more consistent revenues than Day-Ahead.
 
-
-```python
-from plotting import plot_tier_price_distribution_VALUE_WEIGHTED
-fig = plot_tier_price_distribution_VALUE_WEIGHTED(ukpn_dispatched); plt.show()
-```
-
-
-    
-![png](output_7_0.png)
-    
-
+![price_tiers](figures/price_tiers.png)
 
 #### Pricing Tier Analysis
 
@@ -136,18 +114,7 @@ Focusing exclusively on the Day-Ahead product reveals an even sharper concentrat
 
 Here, fewer than 1 in 30 Day-Ahead events account for nearly a quarter of total Day-Ahead revenue. Capturing these high-price scarcity events has an outsized impact on overall returns, making accurate forecasting, availability, and competitive pricing critical for fleet operators participating in the market.
 
-
-```python
-from plotting import plot_zone_product_frequency_value
-df = ukpn_dispatched
-fig2= plot_zone_product_frequency_value(df,  top_n=30,  sort_by_product='Day-Ahead',  save_path="top_30_zones_product_frequency_sorted_by_dayahead.png")
-```
-
-
-    
-![png](output_9_0.png)
-    
-
+![Top 30 UKPN zones ranked by Day-Ahead product frequency, highlighting geographic concentration of flexibility value with premium zones such as Worthing Grid A and Central Harpenden commanding 3-fold price premiums over volume zones](figures/top_30_zones_product_frequency_sorted_by_dayahead.png)
 
 #### Geographic Concentration
 
@@ -1054,4 +1021,3 @@ Brief description of the table
 Market platforms: It associates each DSO or zone with the main platform used to procure flexibility today or in pilots (e.g. NODES in Norway, SWITCH in Swedish pilots, Piclo Flex for E‑REDES and - - EDistribuzione, GOPACS in the Netherlands, EPEX Local Flex/ETPA/Enedis platform in France).
 - Assessment inputs: The “Potential data needed” column specifies the key uncontrollable market parameters (prices, baselines, penalties, grid constraints) and some controllable levers (asset mix, response characteristics) required to run a revenue‑per‑vehicle optimisation for smart charging.
 
-END OF PROJECT.
