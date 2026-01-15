@@ -1033,7 +1033,7 @@ class FlexibilityBiddingEngine:
     
     def _extract_market_intelligence(self):
         """Extract competitive intelligence from UKPN data"""
-        print("\n💡 Extracting market intelligence...")
+        print("\n Extracting market intelligence...")
         
         # Zone-specific pricing
         self.zone_prices = {}
