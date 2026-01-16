@@ -847,7 +847,7 @@ Key Implications for Planning:
 - Revenue variance is dominated by uncontrollable factors (weather, competition); controllable levers (forecasting, uptime, driver engagement) determine capture efficiency.
 
 
-# Internationa Market Expansion
+# <a id=International Market Expansion></a> Internationa Market Expansion
 
 #### Applying the Framework to New Geographies : Controllable vs. Uncontrollable Parameters
 
