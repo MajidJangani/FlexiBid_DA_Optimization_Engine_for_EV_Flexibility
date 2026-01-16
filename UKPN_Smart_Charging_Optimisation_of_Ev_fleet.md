@@ -59,24 +59,27 @@ Only flexibility derived from EV Charger DSR technologies with the demand turn-d
 
 The residential-addressable flexibility market (£425k over 18 months) shows clear differences across products in terms of pricing, volume, and event frequency:
 
-| Product                 | Total Revenue (£M) | Total MWh Req | Avg Price (£/MWh) | Total Events | Event Share (%) |
-|-------------------------|------------------|---------------|-------------------|--------------|----------------|
-| Day-Ahead               | 0.154            | 351.44        | 439.50            | 2,667        | 18.0%          |
-| Long-Term Utilisation   | 0.131            | 3,545.13      | 36.86             | 4,451        | 30.0%          |
-| Scheduled Availability  | 0.101            | 648.47        | 155.91            | 3,097        | 20.9%          |
-| Peak Reduction          | 0.039            | 543.11        | 71.24             | 4,598        | 31.0%          |
-| Total / Avg             | 0.425            | 5,088.15      | 83.51             | 14,813       | 100.0%         |
+| Product                 | Revenue (£M) | Total MWh | Avg Price (£/MWh) | Total Events | Event Share (%) |
+|-------------------------|-------------|-----------|------------------|--------------|----------------|
+| Day-Ahead               | 0.154       | 351.44    | 439.50           | 2,667        | 18.0%          |
+| Long-Term Utilisation   | 0.131       | 3,545.13  | 36.86            | 4,451        | 30.0%          |
+| Scheduled Availability  | 0.101       | 648.47    | 155.91           | 3,097        | 20.9%          |
+| Peak Reduction          | 0.039       | 543.11    | 71.24            | 4,598        | 31.0%          |
+| Total / Avg             | 0.425       | 5,088.15  | 83.51            | 14,813       | 100.0%         |
 
-Despite representing less than one-fifth of events, Day-Ahead generates the largest share of revenue. Each product plays a distinct role in the market, reflecting different risk, reward, and operational requirements.
+Despite representing less than one-fifth of events, Day-Ahead generates the largest share of revenue (36%). Each product plays a distinct role in the market, reflecting different risk, reward, and operational requirements.
 
-- 1. High-Value, Low-Volume: Day-Ahead:  
+1. High-Value, Low-Volume: Day-Ahead
 Day-Ahead clears at an average price of £439.50/MWh—around three times higher than any other product—while accounting for just 7% of total energy volume (351 MWh). This reflects its role as a scarcity product, used when short-term forecasts indicate acute local network constraints. For aggregators, Day-Ahead offers high margins, but only where delivery accuracy remains high enough to avoid penalty erosion.
 
-- 2. Low-Value, High-Volume: Long-Term Utilisation:
-Long-Term Utilisation delivers the majority of energy volume (70%, or 3,545 MWh) at a much lower price point of £36.86/MWh. These forward contracts secure flexibility months in advance, prioritising revenue certainty over margin. 
+2. Low-Value, High-Volume: Long-Term Utilisation 
+Long-Term Utilisation delivers the majority of energy volume (70%, or 3,545 MWh) at a much lower price point of £36.86/MWh. These forward contracts secure flexibility months in advance, prioritising revenue certainty over margin.
 
-- 3. Balanced Hybrid: Scheduled Availability:
-Scheduled Availability sits between the two extremes. With an average utilization price of £155.91/MWh and a combination of availability and dispatch payments, it offers a more balanced risk–return profile. This structure appeals to aggregators seeking diversification, with moderate forecasting requirements and more consistent revenues than Day-Ahead.
+3. Capacity-Focused Product: Scheduled Availability  
+Scheduled Availability generates £101k revenue (24% of total market) primarily through availability payments rather than dispatch. Of the 648 MWh contracted capacity, only 13 MWh (2%) was actually utilised, yielding a blended rate of £155.91/MWh. Aggregators receive £113.54/MWh to hold capacity in reserve, with additional utilisation payments (£13.83/MWh) triggered only during rare network events. This offers revenue stability with minimal operational disruption, though lower margins than Day-Ahead's dispatch-heavy model.
+
+4. Emergency Response: Peak Reduction  
+Peak Reduction accounts for 31% of events but only 9% of revenue (£39k), with a moderate price of £71.24/MWh reflecting its role as a backup mechanism during extreme network stress.
 
 ![price_tiers](figures/price_tiers.png)
 
