@@ -9,6 +9,8 @@ This project develops an automated quantitative bidding engine for electric vehi
 
 The model combines mixed-integer linear programming (MILP) for fleet scheduling under real-world constraints, market-based pricing balancing win rate against profit margins, and Monte Carlo risk analysis across 192 scenarios. Using 18 months of UK Power Networks dispatch data (14,813 events), the framework achieves 88% validation accuracy against operational trial benchmarks. Core outputs include £138/vehicle risk-adjusted expected revenue, £436/MWh optimal pricing (+6% premium for superior reliability), 51% peak reduction capability, and 91% baseline forecast accuracy. The risk model identifies event frequency (weather-driven, ±50% variance) and fleet participation (behavioral, 60-93% range) as dominant uncertainties.
 
+This project also establishes a robust, standards-compliant framework for quantifying the decarbonisation impact of smart-charging strategies. Using the GHG Protocol (Scope 2, location-based) and GLEC Framework, we translate optimized charging schedules and fleet operational data into critical sustainability metrics. This enables the calculation of a defensible fleet carbon baseline and key performance indicators such as transport carbon intensity (gCO₂e/km). The integration of this carbon accounting with financial optimization provides a dual-value analysis, supporting both market revenue generation and transparent, data-driven reporting on emissions reduction—directly addressing the challenges of measuring progress toward carbon-neutral logistics.
+
 The modular, geography-agnostic architecture enables systematic international expansion. A detailed Sweden case study demonstrates transferability and reveals critical market-specific insights: baseline methodology dominates business viability (asset capacity baselines deliver 14× higher revenue than historic demand baselines for smart-charging fleets), V2G value varies across market structures, and product diversity enables portfolio risk management. This framework supports operational bidding automation, market entry feasibility analysis across geographies, and DER portfolio optimization extending beyond EVs to batteries and demand response assets.
 
 # Table of Contents
@@ -22,9 +24,10 @@ The modular, geography-agnostic architecture enables systematic international ex
 7. [Penalty and Schedule Accuracy Factor](#penalty-accuracy)
 8. [Model Validation and Benchmarking](#model-validation)
 9. [Risk-Based Scenario Analysis](#risk-scenario)
-10. [International Market Expansion](#international-expansion)
+10. [Carbon Impact Assessment](#Carbon-Impact)
+11. [International Market Expansion](#international-expansion)
 
-## <a id="introduction"></a> Introduction – The Flexibility Market Opportunity
+# <a id="introduction"></a> Introduction – The Flexibility Market Opportunity
 
 Globally, electricity grids are coming under increasing strain as renewable generation scales and electric vehicles become mainstream. Wind and solar introduce supply-side variability, while EV charging adds a new, highly concentrated source of demand. The pressure is most acute in the early evening (5–8pm), when household electricity use peaks at the same time commercial EV fleets return to base and begin charging. Even a relatively small number of EVs charging simultaneously can overload local transformers and feeders.
 
@@ -846,6 +849,78 @@ Key Implications for Planning:
 - Deterministic models overstate revenue by 7–10%; use risk-adjusted figures for decision-making.
 - Revenue variance is dominated by uncontrollable factors (weather, competition); controllable levers (forecasting, uptime, driver engagement) determine capture efficiency.
 
+
+# <a id="#Carbon-Impact"></a> Carbon Impact Assessment
+
+#### Operational Emissions Quantification
+
+The transition to electric commercial fleets creates a dual value proposition: operational cost reduction through fuel substitution and carbon emissions avoidance through electrification. However, the carbon benefit extends beyond the simple diesel-to-electric transition. Smart charging optimization—shifting load from peak to off-peak periods—introduces an additional decarbonization layer by aligning electricity consumption with cleaner grid generation profiles. This section quantifies the operational carbon footprint of the modeled fleet using standardized reporting frameworks, establishing the baseline required for tracking decarbonization progress and validating the environmental value of demand-side flexibility.
+
+#### Framework Alignment and Scope Boundaries
+GHG Protocol Scope 2 - Indirect Emissions from Purchased Electricity
+This analysis applies the GHG Protocol's Scope 2 guidance using the location-based method, which calculates emissions based on average grid carbon intensity factors for the geographic region. Emissions are derived from the fleet's electricity consumption for charging operations, excluding all other lifecycle stages. This approach aligns with the methodology employed in the Optimise Prime trials, which explicitly focused on operational emissions while excluding upstream production and downstream disposal impacts.
+
+#### GLEC Framework - Logistics Transport Carbon Intensity
+The Global Logistics Emissions Council (GLEC) Framework provides standardized metrics for reporting transport sector emissions, enabling consistent comparison across vehicle technologies and operational configurations. This analysis calculates transport carbon intensity expressed in grams of CO₂ equivalent per vehicle-kilometer (g CO₂e/km), the core metric for logistics decarbonization reporting. The calculation includes only the charging component of fleet operations, as vehicle operation itself produces zero direct emissions for electric vehicles.
+
+**Scope Boundaries - Operational Emissions Only**
+Following Optimise Prime methodology, this assessment quantifies operational emissions exclusively. The analysis includes electricity consumption for vehicle charging but excludes: vehicle and battery manufacturing (Scope 3 Category 1), charging infrastructure production and installation, transmission and distribution system losses (Scope 3 Category 3 upstream), and end-of-life vehicle disposal. This boundary definition ensures consistency with industry benchmarks and focuses measurement on the operationally controllable emissions component—the electricity consumption decisions that smart charging directly influences.
+
+**Data Sources and Calculation Methodology**
+
+The synthetic fleet comprises 100 commercial vehicles calibrated to UKPN WS1 trial behavioral patterns. Fleet composition includes 65 passenger cars (average 1.8 tonnes curb weight), 28 light commercial vans (2.2 tonnes), and 7 premium vehicles (2.1 tonnes). Daily operational distance averages 69.9 km per vehicle, generating 6,989 vehicle-kilometers daily and 2.55 million vehicle-kilometers annually. These operational parameters derive from the fleet generation module (Module 02), which synthesizes vehicle specifications, daily mileage distributions, and plug-in behavior patterns validated against WS1 trial outcomes.
+
+**Grid Carbon Intensity**
+Carbon intensity data sources from the National Grid Electricity System Operator (ESO) Carbon Intensity API, providing half-hourly actual carbon intensity values for Great Britain's electricity grid. The analysis period (May through December 2024) captures seven months of operational data, spanning summer low-demand periods through autumn shoulder months. The dataset yields an average carbon intensity of 121.9 gCO₂/kWh across all half-hour periods, reflecting Great Britain's evolving generation mix with approximately 40% renewable penetration during the measurement window.
+This location-based average represents the grid emissions factor applicable to electricity consumed regardless of timing. While half-hourly granularity enables temporal analysis showing carbon intensity variance throughout the day—ranging from approximately 170 gCO₂/kWh during overnight periods with high wind generation to 250 gCO₂/kWh during evening peaks when gas generation ramps—the baseline calculation uses the period-average factor to establish a technology-neutral comparison point consistent with GHG Protocol location-based methodology.
+
+**Charging Energy Profile**
+The baseline charging profile, generated through Module 04's forecasting methodology, predicts unmanaged fleet charging demand across 48 half-hour Programme Time Units (PTUs). Total daily energy consumption reaches 710.69 kWh, with extreme concentration during the evening arrival period: 596 kWh (83.9%) occurs between 17:00 and 20:00 as vehicles return from daily operations and commence immediate charging. This temporal pattern reflects the return-to-home fleet behavioral model, where drivers plug in upon arrival and chargers operate at maximum available power until reaching target state of charge.
+
+**Baseline Carbon Footprint**
+Applying the location-based carbon intensity factor to the daily charging energy profile yields a baseline operational emissions footprint of 107.76 kg CO₂e per day. Scaled to annual operations (365 days), this baseline projects 39.3 tonnes CO₂e per year for the 100-vehicle fleet, equivalent to 393 kg CO₂e per vehicle annually. This figure represents the charging component only—the electricity-related emissions for maintaining fleet operational readiness. It excludes vehicle manufacturing, infrastructure, and the zero-emission vehicle operation itself.
+
+#### GLEC Transport Carbon Intensity - Charging Component
+
+Dividing daily charging emissions (107.76 kg CO₂e) by daily operational distance (6,989 km) yields a transport carbon intensity of 15.4 g CO₂e/km for the charging component of fleet operations. Alternatively, accounting for vehicle mass by dividing emissions by tonne-kilometers traveled (13,596 t·km daily) produces an intensity of 7.9 g CO₂e per tonne-kilometer. These metrics quantify the electricity-related emissions per unit of transport service delivered, establishing the baseline for tracking charging optimization impacts.
+
+**Industry Benchmarking and Electrification Benefit**
+Context for these figures emerges through comparison with conventional diesel technology. GLEC Framework benchmarks indicate diesel light commercial vehicles (LCVs) generate approximately 250 g CO₂e/km when accounting for combustion emissions and upstream fuel production. The modeled EV fleet's charging intensity of 15.4 g CO₂e/km represents a 94% reduction relative to this diesel baseline. This differential validates the electrification benefit independent of charging optimization—the fundamental technology transition from internal combustion to electric propulsion delivers the majority of carbon abatement.
+Optimise Prime trials quantified this effect directly: Royal Mail's electric fleet produced 80% less CO₂e compared to the equivalent diesel fleet over eight-year operational projections. The WS1 Centrica trial projected individual high-mileage drivers switching to EVs would avoid approximately 16 tonnes CO₂e over a five-year period. These benchmarks confirm that electrification itself—not charging optimization—constitutes the primary decarbonization intervention. Smart charging introduces an incremental efficiency layer by aligning consumption with cleaner grid periods, but the core carbon benefit stems from eliminating tailpipe emissions.
+
+**Real Market Context - UKPN Flexibility Dispatch Data**
+Validation against actual flexibility market operations provides real-world context for demand-side management impacts. Analysis of 2,667 UKPN Day-Ahead Scheduled Utilisation events for EV Charger DSR technology (May 2024 through December 2025) reveals the operational pattern of demand turn-down requests. These events represent actual DNO calls for EV fleet charging reduction during network constraint periods.
+
+Temporal Concentration of Flexibility Events
+Event timing shows extreme concentration in the evening peak window: 2,315 events (86.8% of total) occur between 16:00 and 19:00, with peak concentration at 17:00 (1,305 events, 48.9% of all requests). This temporal pattern directly corresponds to the baseline charging profile's 17:00-20:00 concentration, confirming that unmanaged EV charging coincides precisely with network stress periods. The alignment validates the demand turn-down value proposition: EVs charging at natural return times create the grid constraint that flexibility markets exist to resolve.
+
+The cumulative energy volume across these 2,667 events totals 351.44 MWh of demand reduction, averaging 131.8 kWh per event. This average event size sits between individual vehicle capacity (7.4 kW charger × 2 hours = 14.8 kWh maximum per vehicle) and small fleet aggregations, indicating participation primarily from small-to-medium fleet operators rather than large depot installations. The demand turn-down product's operational characteristic—temporary load reduction during specific constraint periods—directly enables carbon benefit by displacing peak-period electricity consumption when marginal grid carbon intensity reaches daily maximums.
+
+**Methodological Considerations and Limitations**
+Location-Based Method and Marginal Emissions
+The location-based Scope 2 method applies average grid carbon intensity, treating all electricity consumption as indistinguishable regardless of timing. This approach provides technology-neutral baselines suitable for regulatory reporting and year-over-year tracking. However, it understates the carbon benefit of temporal optimization because demand turn-down displaces marginal generation—the incremental plant that would operate to meet additional demand. During evening peaks, marginal generation typically comes from gas-fired plants operating at 400+ gCO₂/kWh, significantly above the grid average. Conversely, overnight off-peak periods see marginal generation from baseload nuclear and wind at approximately 100 gCO₂/kWh.
+Quantifying this temporal benefit requires marginal emissions factor analysis, a methodology referenced in GHG Protocol Scope 2 guidance (Chapter 11.3) but not employed in this baseline assessment. The location-based calculation presented here establishes the conservative baseline: it measures the electrification benefit while leaving temporal optimization impacts understated. Future analysis incorporating marginal factors would quantify the additional carbon value of smart charging beyond the baseline presented.
+
+#### Operational Scope and Lifecycle Exclusions
+
+This assessment deliberately excludes lifecycle emissions for consistency with Optimise Prime methodology and to focus on operationally controllable factors. Vehicle and battery production emissions (estimated at 5-10 tonnes CO₂e per vehicle depending on battery size) represent sunk costs at fleet deployment; charging optimization cannot influence manufacturing impacts retroactively. Similarly, charging infrastructure production and transmission system losses fall outside fleet operator control. The operational scope quantifies what smart charging can influence: when and how electricity is consumed.
+
+This boundary definition serves regulatory compliance requirements (Scope 2 reporting) and operational decision-making (comparing charging strategies). It does not constitute a full lifecycle assessment. Comprehensive environmental evaluation would require including production, infrastructure, and disposal stages, but such analysis addresses different questions—vehicle procurement decisions rather than operational optimization strategy.
+
+**Data Quality and Representativeness**
+The carbon intensity dataset spans seven months (May-December 2024), capturing seasonal variance from summer low-demand to winter shoulder periods but excluding peak winter months (January-April). Great Britain's grid continues rapid decarbonization; the 121.9 gCO₂/kWh average reflects 2024 conditions but will decline as renewable penetration increases. National Grid ESO's Future Energy Scenarios project grid average intensity falling to approximately 50 gCO₂/kWh by 2035, which would reduce fleet baseline emissions proportionally. The figures presented represent current-state baselines requiring periodic recalibration as grid composition evolves.
+
+The synthetic fleet data derives from calibrated behavioral models rather than actual telematics, introducing uncertainty in plug-in timing precision and opt-out rate estimates. However, the model's 93% participation rate and 17:00 plug-in concentration match WS1 trial outcomes, providing confidence that operational patterns reflect real-world fleet behavior. The 15.4 g CO₂e/km charging intensity calculated here quantifies a representative baseline, not a prediction of any specific fleet's emissions. Actual results depend on real driver behavior, vehicle efficiency variance, and local grid conditions.
+
+#### Strategic Implications for Carbon Management - Dual Value Stream Integration
+
+The carbon footprint quantification enables integration with the financial optimization model's revenue projections. The baseline fleet generates £138 per vehicle annually through flexibility market participation while avoiding 393 kg CO₂e per vehicle from electrification (relative to diesel operation). This dual value—financial and environmental—strengthens the business case for fleet electrification beyond Total Cost of Ownership (TCO) analysis. Organizations with internal carbon prices or carbon budget constraints can monetize avoided emissions, while regulatory frameworks increasingly require Scope 2 emissions reporting, making transparent carbon accounting a compliance necessity rather than optional analysis.
+
+**Baseline Establishment for Reduction Tracking**
+The 15.4 g CO₂e/km charging intensity baseline provides the reference point for measuring future optimization impacts. As grid decarbonization continues, this baseline will decline passively without operational changes. Tracking year-over-year intensity reductions requires separating grid improvement (declining carbon intensity factors) from operational optimization (temporal load shifting). The methodology established here—combining grid carbon intensity data with operational profiles—enables this decomposition, attributing carbon reductions accurately between grid evolution and fleet management decisions.
+
+**Framework Transferability and International Application**
+The GHG Protocol and GLEC Framework methodologies transfer directly to international markets where similar data sources exist. Carbon intensity APIs operate in multiple jurisdictions (UK, Germany, Australia, California), enabling location-based Scope 2 calculations globally. The calculation structure—operational distance multiplied by vehicle weights divided by emissions—remains consistent across geographies. What changes is input data: local grid carbon intensity, vehicle efficiency under different climate conditions, and fleet operational patterns. The framework validates in one market (UK) and scales internationally by substituting local data while maintaining methodological consistency. This transferability supports portfolio expansion, allowing aggregators to apply consistent carbon accounting as they enter new markets rather than developing jurisdiction-specific methodologies.
 
 # <a id=International Market Expansion></a> Internationa Market Expansion
 
