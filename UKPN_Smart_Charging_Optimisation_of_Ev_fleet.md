@@ -42,6 +42,7 @@ We designed a retrospective, market-mirroring optimization engine that simulates
 This analysis examines 18 months of flexibility dispatch data (May 2024 - December 2025) from UK Power Networks (UKPN), Britain's largest DNO serving 8.3 million customers across London, the South East, and Eastern England. As an early mover in DSO flexibility procurement, UKPN provides comprehensive dispatch records that enable granular analysis of market dynamics, pricing patterns, and competitive positioning.
 
 TABLE 1: UKPN Product Portfolio
+
 | Product Name (Legacy / Query) | ENA / UKPN Standard Name                                | Procurement Window              | Payment Structure          | Utilisation Instruction Timing          | Notes / Verification                                       |
 | ----------------------------- | ------------------------------------------------------- | ------------------------------- | -------------------------- | --------------------------------------- | ---------------------------------------------------------- |
 | Peak Reduction                | Peak Reduction (PR)                                     | Long-term tender (months ahead) | Utilisation only           | At-trade (during contracted windows)    | Designed to reduce demand peaks; not procured day-ahead    |
