@@ -896,8 +896,10 @@ Event timing shows extreme concentration in the evening peak window: 2,315 event
 
 The cumulative energy volume across these 2,667 events totals 351.44 MWh of demand reduction, averaging 131.8 kWh per event. This average event size sits between individual vehicle capacity (7.4 kW charger × 2 hours = 14.8 kWh maximum per vehicle) and small fleet aggregations, indicating participation primarily from small-to-medium fleet operators rather than large depot installations. The demand turn-down product's operational characteristic—temporary load reduction during specific constraint periods—directly enables carbon benefit by displacing peak-period electricity consumption when marginal grid carbon intensity reaches daily maximums.
 
-**Methodological Considerations and Limitations**
-Location-Based Method and Marginal Emissions
+#### Methodological Considerations and Limitations
+
+**Location-Based Method and Marginal Emissions**
+
 The location-based Scope 2 method applies average grid carbon intensity, treating all electricity consumption as indistinguishable regardless of timing. This approach provides technology-neutral baselines suitable for regulatory reporting and year-over-year tracking. However, it understates the carbon benefit of temporal optimization because demand turn-down displaces marginal generation—the incremental plant that would operate to meet additional demand. During evening peaks, marginal generation typically comes from gas-fired plants operating at 400+ gCO₂/kWh, significantly above the grid average. Conversely, overnight off-peak periods see marginal generation from baseload nuclear and wind at approximately 100 gCO₂/kWh.
 Quantifying this temporal benefit requires marginal emissions factor analysis, a methodology referenced in GHG Protocol Scope 2 guidance (Chapter 11.3) but not employed in this baseline assessment. The location-based calculation presented here establishes the conservative baseline: it measures the electrification benefit while leaving temporal optimization impacts understated. Future analysis incorporating marginal factors would quantify the additional carbon value of smart charging beyond the baseline presented.
 
